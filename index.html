@@ -389,7 +389,7 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 /* Cajón de vinilos */
 .cajon-vinilos{position:absolute;left:640px;top:1316px;width:134px;height:124px;z-index:6;border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .cajon-vinilos .discos{position:absolute;left:8px;right:8px;bottom:40px;height:80px;display:flex;align-items:flex-end;justify-content:center}
-.cajon-vinilos .discos span{width:54px;height:74px;margin:0 -15px;border-radius:3px;background:linear-gradient(rgba(255,255,255,.3),transparent 45%),var(--c);box-shadow:0 2px 5px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.35)}
+.cajon-vinilos .discos span{flex:none;width:54px;height:74px;margin:0 -19px;border-radius:3px;background:linear-gradient(rgba(255,255,255,.3),transparent 45%),var(--c);box-shadow:0 2px 5px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.35)}
 .cajon-vinilos .discos span:nth-child(odd){transform:rotate(-7deg)} .cajon-vinilos .discos span:nth-child(even){transform:rotate(6deg) translateY(4px)}
 .cajon-vinilos .frente{position:absolute;left:0;right:0;bottom:0;height:58px;border-radius:4px;display:grid;place-items:center;font:700 13px/1 var(--serif);letter-spacing:.24em;color:rgba(50,26,10,.7);
   background:var(--grano) 0 0/300px 150px,repeating-linear-gradient(rgba(0,0,0,.35) 0 2px,transparent 2px 19px),linear-gradient(#c08e60,#8a5f3c);background-blend-mode:multiply,normal,normal;box-shadow:0 8px 14px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,230,200,.35)}
@@ -1406,6 +1406,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   // Se recuerda qué vinilos escuchó por el nombre del archivo, así el orden de la lista no importa
   const oidosArch = new Set(leer("vinilos-oidos-arch", []));
   const oidos = { has: j => !!VINILOS[j] && oidosArch.has(VINILOS[j].audio), add: j => { if(VINILOS[j]) oidosArch.add(VINILOS[j].audio); } };
+  const avisoVin = {n: 0, j: 0, t: 0};
   let llegados = leer("vinilos-llegados", 0), vinVisibles = -1, vozActual = -1, vozUltima = -1, esperaAntes = false, rafVoz = 0;
   const estadoVin = VINILOS.map(v => {
     const a = new Audio(), e = {a, ok:false};
@@ -1453,11 +1454,17 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     cajon.classList.toggle("sin-ver", VINILOS.some((v, j) => disp[j] && !oidos.has(j)));
     if(n === vinVisibles) return;
     vinVisibles = n; cajon.hidden = n === 0;
-    $("#discosCajon").innerHTML = VINILOS.map((v, j) => disp[j] ? `<span style="--c:${esc(v.color || "#f4a6bd")}"></span>` : "").join("");
+    // En el cajón asoman máximo 6 portadas, aunque haya más adentro
+    $("#discosCajon").innerHTML = VINILOS.filter((v, j) => disp[j]).slice(-6).map(v => `<span style="--c:${esc(v.color || "#f4a6bd")}"></span>`).join("");
     if(n > llegados){
-      const nuevos = n - llegados, j = disp.lastIndexOf(true);
-      avisar(nuevos === 1 ? `📀 Llegó un vinilo: De ${VINILOS[j].de} para ${C.nombre}` : `📀 Llegaron ${nuevos} vinilos con mensajes para ti`);
+      // Se juntan en un solo aviso los que llegan casi al mismo tiempo
+      avisoVin.n += n - llegados; avisoVin.j = disp.lastIndexOf(true);
       llegados = n; guardar("vinilos-llegados", n);
+      clearTimeout(avisoVin.t);
+      avisoVin.t = setTimeout(() => {
+        avisar(avisoVin.n === 1 ? `📀 Llegó un vinilo: De ${VINILOS[avisoVin.j].de} para ${C.nombre}` : `📀 Llegaron ${avisoVin.n} vinilos con mensajes para ti`);
+        avisoVin.n = 0;
+      }, 1500);
     }
     if(panelVin.classList.contains("on") && $("#vinSonando").hidden) pintarListaVin();
   }
