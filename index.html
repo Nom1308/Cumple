@@ -39,13 +39,16 @@ const CONFIG = {
   ],
 
   // Secretos: corazoncitos casi invisibles escondidos en el cuarto (el cuarto mide 1000 de ancho × 1500 de alto).
+  // Son invisibles: solo brillan cuando ella los toca.
   secretos: [
-    { x: 955, y: 236,  texto: "Me sé de memoria cómo te ríes." },
-    { x: 28,  y: 190,  texto: "Cada vez que me dices que no te tome más fotos, te tomo dos más." },
-    { x: 760, y: 1180, texto: "Eres mi persona favorita para no hacer nada." },
-    { x: 92,  y: 1440, texto: "Decoré este cuarto pensando en ti en cada detalle." },
-    { x: 905, y: 1440, texto: "El domingo tengo algo para ti… 🎁" }
+    { x: 486, y: 1252, texto: "Me sé de memoria cómo te ríes." },
+    { x: 972, y: 690,  texto: "Cada vez que me dices que no te tome más fotos, te tomo dos más." },
+    { x: 10,  y: 870,  texto: "Eres mi persona favorita para no hacer nada." },
+    { x: 232, y: 1466, texto: "Decoré este cuarto pensando en ti en cada detalle." },
+    { x: 962, y: 1462, texto: "El domingo tengo algo para ti… 🎁" }
   ],
+  // El premio por encontrar todos los secretos. Pon el video en la carpeta "videos" con este nombre.
+  videoSecreto: "videos/secreto.mp4",
 
   // Los regalos del cuarto se abren desde esta fecha, y adentro hay vales.
   regalos: {
@@ -494,11 +497,20 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .mueble .pata.i{left:30px;transform:skewX(10deg)} .mueble .pata.d{right:30px;transform:skewX(-10deg)}
 
 /* Secretos escondidos */
-.secreto{position:absolute;z-index:7;width:30px;height:30px;border:0;padding:0;background:none;cursor:pointer;color:#ee8fae;font-size:22px;line-height:30px;text-align:center;opacity:.28;
-  -webkit-tap-highlight-color:transparent;animation:latSecreto 2.8s ease-in-out infinite}
+.secreto{position:absolute;z-index:7;width:30px;height:30px;border:0;padding:0;background:none;cursor:pointer;color:#f5c97a;font-size:24px;line-height:30px;text-align:center;opacity:0;
+  -webkit-tap-highlight-color:transparent}
 .secreto::before{content:"";position:absolute;inset:-16px}
-.secreto.hallado{opacity:1;color:#f5c97a;text-shadow:0 0 10px rgba(245,201,122,.9);animation:none}
-@keyframes latSecreto{50%{opacity:.5;transform:scale(1.18)}}
+.secreto.hallado{opacity:1;text-shadow:0 0 10px rgba(245,201,122,.95),0 0 22px rgba(238,143,174,.7);animation:brillaSecreto 2.4s ease-in-out infinite}
+.secreto.recien{animation:revelaSecreto 1s cubic-bezier(.2,.9,.3,1.4),brillaSecreto 2.4s ease-in-out 1s infinite}
+@keyframes revelaSecreto{0%{opacity:0;transform:scale(.2)}50%{opacity:1;transform:scale(2.2);text-shadow:0 0 30px #fff,0 0 50px #f5c97a}100%{transform:scale(1)}}
+@keyframes brillaSecreto{50%{transform:scale(1.15);text-shadow:0 0 16px rgba(245,201,122,1),0 0 32px rgba(238,143,174,.9)}}
+/* Video secreto */
+.video-secreto{position:absolute;inset:0;z-index:9;display:grid;place-items:center;padding:56px 16px 24px;background:rgba(8,5,16,.93);opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+.video-secreto.on{opacity:1;visibility:visible}
+.vs-marco{background:linear-gradient(170deg,#fffdf8,#f4ecdf);padding:12px 12px 0;box-shadow:0 24px 70px rgba(0,0,0,.6);transform:rotate(-1deg);max-width:100%}
+.vs-marco video{display:block;max-width:min(calc(100vw - 56px),860px);max-height:66vh;background:#000}
+.vs-pie{margin:0;padding:12px 6px 16px;text-align:center;font-family:var(--mano);font-size:26px;line-height:1.1;color:#c9567d}
+.vs-cerrar{position:absolute;top:12px;right:12px;font-size:30px}
 /* Medianoche en vivo */
 .cuenta-grande{position:absolute;inset:0;z-index:7;display:grid;place-items:center;pointer-events:none}
 .cuenta-grande span{display:block;font:italic 700 min(52vw,320px)/1 var(--serif);padding:0 .1em;color:transparent;
@@ -834,6 +846,10 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     </div>
    </div>
    <div class="motas" id="motas" aria-hidden="true"></div>
+   <div class="video-secreto" id="videoSecreto" role="dialog" aria-label="Video secreto">
+     <div class="vs-marco"><video id="vsVideo" playsinline controls preload="none"></video><p class="vs-pie">Para la detective más increíble ♥</p></div>
+     <button class="vbtn vs-cerrar" id="vsCerrar" type="button" aria-label="Cerrar">×</button>
+   </div>
    <div class="cuenta-grande" id="cuentaGrande" aria-live="assertive"></div>
    <div class="destello-cuarto" id="destelloCuarto" aria-hidden="true"></div>
    <div class="aviso-cuarto" id="avisoCuarto">
@@ -846,6 +862,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
        <div id="detFoto" hidden></div>
        <div class="detalle-texto-box"><p class="detalle-titulo" id="detTitulo"></p><p class="detalle-texto" id="detTexto"></p></div>
      </div>
+     <button class="btn" id="detVideo" type="button" hidden>Ver el video secreto ▶</button>
      <button class="btn sec" id="detVolver" type="button">Volver al cuarto</button>
    </div>
    <div class="vinilos" id="vinilos">
@@ -1239,7 +1256,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   const elsSecretos = SECRETOS.map((s, i) => {
     const b = document.createElement("button");
     b.type = "button"; b.className = "secreto" + (hallados.has(i) ? " hallado" : "");
-    b.style.cssText = `left:${s.x}px;top:${s.y}px;animation-delay:${(-i*.9).toFixed(1)}s`;
+    b.style.cssText = `left:${s.x}px;top:${s.y}px`;
     b.textContent = "♥"; b.setAttribute("aria-label", "Un corazoncito escondido");
     b.addEventListener("click", e => { e.stopPropagation(); if(enfocado) cerrarCosa(); else abrirSecreto(i); });
     escenario.appendChild(b);
@@ -1249,15 +1266,19 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   function abrirSecreto(i){
     if(final) return;
     const el = elsSecretos[i], nuevo = !hallados.has(i);
-    hallados.add(i); guardar("secretos-hallados", [...hallados]); el.classList.add("hallado");
+    hallados.add(i); guardar("secretos-hallados", [...hallados]);
+    if(nuevo){ el.classList.add("recien"); setTimeout(() => el.classList.remove("recien"), 1000); }
+    el.classList.add("hallado");
     enfocado = el; cuarto.classList.add("enfocado"); $("#avisoNuevo").classList.remove("on");
     enfocar(el, .3, .2, .33, 2.4);
-    const todos = nuevo && hallados.size === SECRETOS.length;
-    $("#detTitulo").textContent = todos ? `¡Encontraste los ${SECRETOS.length} secretos!` : `Secreto ${hallados.size} de ${SECRETOS.length}`;
-    $("#detTexto").textContent = SECRETOS[i].texto;
+    const completos = hallados.size === SECRETOS.length, todos = nuevo && completos;
+    $("#detTitulo").textContent = todos ? "¡Eres la más increíble detective!" : `Secreto ${hallados.size} de ${SECRETOS.length}`;
+    if(todos) $("#detTexto").innerHTML = `${esc(SECRETOS[i].texto)}<br><br>Encontraste los ${SECRETOS.length} secretos, y por eso tienes un premio:`;
+    else $("#detTexto").textContent = SECRETOS[i].texto;
     $("#detFoto").hidden = true; $("#detFoto").innerHTML = "";
+    $("#detVideo").hidden = !(completos && C.videoSecreto);
     const r = el.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, nuevo ? 22 : 8);
-    if(todos) setTimeout(() => confeti(160), 700);
+    if(todos){ setTimeout(() => confeti(200), 700); setTimeout(() => notasMagicas(innerWidth/2, innerHeight*.5, 24), 1100); }
     clearTimeout(detT); detT = setTimeout(() => detalle.classList.add("on"), reduce ? 0 : 650);
     pintarCuenta();
   }
@@ -1286,6 +1307,27 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     setTimeout(() => { const r = el.getBoundingClientRect(); corazones(r.left + r.width/2, r.top, 10); }, reduce ? 0 : 450);
     clearTimeout(detT); detT = setTimeout(() => detalle.classList.add("on"), reduce ? 0 : 750);
   }
+
+  // Video secreto: el premio por encontrar todos los secretos
+  const vsCaja = $("#videoSecreto"), vsVideo = $("#vsVideo");
+  let musicaAntesVideo = false;
+  vsVideo.addEventListener("error", () => { if(!vsVideo.dataset.respaldo){ vsVideo.dataset.respaldo = "1"; vsVideo.src = "videos/juntos.mp4"; vsVideo.play().catch(() => {}); } });
+  function abrirVideoSecreto(){
+    pararVoz(true); musicaAntesVideo = esperaSonando; quitarEspera();
+    if(!vsVideo.getAttribute("src")) vsVideo.src = C.videoSecreto;
+    vsCaja.classList.add("on");
+    try { vsVideo.currentTime = 0; } catch(e){}
+    vsVideo.play().catch(() => {});
+    confeti(80);
+  }
+  function cerrarVideoSecreto(){
+    vsVideo.pause(); vsCaja.classList.remove("on");
+    if(musicaAntesVideo){ musicaAntesVideo = false; esperaPausada = false; ponerEspera(); }
+  }
+  $("#detVideo").addEventListener("click", e => { e.stopPropagation(); abrirVideoSecreto(); });
+  $("#vsCerrar").addEventListener("click", e => { e.stopPropagation(); cerrarVideoSecreto(); });
+  vsCaja.addEventListener("click", e => { e.stopPropagation(); if(e.target === vsCaja) cerrarVideoSecreto(); });
+  vsVideo.addEventListener("ended", () => { corazones(innerWidth/2, innerHeight*.45, 30); });
 
   // Los regalos se abren desde su fecha (o en modo prueba)
   const R = C.regalos || {};
@@ -1634,7 +1676,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     if(!enfocado || final) return;
     if(enfocado === tv){ tv.classList.remove("enfocada"); if(canal !== 19){ giro = 0; $("#perillaCanal").style.setProperty("--giro", "0deg"); ponerCanal({num: 19}, true); } }
     enfocado = null; tdEnfocado = false; cuarto.classList.remove("td"); clearTimeout(detT); pararVoz();
-    elsCajones.forEach(c => c.classList.remove("abierto"));
+    elsCajones.forEach(c => c.classList.remove("abierto")); $("#detVideo").hidden = true;
     detalle.classList.remove("on"); panelVin.classList.remove("on"); cuarto.classList.remove("enfocado"); vistaBase();
   }
   cuarto.addEventListener("click", e => { if(enfocado && !e.target.closest(".detalle-tarjeta, .vinilos-hoja")) cerrarCosa(); });
