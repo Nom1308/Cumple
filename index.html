@@ -33,7 +33,7 @@ const CONFIG = {
   // El canal 19 queda guardado hasta el cumpleaños. Las fotos están en la carpeta "fotos/ninez".
   //  texto: corto, sale en la pantalla de la tele · nota: lo que se lee debajo
   canales: [
-    { canal: 1,  foto: "fotos/ninez/01.jpg", texto: "Recién nacida",   nota: "El día en que llegaste y llenaste de alegría a toda tu familia." },
+    { canal: 1,  foto: "fotos/ninez/01.jpg", texto: "Recién nacida",   nota: "El día en que el mundo se volvió más bonito." },
     { canal: 2,  foto: "fotos/ninez/02.jpg", texto: "Primeros días",   nota: "Tan chiquita y ya escondiéndote de la cámara." },
     { canal: 3,  foto: "fotos/ninez/03.jpg", texto: "Tu manita",       nota: "Una manita pequeñita, sostenida con todo el amor de tu familia." },
     { canal: 4,  foto: "fotos/ninez/04.jpg", texto: "Primera sonrisa", nota: "Esa sonrisa que desde el principio iluminó tu casa." },
@@ -45,8 +45,8 @@ const CONFIG = {
     { canal: 10, foto: "fotos/ninez/10.jpg", texto: "Lista y bonita",  nota: "Arreglada, con flores en el pelo y la sonrisa lista." },
     { canal: 11, foto: "fotos/ninez/11.jpg", texto: "En familia",      nota: "Rodeada de la gente que más te quiere." },
     { canal: 12, foto: "fotos/ninez/12.jpg", texto: "Toda una modelo", nota: "Posando desde pequeña. Algunas cosas no cambian." },
-    { canal: 13, foto: "fotos/ninez/13.jpg", texto: "Creciendo",       nota: "Cada año creciendo en sabiduría, en bondad y en alegría." },
-    { canal: 14, foto: "fotos/ninez/14.jpg", texto: "Tu música",       nota: "Y un día descubriste tu talento. Qué bonito es escucharte tocar." }
+    { canal: 13, foto: "fotos/ninez/13.jpg", texto: "Creciendo",       nota: "Creciendo, y siempre con los tuyos a tu lado." },
+    { canal: 14, foto: "fotos/ninez/14.jpg", texto: "Tu música",       nota: "Tu talento para la música es un regalo para todos los que te escuchan." }
   ],
 
   // Las canciones de espera: suenan en el tocadiscos del cuarto, una tras otra, antes del cumpleaños.
@@ -258,7 +258,7 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .tv.en-canal #ruido{opacity:.06}
 .tv.en-canal .lineas{opacity:.4}
 .tv.en-canal .barra-roll{opacity:.5}
-.tv.en-canal .osd{opacity:0}
+.tv.en-canal .osd.reloj{opacity:0}
 .canal img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:sepia(.35) saturate(.85) contrast(1.05);animation:parpadeoTv 5s steps(1) infinite}
 @keyframes parpadeoTv{0%,100%{opacity:1}31%{opacity:.93}33%{opacity:1}}
 .canal::after{content:"";position:absolute;inset:0;background:radial-gradient(closest-side,transparent 68%,rgba(30,15,0,.4)),linear-gradient(rgba(255,190,110,.06),rgba(255,190,110,.06))}
