@@ -65,7 +65,9 @@ const CONFIG = {
   //  audio:  el archivo en la carpeta "audios" (mejor .mp3 o .m4a)
   //  dibujo: corazon | flores | estrella | luna | sol | nota | pastel | casa
   //  color:  color de la portada
+  //  llega:  (opcional) cuándo aparece, ej: "2026-10-17T15:00". Sin esto, se reparten solos hasta el cumpleaños.
   // Si un audio todavía no está en la carpeta, ese vinilo no aparece (en modo prueba sí, para que lo veas).
+  // Se pueden agregar los que quieran, en cualquier orden. Cada uno con su propio archivo de audio.
   vinilos: [
     { de: "tu mamá",    audio: "audios/mama.mp3",   dibujo: "corazon",  color: "#f4a6bd" },
     { de: "tu papá",    audio: "audios/papa.mp3",   dibujo: "estrella", color: "#9fd8c8" },
@@ -1224,7 +1226,9 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   // Vinilos con mensajes de voz: llegan poco a poco al cajón y suenan en el tocadiscos
   const VINILOS = (C.vinilos || []).filter(v => v && v.audio);
   const cajon = $("#cajonVinilos"), panelVin = $("#vinilos");
-  const oidos = new Set(leer("vinilos-oidos", []));
+  // Se recuerda qué vinilos escuchó por el nombre del archivo, así el orden de la lista no importa
+  const oidosArch = new Set(leer("vinilos-oidos-arch", []));
+  const oidos = { has: j => !!VINILOS[j] && oidosArch.has(VINILOS[j].audio), add: j => { if(VINILOS[j]) oidosArch.add(VINILOS[j].audio); } };
   let llegados = leer("vinilos-llegados", 0), vinVisibles = -1, vozActual = -1, vozUltima = -1, esperaAntes = false, rafVoz = 0;
   const estadoVin = VINILOS.map(v => {
     const a = new Audio(), e = {a, ok:false};
@@ -1252,7 +1256,13 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       + `<text x="100" y="146" text-anchor="middle" font-family="Caveat, cursive" font-weight="600" font-size="36" fill="${tinta}"${de.length > 12 ? ' textLength="176" lengthAdjust="spacingAndGlyphs"' : ""}>${esc(de)}</text>`
       + `<text x="100" y="178" text-anchor="middle" font-family="Caveat, cursive" font-size="26" fill="${tinta}" fill-opacity=".8">para ${esc(C.nombre)} ♥</text></svg>`;
   }
-  const vinilosDisponibles = () => { const a = avance(), M = VINILOS.length; return VINILOS.map((v, j) => (a >= 1 || a >= j/M) && (estadoVin[j].ok || modoPrueba)); };
+  // Cada vinilo llega en su fecha "llega" (si la tiene); si no, se reparten solos hasta el cumpleaños
+  const llegoVinilo = (v, j, a, M) => {
+    if(a >= 1) return true;
+    if(v.llega && avanceForzado === null){ const t = new Date(v.llega); if(!isNaN(t)) return Date.now() >= t; }
+    return a >= j/M;
+  };
+  const vinilosDisponibles = () => { const a = avance(), M = VINILOS.length; return VINILOS.map((v, j) => llegoVinilo(v, j, a, M) && (estadoVin[j].ok || modoPrueba)); };
   function actualizarVinilos(){
     const disp = vinilosDisponibles(), n = disp.filter(Boolean).length;
     cajon.classList.toggle("sin-ver", VINILOS.some((v, j) => disp[j] && !oidos.has(j)));
@@ -1298,7 +1308,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     e.a.currentTime = 0; e.a.volume = 1;
     e.a.onended = terminarVoz;
     e.a.play().then(() => tocadiscos.classList.add("sonando")).catch(() => {});
-    oidos.add(j); guardar("vinilos-oidos", [...oidos]); actualizarVinilos();
+    oidos.add(j); guardar("vinilos-oidos-arch", [...oidosArch]); actualizarVinilos();
     $("#vinTapa").innerHTML = portadaVinilo(v); $("#vinTapa").style.setProperty("--lc", v.color || "#f4a6bd");
     $("#vinDe").textContent = `De ${v.de}`; $("#vinPara").textContent = `para ${C.nombre} ♥`;
     $("#vinPausa").textContent = "Pausa"; $("#vinBarra").style.width = "0%";
