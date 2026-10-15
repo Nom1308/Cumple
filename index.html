@@ -29,6 +29,28 @@ const CONFIG = {
   musica: "musica/la-medalla.mp3",
   musicaInicio: 0,                 // Segundo en que arranca la canción (ej: 45 para empezar en el coro)
 
+  // Las canciones de espera: suenan en el tocadiscos del cuarto, una tras otra, antes del cumpleaños.
+  // Pon los mp3 en la carpeta "musica". Puedes agregar o quitar las que quieras.
+  //  nombre: lo que sale en el aviso cuando empieza a sonar
+  musicaEspera: [
+    { archivo: "musica/espera1.mp3", nombre: "Just the Way You Are — Bruno Mars" },
+    { archivo: "musica/espera2.mp3", nombre: "Count On Me — Bruno Mars" }
+  ],
+
+  // Vinilos con mensajes de voz para Sara: van llegando poco a poco al cajón junto al tocadiscos.
+  //  de:     quién lo manda ("tu mamá" → en la portada sale "De tu mamá para Sara")
+  //  audio:  el archivo en la carpeta "audios" (mejor .mp3 o .m4a)
+  //  dibujo: corazon | flores | estrella | luna | sol | nota | pastel | casa
+  //  color:  color de la portada
+  // Si un audio todavía no está en la carpeta, ese vinilo no aparece (en modo prueba sí, para que lo veas).
+  vinilos: [
+    { de: "tu mamá",    audio: "audios/mama.mp3",   dibujo: "corazon",  color: "#f4a6bd" },
+    { de: "tu papá",    audio: "audios/papa.mp3",   dibujo: "estrella", color: "#9fd8c8" },
+    { de: "tu tía",     audio: "audios/tia.mp3",    dibujo: "flores",   color: "#f5c97a" },
+    { de: "tu abuela",  audio: "audios/abuela.mp3", dibujo: "casa",     color: "#c3b5f0" },
+    { de: "tus amigas", audio: "audios/amigas.mp3", dibujo: "nota",     color: "#ffb88a" }
+  ],
+
   intro: "Hoy cumples 19 años, y yo celebro tu vida y doy gracias porque ahora también es parte de la mía.",
 
   // El cuarto que se va decorando antes del cumpleaños.
@@ -170,18 +192,24 @@ button{font:inherit;cursor:pointer;color:inherit}
 #portada{position:fixed;inset:0;z-index:50;background:#1b1330;transition:opacity 1s ease,visibility 1s;overflow:hidden}
 #portada.fuera{opacity:0;visibility:hidden}
 .tv{position:absolute;left:290px;bottom:414px;width:420px;z-index:4}
-.antena-base{position:absolute;bottom:100%;left:50%;width:48px;height:14px;margin:0 0 -3px -24px;background:linear-gradient(#c7a6b2,#9a7884);border-radius:24px 24px 4px 4px}
-.antena{position:absolute;bottom:100%;left:50%;width:3px;height:70px;margin-left:-1.5px;background:linear-gradient(#efe3d6,#9c8a7a);border-radius:2px;transform-origin:50% 100%}
-.antena.izq{transform:rotate(-32deg)}
-.antena.der{transform:rotate(26deg)}
-.antena::after{content:"♥";position:absolute;top:-16px;left:50%;transform:translateX(-50%);color:var(--rosa);font-size:17px;line-height:1;text-shadow:0 0 10px rgba(238,143,174,.8)}
-.tv-cuerpo{position:relative;display:flex;align-items:stretch;gap:4%;padding:6% 4% 6% 6%;border-radius:28px;
-  background:linear-gradient(160deg,#f8e3e8 0%,#ecc3ce 50%,#d9a5b5 100%);
-  box-shadow:0 34px 80px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.7),inset 0 -7px 0 rgba(120,60,80,.22)}
-.pantalla{position:relative;flex:1;aspect-ratio:4/3;border:0;padding:0;border-radius:16% / 20%;overflow:hidden;background:#0d0b10;
-  box-shadow:0 0 0 7px #3b2a34,0 0 0 10px #c98ea0,inset 0 0 40px rgba(0,0,0,.9);-webkit-tap-highlight-color:transparent;isolation:isolate}
+.antena-base{position:absolute;bottom:100%;left:50%;width:58px;height:20px;margin:0 0 -2px -29px;border-radius:29px 29px 4px 4px;
+  background:radial-gradient(circle at 40% 30%,#6b4a32,#2b1a10 70%);box-shadow:inset 0 -3px 0 #c9a25a,0 2px 4px rgba(0,0,0,.4)}
+.antena{position:absolute;bottom:100%;left:50%;width:4px;height:96px;margin:0 0 6px -2px;border-radius:2px;transform-origin:50% 100%;
+  background:linear-gradient(90deg,#8d8d8d,#f4f4f4 45%,#9a9a9a)}
+.antena.izq{transform:rotate(-30deg)}
+.antena.der{transform:rotate(24deg)}
+.antena::after{content:"";position:absolute;top:-7px;left:50%;width:11px;height:11px;margin-left:-5.5px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#a9a9a9 55%,#555)}
+.tv-cuerpo{position:relative;display:flex;align-items:stretch;gap:4%;padding:6% 4% 12% 6%;border-radius:20px;
+  background:linear-gradient(90deg,rgba(0,0,0,.3),transparent 7%,transparent 93%,rgba(0,0,0,.35)),linear-gradient(rgba(255,255,255,.12),transparent 14%,transparent 86%,rgba(0,0,0,.3)),
+    var(--grano) 0 0/420px 300px,linear-gradient(160deg,#8a5634,#64391f 50%,#4a2814);
+  box-shadow:0 34px 70px rgba(0,0,0,.65),inset 0 2px 0 rgba(255,214,170,.35),inset 0 0 0 3px #3a200f,inset 0 0 0 5px rgba(201,162,90,.55)}
+.placa{position:absolute;left:6%;bottom:3.4%;width:69%;height:6.2%;display:grid;place-items:center;border-radius:4px;
+  background:linear-gradient(#f3dc9d,#c9a25a 50%,#9a7433);box-shadow:0 2px 3px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.6);
+  font:italic 600 17px/1 var(--serif);color:#4a2f12;letter-spacing:.06em;text-shadow:0 1px 0 rgba(255,240,200,.6)}
+.pantalla{position:relative;flex:1;aspect-ratio:4/3;border:0;padding:0;border-radius:12% / 16%;overflow:hidden;background:#0d0d0b;
+  box-shadow:0 0 0 6px #1d120a,0 0 0 13px #d9c08a,0 0 0 15px #7a5a2c,0 0 0 17px #2a1709,inset 0 0 50px rgba(0,0,0,.95);-webkit-tap-highlight-color:transparent;isolation:isolate}
 .escena-tv{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#5a3f86,#22183d 70%,#140e26);
-  filter:grayscale(1) contrast(1.5) brightness(.75) blur(.7px);transition:filter 1.6s ease;animation:sinSenal 2.6s steps(1) infinite}
+  filter:grayscale(1) sepia(.25) hue-rotate(60deg) contrast(1.5) brightness(.72) blur(.7px);transition:filter 1.6s ease;animation:sinSenal 2.6s steps(1) infinite}
 @keyframes sinSenal{0%{transform:none}18%{transform:translateX(4px) skewX(-3deg)}21%{transform:none}52%{transform:translateY(-5px)}54%{transform:none}78%{transform:translateX(-6px) skewX(4deg)}80%{transform:none}}
 #ruido{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;opacity:.78;transition:opacity 1.4s ease;mix-blend-mode:screen;pointer-events:none}
 .lineas{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.3) 0 1px,transparent 1px 3px)}
@@ -191,19 +219,24 @@ button{font:inherit;cursor:pointer;color:inherit}
 .osd{position:absolute;z-index:3;font-family:"VT323",ui-monospace,monospace;color:#9dffbf;text-shadow:0 0 6px rgba(120,255,160,.85);letter-spacing:.05em;line-height:1;pointer-events:none;transition:opacity .4s,color 1s}
 .osd.ch{top:10%;left:11%;font-size:24px}
 .osd.reloj{bottom:10%;left:0;right:0;text-align:center;font-size:24px}
-.panel{width:19%;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:4%}
-.perilla{position:relative;width:76%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3d6,#e3b062 55%,#a8742f);box-shadow:0 3px 6px rgba(0,0,0,.35)}
-.perilla::after{content:"";position:absolute;left:44%;top:8%;width:12%;height:36%;background:#7a4c1c;border-radius:2px;transform-origin:50% 117%}
+.panel{position:relative;width:19%;display:flex;flex-direction:column;align-items:center;gap:12px;padding:6% 0 0;border-radius:8px;background:linear-gradient(#3a2212,#2a180c);box-shadow:inset 0 2px 6px rgba(0,0,0,.6),0 1px 0 rgba(255,214,170,.2)}
+.panel::before{content:"";position:absolute;top:5px;right:7px;width:7px;height:7px;border-radius:50%;background:#5a2a10;box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+.tv.lista .panel::before,.tv.al-aire .panel::before{background:#ffb04a;box-shadow:0 0 8px 2px rgba(255,170,60,.8)}
+.perilla{position:relative;width:74%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#7a5236,#2e1a0d 62%,#1a0e06);box-shadow:0 0 0 3px #c9a25a,0 0 0 5px #5c3d18,0 4px 8px rgba(0,0,0,.5)}
+.perilla.k1{background:radial-gradient(circle at 38% 32%,#7a5236,#2e1a0d 48%,transparent 49%),repeating-conic-gradient(#e8d6a8 0 3deg,#3a2414 3deg 30deg)}
+.perilla::after{content:"";position:absolute;left:44%;top:8%;width:12%;height:38%;background:#e8d6a8;border-radius:2px;transform-origin:50% 110%}
 .perilla.k1::after{transform:rotate(-40deg)}
 .perilla.k2::after{transform:rotate(70deg)}
-.rejilla{width:76%;flex:1;min-height:24px;border-radius:6px;background:repeating-linear-gradient(0deg,rgba(110,50,70,.35) 0 2px,transparent 2px 6px)}
-.patas{display:flex;justify-content:space-between;width:66%;margin:0 auto}
-.patas::before,.patas::after{content:"";width:12px;height:20px;background:#a87d8b;border-radius:0 0 5px 5px}
-.patas::before{transform:skewX(14deg)} .patas::after{transform:skewX(-14deg)}
+.rejilla{width:80%;flex:1;min-height:30px;margin-bottom:10px;border-radius:5px;box-shadow:inset 0 0 0 2px #c9a25a,inset 0 0 8px rgba(0,0,0,.6);
+  background:repeating-linear-gradient(45deg,rgba(0,0,0,.25) 0 1px,transparent 1px 3px),repeating-linear-gradient(-45deg,rgba(0,0,0,.25) 0 1px,transparent 1px 3px),linear-gradient(#a8865c,#7d5f3e)}
+.patas{display:flex;justify-content:space-between;width:74%;margin:0 auto}
+.patas::before,.patas::after{content:"";width:12px;height:22px;background:linear-gradient(90deg,#2a1709,#5a3720 50%,#2a1709);border-radius:0 0 3px 3px;box-shadow:inset 0 -4px 0 #c9a25a}
+.patas::before{transform:skewX(16deg)} .patas::after{transform:skewX(-16deg)}
 /* Estados de la tele */
 .tv.lista #ruido{opacity:.42}
 .tv.lista .pantalla{animation:llamaTv 1.8s ease-in-out infinite}
-@keyframes llamaTv{50%{box-shadow:0 0 0 7px #3b2a34,0 0 0 10px #c98ea0,0 0 40px 14px rgba(238,143,174,.55),inset 0 0 40px rgba(0,0,0,.9)}}
+@keyframes llamaTv{50%{box-shadow:0 0 0 6px #1d120a,0 0 0 13px #d9c08a,0 0 0 15px #7a5a2c,0 0 0 17px #2a1709,0 0 46px 22px rgba(255,190,110,.5),inset 0 0 50px rgba(0,0,0,.95)}}
 .tv.al-aire .escena-tv{filter:none;animation:none;background:radial-gradient(circle at 50% 38%,#ffd9e4,#f2a7bf 55%,#c9739a)}
 .tv.al-aire #ruido{opacity:.05}
 .tv.al-aire .pantalla{animation:none}
@@ -235,12 +268,76 @@ button{font:inherit;cursor:pointer;color:inherit}
 .escenario{position:absolute;left:0;top:0;width:1000px;height:1500px;transform-origin:0 0;transition:transform 1s cubic-bezier(.65,0,.3,1)}
 .escenario.quieto{transition:none}
 .pared{position:absolute;left:-3000px;right:-3000px;top:-3000px;height:4170px;
-  background:radial-gradient(circle,rgba(238,143,174,.16) 2.5px,transparent 3px) 0 0/92px 92px,
-    repeating-linear-gradient(90deg,#3f2c60 0 46px,#46316b 46px 92px)}
-.pared::after{content:"";position:absolute;inset:0;background:radial-gradient(900px 760px at 3500px 3640px,rgba(255,206,224,.2),transparent 70%)}
-.zocalo{position:absolute;left:-3000px;right:-3000px;top:1170px;height:22px;background:linear-gradient(#f3e3d3,#cdb39d);box-shadow:0 5px 10px rgba(0,0,0,.35)}
-.piso-c{position:absolute;left:-3000px;right:-3000px;top:1192px;height:3000px;
-  background:repeating-linear-gradient(90deg,rgba(0,0,0,.2) 0 2px,transparent 2px 130px),linear-gradient(#86604f,#57392d 320px,#3a261f 700px)}
+  background:var(--ruido) 0 0/260px 260px,var(--damasco) 0 0/120px 168px,
+    repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 2px,transparent 2px 60px),linear-gradient(#45305f,#35264c 3800px)}
+.pared::after{content:"";position:absolute;inset:0;background:radial-gradient(1000px 820px at 3500px 3600px,rgba(255,206,170,.22),transparent 70%)}
+.techo{position:absolute;left:-3000px;right:-3000px;top:-3000px;height:2976px;background:var(--ruido) 0 0/260px 260px,linear-gradient(#0f0a1a 2700px,#2a1d40)}
+.moldura{position:absolute;left:-3000px;right:-3000px;top:-26px;height:26px;background:linear-gradient(#5a4372,#e9d8c4 30%,#b89c82 60%,#6d5585);box-shadow:0 6px 12px rgba(0,0,0,.35)}
+.friso{position:absolute;left:-3000px;right:-3000px;top:905px;height:275px;
+  background:var(--ruido) 0 0/260px 260px,
+    linear-gradient(90deg,rgba(0,0,0,.32) 0 3px,rgba(255,255,255,.07) 3px 5px,transparent 5px) 0 0/124px 100%,
+    linear-gradient(#3b2a52,#2e2140);box-shadow:inset 0 -14px 24px rgba(0,0,0,.3)}
+.friso::before{content:"";position:absolute;left:0;right:0;top:-10px;height:20px;background:linear-gradient(#f3e3d3,#c9ae93 55%,#8a6f58);box-shadow:0 5px 9px rgba(0,0,0,.4)}
+.zocalo{position:absolute;left:-3000px;right:-3000px;top:1166px;height:30px;background:linear-gradient(#f3e3d3,#d6bea5 40%,#a88d74);box-shadow:0 6px 10px rgba(0,0,0,.45)}
+.piso-c{position:absolute;left:-3000px;right:-3000px;top:1196px;height:3000px;
+  background:linear-gradient(rgba(0,0,0,.5),transparent 110px),linear-gradient(transparent 260px,rgba(0,0,0,.45) 700px),
+    var(--grano-v) 0 0/300px 420px,
+    repeating-linear-gradient(90deg,#2a1a14 0 3px,#80573f 3px 131px,#2a1a14 131px 134px,#73503b 134px 262px,#2a1a14 262px 265px,#8a6046 265px 396px)}
+.alfombra{position:absolute;left:280px;top:1296px;width:440px;height:200px;border-radius:50%;z-index:1;
+  background:var(--ruido) 0 0/200px 200px,repeating-conic-gradient(rgba(240,214,150,.16) 0 5deg,transparent 5deg 15deg),
+    radial-gradient(closest-side,#8a2a40 0 30%,#e3bf78 31% 33%,#5e1a2c 34% 62%,#e3bf78 63% 65%,#7a2236 66% 90%,#e3bf78 91% 100%);
+  outline:5px dotted rgba(240,226,200,.75);outline-offset:2px;box-shadow:0 14px 24px rgba(0,0,0,.45)}
+.cuarto::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 85% 75% at 50% 58%,transparent 55%,rgba(6,3,12,.62))}
+.motas{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.mota{position:absolute;border-radius:50%;background:rgba(255,236,200,.75);box-shadow:0 0 6px rgba(255,220,160,.8);animation:mota var(--t,16s) ease-in-out infinite alternate;animation-delay:var(--d,0s)}
+@keyframes mota{0%{opacity:0;translate:0 0}20%{opacity:.8}80%{opacity:.5}100%{opacity:0;translate:var(--dx,30px) var(--dy,-80px)}}
+/* Tocadiscos */
+.tocadiscos{position:absolute;left:384px;top:1290px;width:232px;height:156px;z-index:6;border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tocadiscos svg{display:block;width:100%;height:100%;overflow:visible}
+.tocadiscos .gira{transform-box:fill-box;transform-origin:center}
+.tocadiscos.sonando .gira{animation:girar 1.8s linear infinite}
+@keyframes girar{to{transform:rotate(360deg)}}
+.tocadiscos .brazo{transform-origin:186px 30px;transform:rotate(-26deg);transition:transform 1s ease}
+.tocadiscos.sonando .brazo{transform:rotate(0deg)}
+.tocadiscos .chispa,.cajon-vinilos .chispa{position:absolute;top:-20px;right:-10px;font-size:30px;line-height:1;pointer-events:none;display:none;animation:titila 1.3s ease-in-out infinite}
+.tocadiscos.sin-ver .chispa,.cajon-vinilos.sin-ver .chispa{display:block}
+/* Cajón de vinilos */
+.cajon-vinilos{position:absolute;left:640px;top:1316px;width:134px;height:124px;z-index:6;border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cajon-vinilos .discos{position:absolute;left:8px;right:8px;bottom:40px;height:80px;display:flex;align-items:flex-end;justify-content:center}
+.cajon-vinilos .discos span{width:54px;height:74px;margin:0 -15px;border-radius:3px;background:linear-gradient(rgba(255,255,255,.3),transparent 45%),var(--c);box-shadow:0 2px 5px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.35)}
+.cajon-vinilos .discos span:nth-child(odd){transform:rotate(-7deg)} .cajon-vinilos .discos span:nth-child(even){transform:rotate(6deg) translateY(4px)}
+.cajon-vinilos .frente{position:absolute;left:0;right:0;bottom:0;height:58px;border-radius:4px;display:grid;place-items:center;font:700 13px/1 var(--serif);letter-spacing:.24em;color:rgba(50,26,10,.7);
+  background:var(--grano) 0 0/300px 150px,repeating-linear-gradient(rgba(0,0,0,.35) 0 2px,transparent 2px 19px),linear-gradient(#c08e60,#8a5f3c);background-blend-mode:multiply,normal,normal;box-shadow:0 8px 14px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,230,200,.35)}
+@media (hover:hover){ .cajon-vinilos:hover{filter:brightness(1.1) drop-shadow(0 0 14px rgba(245,201,122,.6))} }
+.zona-musica{position:absolute;left:370px;top:1268px;width:420px;height:196px;pointer-events:none}
+/* Hoja de vinilos */
+.vinilos{position:absolute;left:0;right:0;bottom:0;z-index:5;display:grid;justify-items:center;gap:12px;padding:40px 14px max(20px,env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,rgba(14,9,26,.94) 24%);transform:translateY(105%);transition:transform .55s cubic-bezier(.2,.9,.3,1.1)}
+.vinilos.on{transform:none}
+.vinilos-hoja{position:relative;width:100%;max-width:520px;background:linear-gradient(170deg,#fffdf8,#f4ecdf);color:var(--tinta);padding:18px 16px 16px;box-shadow:0 18px 44px rgba(0,0,0,.55);border-radius:4px;text-align:center}
+.vinilos-hoja::before{content:"";position:absolute;top:-11px;left:50%;width:84px;height:22px;transform:translateX(-50%) rotate(2deg);background:rgba(195,181,240,.7)}
+.vinilos-titulo{font-family:var(--mano);font-size:32px;line-height:1;margin:0;color:#c9567d}
+.vinilos-sub{font-size:14px;line-height:1.4;margin:4px 0 14px;color:#6a5a7a}
+.vinilos-lista{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-height:44vh;overflow:auto;padding:8px 6px}
+.vin-item{position:relative;border:0;padding:0;background:none;aspect-ratio:1;border-radius:4px;box-shadow:0 6px 14px rgba(0,0,0,.3);transition:transform .2s}
+.vin-item:active{transform:scale(.95)}
+.vin-item svg,.vin-tapa svg{display:block;width:100%;height:100%;border-radius:4px}
+.vin-item.nuevo::after{content:"nuevo";position:absolute;top:-8px;right:-6px;background:#c9567d;color:#fff;font:600 11px/1 system-ui,sans-serif;padding:4px 7px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.vin-item.falta{opacity:.45}
+.vin-sonando{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;text-align:left;padding-right:4px}
+.vin-tapa{position:relative;width:min(128px,32vw);aspect-ratio:1;margin-right:28px}
+.vin-tapa::before{content:"";position:absolute;top:5%;left:5%;width:90%;height:90%;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform 1s cubic-bezier(.2,.9,.3,1);
+  background:radial-gradient(circle,#f3e6d6 0 3%,var(--lc,#ee8fae) 4% 17%,#111 18% 20%,transparent 21%),repeating-radial-gradient(circle,#151515 0 3px,#262626 3px 5px)}
+.vin-sonando.afuera .vin-tapa::before{transform:translateX(34%)}
+.vin-tapa svg{position:relative;z-index:1;box-shadow:0 6px 14px rgba(0,0,0,.35)}
+.vin-de{font-family:var(--mano);font-size:32px;line-height:1;margin:0;color:#c9567d}
+.vin-para{margin:2px 0 10px;font-size:16px}
+.vin-barra{height:6px;border-radius:3px;background:rgba(59,43,79,.15);overflow:hidden}
+.vin-barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ee8fae,#c9567d)}
+.vin-botones{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.vin-botones .btn{padding:9px 16px;font-size:15px}
+.vin-botones .btn.sec{color:#8a5a2a;border-color:rgba(138,90,42,.5)}
+@media (hover:hover){ .tocadiscos:hover{filter:brightness(1.1) drop-shadow(0 0 14px rgba(245,201,122,.6))} }
 .penumbra{position:absolute;left:-3000px;right:-3000px;top:-3000px;bottom:-3000px;background:#0b0716;opacity:var(--oscuro,.5);transition:opacity 2s ease;pointer-events:none}
 .aviso-cuarto{position:absolute;left:0;right:0;top:0;z-index:3;height:120px;display:grid;place-content:center;text-align:center;padding:12px 16px;pointer-events:none;transition:opacity .5s;text-shadow:0 2px 12px rgba(0,0,0,.7)}
 .aviso-cuarto .arriba{font-family:var(--mano);font-size:clamp(28px,6.6vw,36px);color:var(--vela);margin:0 0 2px;line-height:1.1}
@@ -259,10 +356,14 @@ button{font:inherit;cursor:pointer;color:inherit}
 @keyframes titila{50%{opacity:.35;scale:.7}}
 .cosa.aparece{animation:aparecer 1.4s cubic-bezier(.2,.9,.3,1.3) backwards}
 @keyframes aparecer{0%{opacity:0;scale:.2;translate:0 -70px;filter:brightness(3)}55%{opacity:1;filter:brightness(1.7) drop-shadow(0 0 30px #f5c97a)}100%{opacity:1;scale:1;translate:0 0}}
-.cuadro{transform:rotate(var(--r,0deg));box-shadow:0 16px 28px rgba(0,0,0,.5)}
+.cuadro{transform:rotate(var(--r,0deg));box-shadow:0 16px 28px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.4)}
+.cuadro::after{content:"";position:absolute;inset:12px;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 14px rgba(0,0,0,.45);
+  background:linear-gradient(118deg,rgba(255,255,255,.26),rgba(255,255,255,.04) 32%,transparent 33%,transparent 62%,rgba(255,255,255,.08) 63%,transparent 75%)}
+.cuadro.blanco::after{inset:16px}
+.cuadro.madera,.mueble .tabla,.mueble .cajon{background-blend-mode:multiply}
 .cuadro img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
 .cuadro.oro{padding:12px;background:linear-gradient(135deg,#fff1c9,#e3b062 30%,#a8742f 55%,#f3d28a 80%,#b9853e)}
-.cuadro.madera{padding:13px;background:linear-gradient(135deg,#a8774f,#6b432c 50%,#8f5f3f)}
+.cuadro.madera{padding:13px;background:var(--grano) 0 0/300px 200px,linear-gradient(135deg,#b07d52,#6b432c 50%,#93613f)}
 .cuadro.blanco{padding:16px;background:#fbf7f0}
 .cuadro.blanco img{outline:3px solid #e6dccd}
 .cuadro.ovalo{padding:10px;border-radius:50%;background:linear-gradient(135deg,#fff1c9,#d9a65a 40%,#a8742f 70%,#f0c47e)}
@@ -274,7 +375,8 @@ button{font:inherit;cursor:pointer;color:inherit}
 .clavo{position:absolute;left:50%;top:-38px;width:13px;height:13px;margin-left:-6.5px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#c9b49c 55%,#6d5a48)}
 .cuadro.ovalo .clavo{top:-32px}
 .letrero .banderita{position:absolute;top:0;width:var(--w);height:98px;margin-left:calc(var(--w) / -2);transform-origin:50% 0;transform:rotate(var(--a));
-  display:grid;justify-items:center;padding-top:12px;font:italic 600 46px/1 var(--serif);color:var(--t);background:var(--c);
+  display:grid;justify-items:center;padding-top:12px;font:italic 600 46px/1 var(--serif);color:var(--t);
+  background:linear-gradient(transparent 6px,rgba(255,255,255,.35) 6px 8px,transparent 8px),repeating-linear-gradient(45deg,rgba(255,255,255,.13) 0 3px,transparent 3px 7px),linear-gradient(rgba(0,0,0,.18),transparent 30%),var(--c);
   clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%);animation:mecer 3.2s ease-in-out infinite alternate;animation-delay:var(--d)}
 @keyframes mecer{from{rotate:-3deg}to{rotate:3deg}}
 .letrero svg{position:absolute;inset:0}
@@ -292,12 +394,13 @@ button{font:inherit;cursor:pointer;color:inherit}
 .caja::before,.caja::after{content:"";position:absolute;top:-20px;width:20px;height:16px;border:5px solid var(--l);border-radius:50%}
 .caja::before{left:calc(50% - 25px)} .caja::after{left:calc(50% - 5px)}
 .mueble{position:absolute;left:180px;top:1086px;width:640px;height:200px;z-index:3}
-.mueble .tabla{position:absolute;left:-12px;right:-12px;top:0;height:24px;border-radius:6px;background:linear-gradient(#c4956d,#8a5f40);box-shadow:0 6px 10px rgba(0,0,0,.35)}
-.mueble .cajon{position:absolute;top:24px;width:50%;height:120px;background:linear-gradient(#a3724f,#7a5137);border:3px solid #65412b}
+.mueble::after{content:"";position:absolute;left:-30px;right:-30px;top:196px;height:22px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.5),transparent);z-index:-1}
+.mueble .tabla{position:absolute;left:-14px;right:-14px;top:0;height:26px;border-radius:7px;background:var(--grano) 0 0/400px 200px,linear-gradient(#d39f71,#8a5f40);box-shadow:0 7px 12px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,230,200,.4)}
+.mueble .cajon{position:absolute;top:26px;width:50%;height:118px;background:var(--grano) 0 0/400px 200px,linear-gradient(#a9764f,#744c33);box-shadow:inset 0 0 0 3px #5a3a25,inset 0 0 0 7px rgba(0,0,0,.12),inset 0 -10px 16px rgba(0,0,0,.25)}
 .mueble .cajon.i{left:0} .mueble .cajon.d{right:0}
-.mueble .cajon::after{content:"";position:absolute;left:50%;top:50%;width:30px;height:10px;margin:-5px 0 0 -15px;border-radius:5px;background:#e3b062}
-.mueble .pata{position:absolute;top:144px;width:18px;height:56px;background:#65412b;border-radius:0 0 4px 4px}
-.mueble .pata.i{left:28px;transform:skewX(8deg)} .mueble .pata.d{right:28px;transform:skewX(-8deg)}
+.mueble .cajon::after{content:"";position:absolute;left:50%;top:50%;width:46px;height:12px;margin:-6px 0 0 -23px;border-radius:6px;background:linear-gradient(#f3dc9d,#b88a3e);box-shadow:0 2px 3px rgba(0,0,0,.45)}
+.mueble .pata{position:absolute;top:144px;width:16px;height:58px;background:linear-gradient(90deg,#3a2414,#6b4529 50%,#3a2414);border-radius:0 0 3px 3px;box-shadow:inset 0 -6px 0 #c9a25a}
+.mueble .pata.i{left:30px;transform:skewX(10deg)} .mueble .pata.d{right:30px;transform:skewX(-10deg)}
 
 /* Vista de cerca */
 .detalle{position:absolute;left:0;right:0;bottom:0;z-index:5;display:grid;justify-items:center;gap:12px;padding:40px 16px max(22px,env(safe-area-inset-bottom));
@@ -530,8 +633,53 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   <div class="cuarto" id="cuarto">
    <div class="escenario" id="escenario">
     <span class="pared" aria-hidden="true"></span>
+    <span class="techo" aria-hidden="true"></span>
+    <span class="moldura" aria-hidden="true"></span>
+    <span class="friso" aria-hidden="true"></span>
     <span class="zocalo" aria-hidden="true"></span>
     <span class="piso-c" aria-hidden="true"></span>
+    <span class="alfombra" aria-hidden="true"></span>
+    <button class="tocadiscos sin-ver" id="tocadiscos" type="button" aria-label="Tocadiscos: poner o quitar la música">
+      <svg viewBox="0 0 232 156" aria-hidden="true">
+        <defs>
+          <linearGradient id="tdCuero" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3c8a8c"/><stop offset="1" stop-color="#22585a"/></linearGradient>
+          <linearGradient id="tdTapa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9dcc2"/><stop offset="1" stop-color="#cdb994"/></linearGradient>
+          <linearGradient id="tdBronce" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3dc9d"/><stop offset="1" stop-color="#a7802f"/></linearGradient>
+        </defs>
+        <ellipse cx="116" cy="150" rx="112" ry="8" fill="rgba(0,0,0,.45)"/>
+        <path d="M14 66 h204 v68 q0 12 -12 12 h-180 q-12 0 -12 -12z" fill="url(#tdCuero)"/>
+        <path d="M14 66 h204 v6 h-204z" fill="rgba(255,255,255,.18)"/>
+        <path d="M30 18 h172 l16 48 h-204z" fill="url(#tdTapa)" stroke="#a88f68" stroke-width="2"/>
+        <g transform="translate(108 42) scale(1 .32)">
+          <circle r="66" fill="#141414"/>
+          <g class="gira">
+            <circle r="66" fill="#151515"/>
+            <g fill="none" stroke="#2c2c2c" stroke-width="2"><circle r="59"/><circle r="52"/><circle r="45"/><circle r="38"/><circle r="31"/></g>
+            <circle r="21" fill="#ee8fae" id="tdEtiqueta"/><circle r="15" fill="none" stroke="#fbe3ef" stroke-width="2"/>
+            <circle cx="11" cy="0" r="3.5" fill="#fff"/>
+            <path d="M-7 -12 l14 0" stroke="#c9567d" stroke-width="3"/>
+          </g>
+          <path d="M0 0 L62 -22 A66 66 0 0 1 64 16 Z" fill="rgba(255,255,255,.1)"/>
+          <circle r="3" fill="#d9d9d9"/>
+        </g>
+        <g class="brazo">
+          <circle cx="186" cy="30" r="9" fill="url(#tdBronce)" stroke="#6e5222" stroke-width="2"/>
+          <path d="M186 30 L150 50 L136 48" fill="none" stroke="#e6e6e6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="128" y="44" width="12" height="8" rx="2" fill="#333"/>
+        </g>
+        <circle cx="44" cy="102" r="9" fill="url(#tdBronce)"/><circle cx="70" cy="102" r="9" fill="url(#tdBronce)"/>
+        <circle cx="168" cy="104" r="26" fill="#1f4a4b" stroke="url(#tdBronce)" stroke-width="3"/>
+        <g fill="#0f2e2f"><circle cx="160" cy="96" r="2.4"/><circle cx="168" cy="96" r="2.4"/><circle cx="176" cy="96" r="2.4"/><circle cx="156" cy="104" r="2.4"/><circle cx="164" cy="104" r="2.4"/><circle cx="172" cy="104" r="2.4"/><circle cx="180" cy="104" r="2.4"/><circle cx="160" cy="112" r="2.4"/><circle cx="168" cy="112" r="2.4"/><circle cx="176" cy="112" r="2.4"/></g>
+        <rect x="8" y="122" width="14" height="14" rx="3" fill="url(#tdBronce)"/><rect x="210" y="122" width="14" height="14" rx="3" fill="url(#tdBronce)"/>
+      </svg>
+      <span class="chispa" aria-hidden="true">✨</span>
+    </button>
+    <button class="cajon-vinilos" id="cajonVinilos" type="button" aria-label="Vinilos con mensajes para ti" hidden>
+      <span class="discos" id="discosCajon"></span>
+      <span class="frente">VINILOS</span>
+      <span class="chispa" aria-hidden="true">✨</span>
+    </button>
+    <span class="zona-musica" id="zonaMusica" aria-hidden="true"></span>
     <span class="penumbra" aria-hidden="true"></span>
     <div class="mueble" id="mueble" aria-hidden="true">
       <span class="tabla"></span><span class="cajon i"></span><span class="cajon d"></span><span class="pata i"></span><span class="pata d"></span>
@@ -555,10 +703,12 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
           <span class="osd reloj" id="osdReloj"></span>
         </button>
         <span class="panel" aria-hidden="true"><span class="perilla k1"></span><span class="perilla k2"></span><span class="rejilla"></span></span>
+        <span class="placa" aria-hidden="true">Saravisión</span>
       </div>
       <span class="patas" aria-hidden="true"></span>
     </div>
    </div>
+   <div class="motas" id="motas" aria-hidden="true"></div>
    <div class="aviso-cuarto" id="avisoCuarto">
      <p class="arriba" id="arriba">Estoy decorando algo para ti…</p>
      <p class="sube" id="cuenta"></p>
@@ -570,6 +720,24 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
        <div class="detalle-texto-box"><p class="detalle-titulo" id="detTitulo"></p><p class="detalle-texto" id="detTexto"></p></div>
      </div>
      <button class="btn sec" id="detVolver" type="button">Volver al cuarto</button>
+   </div>
+   <div class="vinilos" id="vinilos">
+     <div class="vinilos-hoja">
+       <div id="vinLista">
+         <p class="vinilos-titulo">Vinilos para ti</p>
+         <p class="vinilos-sub">Mensajes de la gente que te quiere. Toca uno para ponerlo.</p>
+         <div class="vinilos-lista" id="vinilosLista"></div>
+       </div>
+       <div class="vin-sonando" id="vinSonando" hidden>
+         <div class="vin-tapa" id="vinTapa"></div>
+         <div class="vin-info">
+           <p class="vin-de" id="vinDe"></p><p class="vin-para" id="vinPara"></p>
+           <div class="vin-barra"><i id="vinBarra"></i></div>
+           <div class="vin-botones"><button class="btn" id="vinPausa" type="button">Pausa</button><button class="btn sec" id="vinOtros" type="button">Otros vinilos</button></div>
+         </div>
+       </div>
+     </div>
+     <button class="btn sec" id="vinVolver" type="button">Volver al cuarto</button>
    </div>
    <p class="aviso-nuevo" id="avisoNuevo" aria-live="polite"></p>
   </div>
@@ -811,6 +979,22 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   const leer = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } };
   const guardar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
 
+  // Texturas: veta de madera, grano fino y papel tapiz damasco (SVG generado aquí mismo)
+  const svgURL = s => `url("data:image/svg+xml,${encodeURIComponent(s)}")`;
+  const ruidoSVG = (w, h, freq, oct, matriz) => `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><filter id="f" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="${freq}" numOctaves="${oct}" seed="7" stitchTiles="stitch"/><feColorMatrix values="${matriz}"/></filter><rect width="100%" height="100%" filter="url(#f)"/></svg>`;
+  const raiz = document.documentElement.style;
+  raiz.setProperty("--grano",   svgURL(ruidoSVG(400, 200, ".008 .28", 3, "0 0 0 0 .18 0 0 0 0 .09 0 0 0 0 .04 0 0 0 .55 0")));
+  raiz.setProperty("--grano-v", svgURL(ruidoSVG(300, 420, ".3 .007", 3, "0 0 0 0 .16 0 0 0 0 .08 0 0 0 0 .03 0 0 0 .5 0")));
+  raiz.setProperty("--ruido",   svgURL(ruidoSVG(260, 260, ".85", 2, "0 0 0 0 1 0 0 0 0 .95 0 0 0 0 .9 0 0 0 .07 0")));
+  raiz.setProperty("--damasco", svgURL(`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="168" viewBox="0 0 120 168"><g fill="#ffd9ea" fill-opacity=".075"><path d="M60 22c9 13 21 22 21 40s-12 28-21 40c-9-12-21-22-21-40s12-27 21-40z"/><path d="M0 106c7 9 15 15 15 28s-8 21-15 30c-7-9-15-17-15-30s8-19 15-28zM120 106c7 9 15 15 15 28s-8 21-15 30c-7-9-15-17-15-30s8-19 15-28z"/></g><g fill="none" stroke="#ffd9ea" stroke-opacity=".07" stroke-width="2"><path d="M60 102c-5 16-18 24-31 24M60 102c5 16 18 24 31 24M60 22c-5-10-14-15-24-15M60 22c5-10 14-15 24-15"/><circle cx="60" cy="62" r="7"/></g></svg>`));
+
+  // Motas de polvo flotando en la luz
+  for(let i = 0; i < (reduce ? 0 : 22); i++){
+    const m = document.createElement("span"); m.className = "mota"; const t = rnd(2, 4.5);
+    m.style.cssText = `left:${rnd(4,96).toFixed(1)}%;top:${rnd(15,92).toFixed(1)}%;width:${t.toFixed(1)}px;height:${t.toFixed(1)}px;--t:${rnd(12,22).toFixed(1)}s;--d:${(-rnd(0,20)).toFixed(1)}s;--dx:${rnd(-60,60).toFixed(0)}px;--dy:${rnd(-120,-40).toFixed(0)}px`;
+    $("#motas").appendChild(m);
+  }
+
   // El escenario mide 1000×1500 y se escala para caber en la pantalla, dejando arriba espacio para el aviso
   const ANCHO = 1000, ALTO = 1500, RESERVA = 120;
   let vista = {s:1, tx:0, ty:0}, enfocado = null, final = false;
@@ -822,7 +1006,9 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   }
   function rectLocal(el){ let x = 0, y = 0, n = el; while(n && n !== escenario){ x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; } return {x, y, w: el.offsetWidth, h: el.offsetHeight}; }
   // Acerca la cámara a un elemento: fw/fh = cuánto del ancho/alto de la pantalla ocupa, cy = a qué altura queda su centro
+  let ultimoEnfoque = null;
   function enfocar(el, fw, fh, cy, tope){
+    ultimoEnfoque = [el, fw, fh, cy, tope];
     const l = rectLocal(el), vw = innerWidth, vh = innerHeight;
     const base = Math.min(vw/ANCHO, (vh - RESERVA)/ALTO);
     const s = Math.min(vw*fw/l.w, vh*fh/l.h, tope ? base*tope : Infinity);
@@ -980,11 +1166,122 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     escenario.style.setProperty("--oscuro", (.5*(1 - n/Math.max(1, COSAS.length))).toFixed(2));
   }
 
+  // Vinilos con mensajes de voz: llegan poco a poco al cajón y suenan en el tocadiscos
+  const VINILOS = (C.vinilos || []).filter(v => v && v.audio);
+  const cajon = $("#cajonVinilos"), panelVin = $("#vinilos");
+  const oidos = new Set(leer("vinilos-oidos", []));
+  let llegados = leer("vinilos-llegados", 0), vinVisibles = -1, vozActual = -1, vozUltima = -1, esperaAntes = false, rafVoz = 0;
+  const estadoVin = VINILOS.map(v => {
+    const a = new Audio(), e = {a, ok:false};
+    a.preload = "metadata";
+    a.addEventListener("loadedmetadata", () => { e.ok = true; actualizarVinilos(); }, {once:true});
+    a.src = v.audio;
+    return e;
+  });
+  const ICONOS = {
+    corazon: `<path d="M50 88C20 66 6 50 6 32 6 18 17 8 30 8c10 0 17 6 20 14 3-8 10-14 20-14 13 0 24 10 24 24 0 18-14 34-44 56z"/>`,
+    estrella: `<path d="M50 6l11 32h34L67 58l11 34-28-21-28 21 11-34L5 38h34z"/><circle cx="88" cy="12" r="4"/><circle cx="12" cy="84" r="3"/>`,
+    luna: `<path d="M62 8a42 42 0 1 0 30 70A34 34 0 1 1 62 8z"/><circle cx="82" cy="22" r="4"/><circle cx="92" cy="42" r="2.5"/>`,
+    sol: `<circle cx="50" cy="50" r="22"/><g stroke="#fff" stroke-width="7" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(g => { const r = g*Math.PI/180; return `<line x1="${(50+32*Math.cos(r)).toFixed(1)}" y1="${(50+32*Math.sin(r)).toFixed(1)}" x2="${(50+44*Math.cos(r)).toFixed(1)}" y2="${(50+44*Math.sin(r)).toFixed(1)}"/>`; }).join("")}</g>`,
+    flores: [[28,38],[72,32],[50,70]].map(([x, y]) => `<g transform="translate(${x} ${y})">${[0,72,144,216,288].map(g => { const r = g*Math.PI/180; return `<circle cx="${(13*Math.cos(r)).toFixed(1)}" cy="${(13*Math.sin(r)).toFixed(1)}" r="10"/>`; }).join("")}<circle r="8" fill="#ffd27a"/></g>`).join(""),
+    nota: `<path d="M34 80a13 11 0 1 1-1-9V20l48-11v57a13 11 0 1 1-1-9V27l-46 10z"/>`,
+    pastel: `<rect x="14" y="54" width="72" height="34" rx="6"/><rect x="24" y="36" width="52" height="22" rx="5" fill-opacity=".75"/><rect x="47" y="16" width="6" height="20" rx="2"/><path d="M50 3c6 7 6 11 0 13-6-2-6-6 0-13z" fill="#ffd27a"/>`,
+    casa: `<path d="M50 10L8 46h12v42h60V46h12z"/><path d="M50 76c-10-8-16-13-16-20 0-5 4-8 8-8 3 0 6 2 8 5 2-3 5-5 8-5 4 0 8 3 8 8 0 7-6 12-16 20z" fill="#c9567d"/>`
+  };
+  function portadaVinilo(v){
+    const de = `De ${v.de}`, tinta = v.tinta || "#3b2b4f";
+    return `<svg viewBox="0 0 200 200" aria-hidden="true"><rect width="200" height="200" fill="${esc(v.color || "#f4a6bd")}"/>`
+      + `<circle cx="178" cy="178" r="78" fill="rgba(255,255,255,.14)"/><circle cx="20" cy="18" r="30" fill="rgba(255,255,255,.1)"/>`
+      + `<rect x="8" y="8" width="184" height="184" rx="3" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" stroke-dasharray="7 5"/>`
+      + `<g transform="translate(60 16) scale(.8)" fill="#fff" fill-opacity=".95">${ICONOS[v.dibujo] || ICONOS.corazon}</g>`
+      + `<text x="100" y="146" text-anchor="middle" font-family="Caveat, cursive" font-weight="600" font-size="36" fill="${tinta}"${de.length > 12 ? ' textLength="176" lengthAdjust="spacingAndGlyphs"' : ""}>${esc(de)}</text>`
+      + `<text x="100" y="178" text-anchor="middle" font-family="Caveat, cursive" font-size="26" fill="${tinta}" fill-opacity=".8">para ${esc(C.nombre)} ♥</text></svg>`;
+  }
+  const vinilosDisponibles = () => { const a = avance(), M = VINILOS.length; return VINILOS.map((v, j) => (a >= 1 || a >= j/M) && (estadoVin[j].ok || modoPrueba)); };
+  function actualizarVinilos(){
+    const disp = vinilosDisponibles(), n = disp.filter(Boolean).length;
+    cajon.classList.toggle("sin-ver", VINILOS.some((v, j) => disp[j] && !oidos.has(j)));
+    if(n === vinVisibles) return;
+    vinVisibles = n; cajon.hidden = n === 0;
+    $("#discosCajon").innerHTML = VINILOS.map((v, j) => disp[j] ? `<span style="--c:${esc(v.color || "#f4a6bd")}"></span>` : "").join("");
+    if(n > llegados){
+      const nuevos = n - llegados, j = disp.lastIndexOf(true);
+      avisar(nuevos === 1 ? `📀 Llegó un vinilo: De ${VINILOS[j].de} para ${C.nombre}` : `📀 Llegaron ${nuevos} vinilos con mensajes para ti`);
+      llegados = n; guardar("vinilos-llegados", n);
+    }
+    if(panelVin.classList.contains("on") && $("#vinSonando").hidden) pintarListaVin();
+  }
+  function pintarListaVin(){
+    const disp = vinilosDisponibles(), lista = $("#vinilosLista");
+    lista.innerHTML = "";
+    VINILOS.forEach((v, j) => {
+      if(!disp[j]) return;
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "vin-item" + (oidos.has(j) ? "" : " nuevo") + (estadoVin[j].ok ? "" : " falta");
+      b.setAttribute("aria-label", `De ${v.de} para ${C.nombre}`);
+      b.innerHTML = portadaVinilo(v);
+      b.addEventListener("click", () => ponerVinilo(j));
+      lista.appendChild(b);
+    });
+    $("#vinLista").hidden = false; $("#vinSonando").hidden = true;
+  }
+  function abrirVinilos(){
+    if(final) return;
+    enfocado = $("#zonaMusica"); cuarto.classList.add("enfocado"); $("#avisoNuevo").classList.remove("on");
+    enfocar(enfocado, .96, .4, .28, 2.6);
+    pintarListaVin();
+    clearTimeout(detT); detT = setTimeout(() => panelVin.classList.add("on"), reduce ? 0 : 600);
+  }
+  function ponerVinilo(j){
+    const v = VINILOS[j], e = estadoVin[j];
+    if(!e.ok){ avisar(`Falta el audio: ${v.audio}`); return; }
+    const cambiando = vozActual >= 0;
+    pararVoz(true);
+    if(!cambiando){ esperaAntes = esperaSonando && !esperaPausada; quitarEspera(); }
+    vozActual = vozUltima = j;
+    $("#tdEtiqueta").setAttribute("fill", v.color || "#f4a6bd");
+    e.a.currentTime = 0; e.a.volume = 1;
+    e.a.onended = terminarVoz;
+    e.a.play().then(() => tocadiscos.classList.add("sonando")).catch(() => {});
+    oidos.add(j); guardar("vinilos-oidos", [...oidos]); actualizarVinilos();
+    $("#vinTapa").innerHTML = portadaVinilo(v); $("#vinTapa").style.setProperty("--lc", v.color || "#f4a6bd");
+    $("#vinDe").textContent = `De ${v.de}`; $("#vinPara").textContent = `para ${C.nombre} ♥`;
+    $("#vinPausa").textContent = "Pausa"; $("#vinBarra").style.width = "0%";
+    $("#vinLista").hidden = true; const s = $("#vinSonando"); s.hidden = false; s.classList.remove("afuera");
+    requestAnimationFrame(() => requestAnimationFrame(() => s.classList.add("afuera")));
+    const r = tocadiscos.getBoundingClientRect(); corazones(r.left + r.width*.45, r.top + r.height*.2, 14);
+    const paso = () => { if(vozActual !== j) return; const d = e.a.duration; $("#vinBarra").style.width = (d ? e.a.currentTime/d*100 : 0).toFixed(1) + "%"; rafVoz = requestAnimationFrame(paso); };
+    cancelAnimationFrame(rafVoz); rafVoz = requestAnimationFrame(paso);
+  }
+  function pararVoz(silencio){
+    if(vozActual < 0) return;
+    const e = estadoVin[vozActual]; e.a.onended = null; e.a.pause();
+    vozActual = -1; cancelAnimationFrame(rafVoz);
+    tocadiscos.classList.remove("sonando"); $("#tdEtiqueta").setAttribute("fill", "#ee8fae");
+    $("#vinSonando").classList.remove("afuera");
+    if(!silencio && esperaAntes){ esperaAntes = false; ponerEspera(); }
+  }
+  function terminarVoz(){
+    $("#vinBarra").style.width = "100%"; $("#vinPausa").textContent = "Escuchar otra vez";
+    const r = tocadiscos.getBoundingClientRect(); corazones(r.left + r.width/2, r.top, 10);
+    pararVoz();
+  }
+  cajon.addEventListener("click", e => { e.stopPropagation(); if(enfocado && enfocado.id !== "zonaMusica"){ cerrarCosa(); return; } abrirVinilos(); });
+  $("#vinPausa").addEventListener("click", () => {
+    if(vozActual < 0){ if(vozUltima >= 0) ponerVinilo(vozUltima); return; }
+    const a = estadoVin[vozActual].a;
+    if(a.paused){ a.play().catch(() => {}); tocadiscos.classList.add("sonando"); $("#vinPausa").textContent = "Pausa"; }
+    else { a.pause(); tocadiscos.classList.remove("sonando"); $("#vinPausa").textContent = "Seguir"; }
+  });
+  $("#vinOtros").addEventListener("click", () => { pararVoz(); pintarListaVin(); });
+  $("#vinVolver").addEventListener("click", e => { e.stopPropagation(); cerrarCosa(); });
+
   let avisoHasta = 0;
   function pintarCuenta(){
     const b = bloqueada();
     tv.classList.toggle("lista", !b);
     actualizarCuarto();
+    actualizarVinilos();
     const N = COSAS.length;
     if(b){
       const ms = cumple - new Date();
@@ -1007,12 +1304,68 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   pintarCuenta();
   const relojT = setInterval(pintarCuenta, 1000);
 
+  // Música de espera: suena en el tocadiscos desde el primer toque en el cuarto
+  const tocadiscos = $("#tocadiscos");
+  const LISTA_ESPERA = [].concat(C.musicaEspera || []).map(x => typeof x === "string" ? {archivo: x} : x).filter(x => x && x.archivo);
+  const audioEspera = LISTA_ESPERA.length ? new Audio() : null;
+  let esperaFalla = !audioEspera, esperaSonando = false, esperaPausada = false, primerToque = true, fadeEsp = 0, notasEsp = 0, iEspera = 0, fallasEspera = 0;
+  const anunciarEspera = () => { const c = LISTA_ESPERA[iEspera]; if(c && c.nombre) avisar(`♪ ${c.nombre}`); };
+  function cargarEspera(i){ iEspera = (i + LISTA_ESPERA.length) % LISTA_ESPERA.length; audioEspera.src = LISTA_ESPERA[iEspera].archivo; }
+  if(audioEspera){
+    audioEspera.preload = "auto"; audioEspera.loop = LISTA_ESPERA.length === 1;
+    // Al terminar una canción pasa a la siguiente; si un archivo no está, lo salta
+    audioEspera.addEventListener("ended", () => { cargarEspera(iEspera + 1); if(esperaSonando) audioEspera.play().then(anunciarEspera).catch(() => {}); });
+    audioEspera.addEventListener("loadedmetadata", () => { fallasEspera = 0; esperaFalla = false; });
+    audioEspera.addEventListener("error", () => {
+      if(++fallasEspera >= LISTA_ESPERA.length){ esperaFalla = true; esperaSonando = false; tocadiscos.classList.remove("sonando"); return; }
+      cargarEspera(iEspera + 1);
+      if(esperaSonando) audioEspera.play().then(anunciarEspera).catch(() => {});
+    });
+    cargarEspera(0);
+  }
+  function volumenEspera(obj, fin){
+    clearInterval(fadeEsp);
+    fadeEsp = setInterval(() => {
+      const v = audioEspera.volume;
+      if(Math.abs(obj - v) <= .04){ audioEspera.volume = obj; clearInterval(fadeEsp); fin && fin(); }
+      else audioEspera.volume = Math.min(1, Math.max(0, v + (obj > v ? .04 : -.04)));
+    }, 50);
+  }
+  function ponerEspera(){
+    if(esperaFalla || esperaSonando || final) return;
+    audioEspera.volume = 0;
+    audioEspera.play().then(() => {
+      esperaSonando = true; tocadiscos.classList.add("sonando"); volumenEspera(.6);
+      anunciarEspera();
+      clearInterval(notasEsp);
+      notasEsp = setInterval(() => { if(!esperaSonando || enfocado) return; const r = tocadiscos.getBoundingClientRect(); notasMagicas(r.left + r.width*.45, r.top + r.height*.25, 2); }, 1700);
+    }).catch(() => {});
+  }
+  function quitarEspera(){
+    if(!esperaSonando) return;
+    esperaSonando = false; tocadiscos.classList.remove("sonando"); clearInterval(notasEsp);
+    volumenEspera(0, () => audioEspera.pause());
+  }
+  cuarto.addEventListener("pointerdown", e => {
+    if(!primerToque || e.target.closest("#tocadiscos")) return;
+    primerToque = false;
+    if(!esperaPausada) ponerEspera();
+  });
+  tocadiscos.addEventListener("click", e => {
+    e.stopPropagation();
+    if(enfocado){ cerrarCosa(); return; }
+    primerToque = false; tocadiscos.classList.remove("sin-ver");
+    if(vozActual >= 0){ pararVoz(); return; }
+    if(esperaFalla){ if(modoPrueba) avisar("Faltan las canciones en la carpeta musica"); return; }
+    if(esperaSonando){ esperaPausada = true; quitarEspera(); } else { esperaPausada = false; ponerEspera(); }
+  });
+
   // Modo detective: tocar una cosa acerca la cámara y muestra su recuerdo
   let detT = 0;
   function abrirCosa(i){
     const el = elsCosas[i], c = COSAS[i];
     if(!el || final) return;
-    enfocado = el; cuarto.classList.add("enfocado");
+    enfocado = el; cuarto.classList.add("enfocado"); $("#avisoNuevo").classList.remove("on");
     enfocar(el, .88, .5, .33, 3.4);
     abiertas.add(i); guardar("cuarto-abiertas", [...abiertas]); el.classList.remove("sin-ver");
     const img = el.querySelector("img[data-full]");
@@ -1027,12 +1380,12 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   }
   function cerrarCosa(){
     if(!enfocado || final) return;
-    enfocado = null; clearTimeout(detT);
-    detalle.classList.remove("on"); cuarto.classList.remove("enfocado"); vistaBase();
+    enfocado = null; clearTimeout(detT); pararVoz();
+    detalle.classList.remove("on"); panelVin.classList.remove("on"); cuarto.classList.remove("enfocado"); vistaBase();
   }
-  cuarto.addEventListener("click", e => { if(enfocado && !e.target.closest(".detalle-tarjeta")) cerrarCosa(); });
+  cuarto.addEventListener("click", e => { if(enfocado && !e.target.closest(".detalle-tarjeta, .vinilos-hoja")) cerrarCosa(); });
   document.addEventListener("keydown", e => { if(e.key === "Escape") cerrarCosa(); });
-  addEventListener("resize", () => { if(final) return; if(enfocado) enfocar(enfocado, .88, .5, .33, 3.4); else vistaBase(); });
+  addEventListener("resize", () => { if(final) return; if(enfocado && ultimoEnfoque) enfocar(...ultimoEnfoque); else vistaBase(); });
 
   let abierto = false, toques = 0, ultToque = 0;
   pantalla.addEventListener("click", e => {
@@ -1059,6 +1412,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
 
   // Entramos a la tele: se sintoniza a todo color, se abre el sobre y empieza todo
   async function encender(){
+    pararVoz(true); quitarEspera(); panelVin.classList.remove("on");
     musicaIniciada = true; sonar();
     final = true; enfocado = null; clearTimeout(detT); clearTimeout(avisoT);
     $("#avisoNuevo").classList.remove("on"); detalle.classList.remove("on"); cuarto.classList.remove("enfocado"); cuarto.classList.add("final");
