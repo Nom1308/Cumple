@@ -36,7 +36,7 @@ const CONFIG = {
   //  video: un video con sonido (se reproduce al tocarlo)
   //  viva:  un video cortito sin sonido que se mueve solo, como foto viva
   //  pie:   texto corto escrito en la polaroid
-  //  frase: lo que aparece en "Nuestro año" (las historias)
+  //  frase: la notica escrita a mano que aparece al abrir la foto en grande
   momentos: [
     { foto: "fotos/14-pecas.jpg",       pie: "El viento, tu pelo y tus pecas", frase: "Empecemos por lo obvio: eres preciosa." },
     { foto: "fotos/02-sonrisa.jpg",     pie: "Esa sonrisa",                    frase: "Esa sonrisa tranquila que me desarma cada vez." },
@@ -139,6 +139,8 @@ button{font:inherit;cursor:pointer;color:inherit}
 .sobre.abierto .sello{opacity:0;transform:translate(-50%,-50%) scale(.5)}
 .sobre.abierto .tarjeta{transform:translateY(-62%)}
 .sobre:not(.abierto):hover .sello{transform:translate(-50%,-50%) scale(1.06)}
+.sobre.tiembla{animation:tiembla .45s ease}
+@keyframes tiembla{20%{transform:translateX(-7px) rotate(-2deg)}40%{transform:translateX(6px) rotate(1.5deg)}60%{transform:translateX(-4px) rotate(-1deg)}80%{transform:translateX(2px)}}
 .toca{margin:34px 0 6px;font-size:17px}
 .sube{color:var(--suave);font-size:15px;margin:0}
 
@@ -171,48 +173,6 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .ded-firma{font-family:var(--mano);font-size:30px;color:var(--rosa);margin:28px 0 0;opacity:0;transition:opacity 1.2s ease}
 .dedicatoria.visto .ded-firma{opacity:1;transition-delay:var(--fd,1.6s)}
 
-/* ---------- Nuestro año (portada de historias) ---------- */
-.abanico{position:relative;width:min(340px,86vw);height:300px;margin:10px auto 34px;border:0;background:none;padding:0;display:block}
-.abanico .carta-f{position:absolute;left:50%;top:10px;width:180px;background:var(--papel);padding:8px 8px 30px;box-shadow:0 16px 34px rgba(0,0,0,.5);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
-.abanico .carta-f img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover}
-.abanico .c1{transform:translateX(-50%) translateX(-78px) rotate(-12deg)}
-.abanico .c2{transform:translateX(-50%) translateX(78px) rotate(11deg)}
-.abanico .c3{transform:translateX(-50%) translateY(-6px) rotate(-1deg)}
-.abanico:hover .c1{transform:translateX(-50%) translateX(-96px) rotate(-16deg)}
-.abanico:hover .c2{transform:translateX(-50%) translateX(96px) rotate(15deg)}
-.abanico .play{position:absolute;left:50%;top:128px;transform:translate(-50%,-50%);width:66px;height:66px;border-radius:50%;background:rgba(27,19,48,.72);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:grid;place-items:center;border:1px solid rgba(245,201,122,.6);z-index:3}
-.abanico .play svg{width:24px;height:24px;margin-left:4px;fill:var(--vela)}
-
-/* ---------- Historias ---------- */
-.cuentos{position:fixed;inset:0;z-index:80;background:#0d0818;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;-webkit-user-select:none;user-select:none}
-.cuentos.on{opacity:1;visibility:visible}
-.cuentos .difuso{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(40px) brightness(.45) saturate(1.2);transition:background-image .6s}
-.marco-c{position:absolute;inset:0;overflow:hidden;background:#000}
-@media (min-width:700px) and (min-aspect-ratio:3/4){
-  .marco-c{inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);height:94vh;aspect-ratio:9/16;border-radius:16px;box-shadow:0 30px 90px rgba(0,0,0,.6)}
-}
-.escena{position:absolute;inset:0}
-.escena img,.escena video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:entra .7s ease}
-.escena img.kb{animation:entra .7s ease,kb var(--D,6s) linear forwards}
-@keyframes entra{from{opacity:0}to{opacity:1}}
-@keyframes kb{from{transform:scale(1.04) translate(var(--x0),var(--y0))}to{transform:scale(1.16) translate(var(--x1),var(--y1))}}
-.cuentos.pausa .escena img.kb{animation-play-state:paused}
-.sombra-c{position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(0,0,0,.45),transparent 18%,transparent 55%,rgba(10,6,22,.85))}
-.barras{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:4px;z-index:3}
-.barras span{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}
-.barras i{display:block;height:100%;width:0;background:#fff}
-.frase{position:absolute;left:0;right:0;bottom:0;padding:0 26px max(46px,env(safe-area-inset-bottom));z-index:3;font-family:var(--mano);font-size:clamp(30px,8vw,40px);line-height:1.15;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.6)}
-.frase span{display:inline-block;opacity:0;transform:translateY(10px);animation:palabra .5s ease forwards;animation-delay:calc(.35s + var(--w) * 90ms)}
-@keyframes palabra{to{opacity:1;transform:none}}
-.cuentos .cerrar{position:absolute;top:24px;right:12px;z-index:5;width:44px;height:44px;border:0;background:none;color:#fff;font-size:30px;line-height:1}
-.cuentos .zonas{position:absolute;inset:60px 0 0;display:grid;grid-template-columns:1fr 2fr;z-index:2}
-.cuentos .zonas button{background:none;border:0;padding:0}
-.cuentos .ayuda{position:absolute;top:30px;left:16px;z-index:4;font-size:13px;color:rgba(255,255,255,.75);transition:opacity .6s}
-.fin-c{position:absolute;inset:0;z-index:6;display:grid;place-content:center;justify-items:center;gap:22px;text-align:center;padding:30px;background:rgba(13,8,24,.82)}
-.fin-c p{font-family:var(--mano);font-size:clamp(34px,8vw,46px);color:var(--vela);margin:0;line-height:1.15}
-.fin-c .botones{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-
 /* ---------- Galería ---------- */
 .marco{position:relative;aspect-ratio:1/1;overflow:hidden;background:#2b2140}
 .marco img,.marco video{width:100%;height:100%;object-fit:cover;display:block}
@@ -221,8 +181,17 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .ph small{font-family:system-ui,sans-serif;font-size:12px;opacity:.7;word-break:break-all}
 .insignia{position:absolute;right:8px;bottom:8px;width:34px;height:34px;border-radius:50%;background:rgba(27,19,48,.7);display:grid;place-items:center}
 .insignia svg{width:13px;height:13px;margin-left:2px;fill:#fff}
-.mesa{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 16px;max-width:520px;margin:0 auto}
-.pola{display:block;width:100%;background:var(--papel);border:0;padding:9px 9px 0;color:var(--tinta);text-align:center;box-shadow:0 12px 28px rgba(0,0,0,.45);transform:rotate(var(--rot));-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.mesa{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 16px;max-width:520px;margin:14px auto 0}
+.pola{position:relative;display:block;width:100%;background:linear-gradient(170deg,#fffdf8,#f4ecdf);border:0;padding:9px 9px 0;color:var(--tinta);text-align:center;box-shadow:0 12px 28px rgba(0,0,0,.45);transform:rotate(var(--rot));-webkit-tap-highlight-color:transparent;touch-action:manipulation;opacity:0}
+.mesa:not(.regada) .pola:nth-child(even){margin-top:26px}
+/* Cinta adhesiva */
+.pola::before,.tarjeta-v::before{content:"";position:absolute;top:-11px;left:calc(50% + var(--cx,0px));z-index:2;width:78px;height:22px;transform:translateX(-50%) rotate(var(--cr,-3deg));
+  background:repeating-linear-gradient(45deg,rgba(255,255,255,.2) 0 4px,transparent 4px 9px),var(--cinta,rgba(238,143,174,.6));box-shadow:0 1px 3px rgba(0,0,0,.18)}
+/* Cae sobre la mesa y se revela como una polaroid de verdad */
+.pola.visto{opacity:1;animation:posa .9s cubic-bezier(.2,.9,.3,1.15) backwards;animation-delay:calc(var(--n,0) * 130ms)}
+@keyframes posa{from{opacity:0;transform:translateY(-50px) rotate(calc(var(--rot) * -1.8)) scale(1.12)}to{opacity:1;transform:rotate(var(--rot))}}
+.pola .marco>img,.pola .marco>video{filter:sepia(.55) brightness(1.6) contrast(.5) saturate(.3) blur(2px);transition:filter 2.8s ease;transition-delay:calc(var(--n,0) * 130ms + .5s)}
+.pola.visto .marco>img,.pola.visto .marco>video{filter:none}
 .pie{display:block;font-family:var(--mano);font-size:19px;line-height:1.15;padding:9px 4px 13px;min-height:52px}
 .mesa.regada{display:block;max-width:none}
 .mesa.regada .pola{position:absolute;width:220px;padding:11px 11px 0;cursor:grab;transition:transform .25s,box-shadow .25s}
@@ -232,11 +201,14 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 
 .visor{position:fixed;inset:0;z-index:85;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:20px;background:rgba(12,8,24,.94);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .visor.on{opacity:1;visibility:visible}
-.visor figure{margin:0;display:grid;justify-items:center;gap:14px;grid-column:2;min-width:0}
-.visor .marco{aspect-ratio:auto;background:none;max-width:100%;overflow:visible}
-.visor .marco img,.visor .marco video{width:auto;height:auto;max-width:min(100%,960px);max-height:72vh;margin:0 auto;object-fit:contain;border:10px solid var(--papel);box-shadow:0 20px 60px rgba(0,0,0,.6);background:#000}
+.visor figure{margin:0;display:grid;justify-items:center;gap:16px;grid-column:2;min-width:0}
+.tarjeta-v{position:relative;width:fit-content;max-width:100%;background:linear-gradient(170deg,#fffdf8,#f4ecdf);padding:12px 12px 0;box-shadow:0 24px 70px rgba(0,0,0,.6);transform:rotate(-1deg)}
+.tarjeta-v.entra{animation:visorEntra .55s cubic-bezier(.2,.9,.3,1.1)}
+@keyframes visorEntra{from{opacity:0;transform:translateY(26px) rotate(2.5deg) scale(.94)}to{opacity:1;transform:rotate(-1deg)}}
+.visor .marco{aspect-ratio:auto;background:none;overflow:visible}
+.visor .marco img,.visor .marco video{display:block;width:auto;height:auto;max-width:min(calc(100vw - 190px),900px);max-height:60vh;object-fit:contain;background:#000}
 .visor .ph{width:min(76vw,460px);aspect-ratio:1}
-#vpie{font-family:var(--mano);font-size:clamp(24px,4.5vw,32px);color:var(--papel);text-align:center;line-height:1.2}
+#vpie{width:0;min-width:100%;margin:0;font-family:var(--mano);font-size:clamp(25px,4.5vw,32px);color:var(--tinta);text-align:center;line-height:1.2;padding:14px 8px 18px}
 #vnum{font-size:14px;color:var(--suave)}
 .vbtn{background:rgba(255,255,255,.08);border:0;border-radius:50%;width:48px;height:48px;font-size:28px;line-height:1;color:var(--papel)}
 #vx{position:absolute;top:14px;right:14px;font-size:30px}
@@ -245,6 +217,7 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
   .visor figure{grid-column:1}
   #vprev,#vnext{position:absolute;bottom:18px}
   #vprev{left:18px} #vnext{right:18px}
+  .visor .marco img,.visor .marco video{max-width:calc(100vw - 48px);max-height:56vh}
 }
 
 /* ---------- Frasco ---------- */
@@ -380,7 +353,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       <span class="solapa"></span>
       <span class="sello" id="sello">B</span>
     </button>
-    <p class="toca">Toca el sobre para abrirlo</p>
+    <p class="toca" id="toca">Toca el sobre para abrirlo</p>
     <p class="sube" id="cuenta"></p>
   </div>
 </div>
@@ -405,21 +378,9 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     <p class="ded-firma" id="dedFirma"></p>
   </section>
 
-  <section id="tuano" class="centro">
-    <h2>Nuestro año</h2>
-    <p class="nota">Fotos, videos y unas palabras para cada momento. Sube el volumen y ponte cómoda.</p>
-    <button class="abanico" id="abanico" type="button" aria-label="Ver nuestro año en historias">
-      <span class="carta-f c1"><img id="ab1" alt=""></span>
-      <span class="carta-f c2"><img id="ab2" alt=""></span>
-      <span class="carta-f c3"><img id="ab3" alt=""></span>
-      <span class="play"><svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg></span>
-    </button>
-    <button class="btn" id="btnHistorias" type="button">Ver nuestro año</button>
-  </section>
-
   <section id="momentos" class="centro">
     <h2>Momentos que guardo</h2>
-    <p class="nota" id="notaFotos">Toca una foto para verla en grande.</p>
+    <p class="nota" id="notaFotos">Toca una foto para leer lo que te escribí.</p>
     <div class="mesa" id="mesa"></div>
   </section>
 
@@ -507,30 +468,10 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
 </main>
 <footer id="pieFinal"></footer>
 
-<div class="cuentos" id="cuentos" role="dialog" aria-modal="true" aria-label="Nuestro año en historias" aria-hidden="true">
-  <div class="difuso" id="difuso"></div>
-  <div class="marco-c">
-    <div class="escena" id="escena"></div>
-    <div class="sombra-c"></div>
-    <div class="barras" id="barras"></div>
-    <p class="ayuda" id="ayudaC">Toca a la derecha para avanzar, mantén para pausar</p>
-    <div class="zonas"><button type="button" id="zPrev" aria-label="Anterior"></button><button type="button" id="zNext" aria-label="Siguiente"></button></div>
-    <p class="frase" id="frase"></p>
-    <button class="cerrar" id="cerrarC" type="button" aria-label="Cerrar">×</button>
-    <div class="fin-c" id="finC" hidden>
-      <p>Y lo mejor todavía está por venir.</p>
-      <div class="botones">
-        <button class="btn" id="seguirC" type="button">Seguir con tu regalo</button>
-        <button class="btn sec" id="otraC" type="button">Verlo otra vez</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Foto en grande" aria-hidden="true">
   <button class="vbtn" id="vx" type="button" aria-label="Cerrar">×</button>
   <button class="vbtn" id="vprev" type="button" aria-label="Anterior">‹</button>
-  <figure><div id="vimg"></div><figcaption id="vpie"></figcaption><span id="vnum"></span></figure>
+  <figure><div class="tarjeta-v" id="vcard"><div id="vimg"></div><p id="vpie"></p></div><span id="vnum"></span></figure>
   <button class="vbtn" id="vnext" type="button" aria-label="Siguiente">›</button>
 </div>
 
@@ -625,14 +566,45 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   const cumple = fecha(C.fechaCumple);
   $("#paraNombre").textContent = C.sobre || `Para ${C.nombre}`;
   $("#sello").textContent = (C.de || "♥").trim().charAt(0).toUpperCase();
-  if(cumple){
-    const d = Math.round((cumple - hoy())/DIA);
-    $("#cuenta").textContent = d > 1 ? `Faltan ${d} días para tu cumpleaños.` : d === 1 ? "Mañana es tu cumpleaños." : d === 0 ? "Hoy es tu día. Sube el volumen." : "Sube el volumen.";
-    $("#heroFecha").textContent = `${cumple.getDate()} de ${MESES[cumple.getMonth()]}`;
+  if(cumple) $("#heroFecha").textContent = `${cumple.getDate()} de ${MESES[cumple.getMonth()]}`;
+
+  // El sobre no se abre hasta el día del cumpleaños.
+  // Truco para revisarla antes: tocar el sobre 28 veces seguidas (modo prueba, dura hasta cerrar el navegador).
+  let modoPrueba = false;
+  try { modoPrueba = sessionStorage.getItem("cumple-prueba") === "1"; } catch(e){}
+  const bloqueada = () => !!cumple && new Date() < cumple && !modoPrueba;
+  let avisoHasta = 0;
+  function pintarCuenta(){
+    if(!cumple) return;
+    if(bloqueada()){
+      const ms = cumple - new Date();
+      const d = Math.floor(ms/DIA), h = Math.floor(ms/36e5)%24, m = Math.floor(ms/6e4)%60, s = Math.floor(ms/1e3)%60;
+      if(Date.now() > avisoHasta) $("#toca").textContent = `Este sobre se abre el ${cumple.getDate()} de ${MESES[cumple.getMonth()]}`;
+      $("#cuenta").textContent = (d > 0 ? `Faltan ${d} ${d === 1 ? "día" : "días"}, ` : "Faltan ") + `${h} h, ${m} min y ${s} s`;
+    } else {
+      $("#toca").textContent = "Toca el sobre para abrirlo";
+      $("#cuenta").textContent = modoPrueba && new Date() < cumple ? "Modo prueba: solo tú puedes ver esto."
+        : Math.round((cumple - hoy())/DIA) === 0 ? "Hoy es tu día. Sube el volumen." : "Sube el volumen.";
+    }
   }
-  let abierto = false;
+  pintarCuenta();
+  const relojT = setInterval(pintarCuenta, 1000);
+
+  let abierto = false, toques = 0, ultToque = 0;
   $("#sobre").addEventListener("click", () => {
-    if(abierto) return; abierto = true;
+    if(abierto) return;
+    if(bloqueada()){
+      const t = performance.now();
+      toques = t - ultToque < 1500 ? toques + 1 : 1; ultToque = t;
+      if(toques < 28){
+        const s = $("#sobre"); s.classList.remove("tiembla"); void s.offsetWidth; s.classList.add("tiembla");
+        $("#toca").textContent = "Todavía no… un poquito de paciencia."; avisoHasta = Date.now() + 2200;
+        return;
+      }
+      modoPrueba = true;
+      try { sessionStorage.setItem("cumple-prueba", "1"); } catch(e){}
+    }
+    abierto = true; clearInterval(relojT);
     $("#sobre").classList.add("abierto");
     musicaIniciada = true; sonar();
     setTimeout(() => {
@@ -708,93 +680,18 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   tamCielo();
   if(!reduce) requestAnimationFrame(dibujarCielo);
 
-  /* ---------- Historias: "Nuestro año" ---------- */
-  const fotosSolo = momentos.filter(m => m.foto);
-  [["#ab1", 3], ["#ab2", 6], ["#ab3", 0]].forEach(([sel, i]) => { const f = fotosSolo[i] || fotosSolo[0]; if(f){ $(sel).src = miniDe(f.foto); $(sel).onerror = function(){ this.onerror = null; this.src = f.foto; }; } });
-  if(!momentos.length){ $("#tuano").hidden = true; $("#momentos").hidden = true; }
-  const cuentos = $("#cuentos"), escena = $("#escena"), barras = $("#barras");
-  barras.innerHTML = momentos.map(() => "<span><i></i></span>").join("");
-  const barrasI = [...barras.querySelectorAll("i")];
-  let ci = 0, tAcum = 0, tPrev = 0, dur = 6000, pausado = false, abiertoC = false, rafC = 0, videoC = null, presion = 0, largo = false;
-  const DUR_FOTO = 6000;
-  function pintarBarras(){ barrasI.forEach((b, i) => { b.style.width = i < ci ? "100%" : i > ci ? "0%" : Math.min(100, tAcum/dur*100) + "%"; }); }
-  function mostrarC(i){
-    ci = i; tAcum = 0; dur = DUR_FOTO;
-    if(videoC){ videoC.pause(); videoC = null; soltarM("historia-video"); }
-    const mo = momentos[i];
-    escena.innerHTML = "";
-    const fondo = mo.foto || mo.poster;
-    $("#difuso").style.backgroundImage = fondo ? `url("${fondo}")` : "none";
-    if(mo.foto){
-      const img = new Image(); img.src = mo.foto; img.alt = mo.pie || ""; img.className = "kb";
-      const dx = rnd(-3,3), dy = rnd(-3,3);
-      img.style.cssText = `--D:${DUR_FOTO}ms;--x0:${dx}%;--y0:${dy}%;--x1:${-dx}%;--y1:${-dy*.6}%`;
-      escena.appendChild(img);
-      img.onerror = () => { escena.innerHTML = `<div class="ph" style="position:absolute;inset:0"><span>Tu foto aquí</span><small>${esc(mo.foto)}</small></div>`; };
-    } else {
-      const v = document.createElement("video");
-      v.src = mo.video || mo.viva; v.playsInline = true; v.setAttribute("playsinline",""); if(mo.poster) v.poster = mo.poster;
-      if(mo.viva){ v.muted = true; v.loop = true; v.setAttribute("muted",""); }
-      else { videoC = v; retener("historia-video"); v.addEventListener("loadedmetadata", () => { if(isFinite(v.duration) && v.duration > 1) dur = v.duration*1000 + 400; }); }
-      escena.appendChild(v);
-      v.play().catch(() => { if(!mo.viva){ v.muted = true; v.play().catch(()=>{}); } });
-      v.onerror = () => { dur = 2500; };
-    }
-    const fr = $("#frase"); fr.innerHTML = "";
-    String(mo.frase || mo.pie || "").split(" ").forEach((w, k) => { const s = document.createElement("span"); s.textContent = w; s.style.setProperty("--w", k); fr.appendChild(s); fr.appendChild(document.createTextNode(" ")); });
-    pintarBarras();
-    const sig = momentos[i+1]; if(sig && sig.foto){ const pre = new Image(); pre.src = sig.foto; }
-  }
-  function bucleC(t){
-    if(!abiertoC) return;
-    const dt = tPrev ? t - tPrev : 0; tPrev = t;
-    if(!pausado && $("#finC").hidden){
-      if(videoC && !videoC.paused && isFinite(videoC.duration)) tAcum = videoC.currentTime*1000;
-      else tAcum += dt;
-      pintarBarras();
-      if(tAcum >= dur) siguienteC();
-    }
-    rafC = requestAnimationFrame(bucleC);
-  }
-  function siguienteC(){ if(ci < momentos.length - 1) mostrarC(ci + 1); else finC(); }
-  function anteriorC(){ mostrarC(Math.max(0, ci - 1)); }
-  function finC(){
-    if(videoC){ videoC.pause(); videoC = null; soltarM("historia-video"); }
-    tAcum = dur; pintarBarras(); $("#finC").hidden = false; $("#seguirC").focus();
-    confeti(60);
-  }
-  function abrirC(desde){
-    abiertoC = true; pausado = false; cuentos.classList.remove("pausa"); $("#finC").hidden = true;
-    cuentos.classList.add("on"); cuentos.setAttribute("aria-hidden","false"); document.body.classList.add("locked");
-    $("#ayudaC").style.opacity = 1; setTimeout(() => { $("#ayudaC").style.opacity = 0; }, 3500);
-    mostrarC(desde || 0); tPrev = 0; rafC = requestAnimationFrame(bucleC);
-  }
-  function cerrarC(){
-    abiertoC = false; cancelAnimationFrame(rafC);
-    if(videoC){ videoC.pause(); videoC = null; } soltarM("historia-video");
-    escena.innerHTML = ""; cuentos.classList.remove("on"); cuentos.setAttribute("aria-hidden","true"); document.body.classList.remove("locked");
-  }
-  function pausar(p){ pausado = p; cuentos.classList.toggle("pausa", p); if(videoC){ p ? videoC.pause() : videoC.play().catch(()=>{}); } }
-  $("#abanico").addEventListener("click", () => abrirC(0));
-  $("#btnHistorias").addEventListener("click", () => abrirC(0));
-  $("#cerrarC").addEventListener("click", cerrarC);
-  $("#otraC").addEventListener("click", () => { $("#finC").hidden = true; mostrarC(0); });
-  $("#seguirC").addEventListener("click", () => { cerrarC(); $("#momentos").scrollIntoView({behavior: reduce ? "auto" : "smooth"}); });
-  [["#zPrev", anteriorC], ["#zNext", siguienteC]].forEach(([sel, fn]) => {
-    const b = $(sel);
-    b.addEventListener("pointerdown", () => { largo = false; presion = setTimeout(() => { largo = true; pausar(true); }, 260); });
-    const fin = () => { clearTimeout(presion); if(largo){ pausar(false); } };
-    b.addEventListener("pointerup", fin); b.addEventListener("pointercancel", fin); b.addEventListener("pointerleave", fin);
-    b.addEventListener("click", e => { if(largo){ e.preventDefault(); largo = false; return; } fn(); });
-  });
-
   /* ---------- Galería ---------- */
+  if(!momentos.length) $("#momentos").hidden = true;
   const mesa = $("#mesa"); let zTop = 10;
+  const CINTAS = ["rgba(238,143,174,.6)","rgba(195,181,240,.62)","rgba(245,201,122,.6)","rgba(159,216,200,.6)"];
   const polas = momentos.map((mo, i) => {
     const b = document.createElement("button");
     b.type = "button"; b.className = "pola";
     b.setAttribute("aria-label", `${mo.foto ? "Ver foto" : "Ver video"}: ${mo.pie || i+1}`);
     b.style.setProperty("--rot", rnd(-6,6).toFixed(1)+"deg");
+    b.style.setProperty("--cinta", CINTAS[i % CINTAS.length]);
+    b.style.setProperty("--cr", rnd(-9,9).toFixed(1)+"deg");
+    b.style.setProperty("--cx", rnd(-20,20).toFixed(0)+"px");
     b.appendChild(medio(mo, {mini:true, insignia:true}));
     const pie = document.createElement("span"); pie.className = "pie"; pie.textContent = mo.pie || ""; b.appendChild(pie);
     mesa.appendChild(b);
@@ -818,6 +715,13 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     b.addEventListener("click", e => { if(mov){ mov = false; e.preventDefault(); return; } abrirVisor(i); });
     return b;
   });
+  // Cada polaroid cae y se revela cuando llega a la pantalla
+  if("IntersectionObserver" in window){
+    const ioP = new IntersectionObserver(es => {
+      es.filter(e => e.isIntersecting).forEach((e, j) => { e.target.style.setProperty("--n", j); e.target.classList.add("visto"); ioP.unobserve(e.target); });
+    }, {threshold:.25});
+    polas.forEach(p => ioP.observe(p));
+  } else polas.forEach(p => p.classList.add("visto"));
   let anchoMesa = 0;
   function acomodar(){
     const w = mesa.parentElement.clientWidth - 40;
@@ -825,11 +729,11 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     if(w < 700){
       mesa.classList.remove("regada"); mesa.style.height = "";
       polas.forEach(p => { p.style.left = p.style.top = p.style.zIndex = ""; });
-      $("#notaFotos").textContent = "Toca una foto para verla en grande.";
+      $("#notaFotos").textContent = "Toca una foto para leer lo que te escribí.";
       return;
     }
     mesa.classList.add("regada");
-    $("#notaFotos").textContent = "Arrastra las fotos para acomodarlas, o tócalas para verlas en grande.";
+    $("#notaFotos").textContent = "Arrastra las fotos para acomodarlas, o tócalas para leer lo que te escribí.";
     const pw = 220, alto = 288;
     const cols = Math.max(2, Math.min(4, Math.floor(w/(pw+34))));
     const filas = Math.ceil(polas.length/cols), cw = w/cols;
@@ -850,8 +754,11 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     box.appendChild(medio(mo, {controles:true}));
     const v = box.querySelector("video");
     if(v && mo.video){ retener("visor-video"); v.play().catch(()=>{}); v.addEventListener("ended", () => soltarM("visor-video")); }
-    $("#vpie").textContent = mo.pie || "";
+    $("#vpie").textContent = mo.frase || mo.pie || "";
     $("#vnum").textContent = `${vi+1} de ${momentos.length}`;
+    const card = $("#vcard");
+    ["--cinta","--cr","--cx"].forEach(k => card.style.setProperty(k, polas[vi].style.getPropertyValue(k)));
+    card.classList.remove("entra"); void card.offsetWidth; card.classList.add("entra");
   }
   function abrirVisor(i){ vi = i; focoPrevio = document.activeElement; visor.classList.add("on"); visor.setAttribute("aria-hidden","false"); document.body.classList.add("locked"); pintarVisor(); $("#vx").focus(); }
   function cerrarVisor(){ pararVisorVideo(); $("#vimg").innerHTML = ""; visor.classList.remove("on"); visor.setAttribute("aria-hidden","true"); document.body.classList.remove("locked"); focoPrevio && focoPrevio.focus(); }
@@ -866,9 +773,6 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   document.addEventListener("keydown", e => {
     if(visor.classList.contains("on")){
       if(e.key === "Escape") cerrarVisor(); if(e.key === "ArrowLeft") moverVisor(-1); if(e.key === "ArrowRight") moverVisor(1);
-    } else if(abiertoC){
-      if(e.key === "Escape") cerrarC(); if(e.key === "ArrowLeft") anteriorC(); if(e.key === "ArrowRight") siguienteC();
-      if(e.key === " "){ e.preventDefault(); pausar(!pausado); }
     }
   });
 
