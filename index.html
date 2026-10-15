@@ -100,11 +100,14 @@ const CONFIG = {
   // Si un audio todavía no está en la carpeta, ese vinilo no aparece (en modo prueba sí, para que lo veas).
   // Se pueden agregar los que quieran, en cualquier orden. Cada uno con su propio archivo de audio.
   vinilos: [
-    { de: "tu abuela",     audio: "audios/abuela.mp3",    dibujo: "casa",     color: "#c3b5f0" },
-    { de: "tu papá",       audio: "audios/papa.mp3",      dibujo: "estrella", color: "#9fd8c8" },
-    { de: "tu tía Geral",  audio: "audios/tia-geral.mp3", dibujo: "flores",   color: "#f5c97a" },
-    { de: "tu mamá",       audio: "audios/mama.mp3",      dibujo: "corazon",  color: "#f4a6bd" },
-    { de: "tus amigas",    audio: "audios/amigas.mp3",    dibujo: "nota",     color: "#ffb88a" }
+    { de: "tu abuela",                     audio: "audios/abuela.mp3",                dibujo: "casa",     color: "#c3b5f0" },
+    { de: "tu abuelo",                     audio: "audios/abuelo.mp3",                dibujo: "luna",     color: "#8fbbe0" },
+    { de: "tu papá",                       audio: "audios/papa.mp3",                  dibujo: "estrella", color: "#9fd8c8" },
+    { de: "tu tía Geral",                  audio: "audios/tia-geral.mp3",             dibujo: "flores",   color: "#f5c97a" },
+    { de: "tus tías Anyie y Gaby",         audio: "audios/tias-anyie-gaby.mp3",       dibujo: "pastel",   color: "#b5dfa3" },
+    { de: "tu tía Diana y tu tío Albeiro", audio: "audios/tia-diana-tio-albeiro.mp3", dibujo: "sol",      color: "#f9a98e" },
+    { de: "tu mamá",                       audio: "audios/mama.mp3",                  dibujo: "corazon",  color: "#f4a6bd" },
+    { de: "tus amigas",                    audio: "audios/amigas.mp3",                dibujo: "nota",     color: "#ffb88a" }
   ],
 
   intro: "Hoy cumples 19 años, y yo celebro tu vida y doy gracias porque ahora también es parte de la mía.",
@@ -1427,8 +1430,16 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       + `<circle cx="178" cy="178" r="78" fill="rgba(255,255,255,.14)"/><circle cx="20" cy="18" r="30" fill="rgba(255,255,255,.1)"/>`
       + `<rect x="8" y="8" width="184" height="184" rx="3" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" stroke-dasharray="7 5"/>`
       + `<g transform="translate(60 16) scale(.8)" fill="#fff" fill-opacity=".95">${ICONOS[v.dibujo] || ICONOS.corazon}</g>`
-      + `<text x="100" y="146" text-anchor="middle" font-family="Caveat, cursive" font-weight="600" font-size="36" fill="${tinta}"${de.length > 12 ? ' textLength="176" lengthAdjust="spacingAndGlyphs"' : ""}>${esc(de)}</text>`
-      + `<text x="100" y="178" text-anchor="middle" font-family="Caveat, cursive" font-size="26" fill="${tinta}" fill-opacity=".8">para ${esc(C.nombre)} ♥</text></svg>`;
+      + nombreEnPortada(de, tinta)
+      + `<text x="100" y="182" text-anchor="middle" font-family="Caveat, cursive" font-size="24" fill="${tinta}" fill-opacity=".8">para ${esc(C.nombre)} ♥</text></svg>`;
+  }
+  // Nombres largos ("De tu tía Diana y tu tío Albeiro") van en dos líneas
+  function nombreEnPortada(de, tinta){
+    const t = (s, y, tam) => `<text x="100" y="${y}" text-anchor="middle" font-family="Caveat, cursive" font-weight="600" font-size="${tam}" fill="${tinta}"${s.length*tam*.42 > 180 ? ' textLength="180" lengthAdjust="spacingAndGlyphs"' : ""}>${esc(s)}</text>`;
+    if(de.length <= 15) return t(de, 148, 36);
+    const p = de.split(" "); let mejor = 1, dif = Infinity;
+    for(let k = 1; k < p.length; k++){ const d = Math.abs(p.slice(0, k).join(" ").length - p.slice(k).join(" ").length); if(d < dif){ dif = d; mejor = k; } }
+    return t(p.slice(0, mejor).join(" "), 126, 29) + t(p.slice(mejor).join(" "), 155, 29);
   }
   // Cada vinilo llega en su fecha "llega" (si la tiene); si no, se reparten solos hasta el cumpleaños
   const llegoVinilo = (v, j, a, M) => {
