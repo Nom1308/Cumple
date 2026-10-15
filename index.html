@@ -92,7 +92,7 @@ const CONFIG = {
       { tipo: "globos", titulo: "Globos", texto: "Uno por cada vez que me has hecho reír. Me quedé corto de globos." },
       { tipo: "cuadro", foto: "fotos/14-pecas.jpg", titulo: "Preciosa", texto: "Preciosa, como siempre." },
       { tipo: "cafe", foto: "fotos/28-cafe.jpg", titulo: "El café más caro", texto: "El café más caro de nuestra historia, jajaja. Pero bueno, lo mejor siempre fue la compañía." },
-      { tipo: "cuadro", foto: "fotos/20-equipo.jpg", titulo: "La misma vibra", texto: "Siempre me sigues, yo te sigo… y nos entendemos. La misma vibra." },
+      { tipo: "cuadro", foto: "fotos/20-equipo.jpg", titulo: "La misma vibra", texto: "Siempre me sigues, yo te sigo… ¿acaso no entiendes la vibra? 😎" },
       { tipo: "libros", foto: "fotos/29-libreria.jpg", titulo: "Diecinueve fotos después", texto: "Diecinueve fotos después, jajaja… ninguna te gustó. A mí me gustaron todas." },
       { tipo: "cuadro", foto: "fotos/16-mirador.jpg", titulo: "El paisaje más bonito", texto: "El paisaje más bonito… y Bogotá." },
       { tipo: "rosas", foto: "fotos/23-rosas.jpg", titulo: "Hermosa", texto: "Tú siendo hermosa, como siempre." },
@@ -1548,7 +1548,8 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       if(toques < 28){
         if(!recien){
           tv.classList.remove("golpe"); void tv.offsetWidth; tv.classList.add("golpe");
-          $("#detTexto").textContent = `Todavía no hay señal… el canal 19 se transmite el ${cumple.getDate()} de ${MESES[cumple.getMonth()]} ♥ Gira la perilla para ver los otros canales.`;
+          $("#detTitulo").textContent = "Mai bed 🙈";
+          $("#detTexto").textContent = `Todavía no hay señal… el canal 19 se transmite el ${cumple.getDate()} de ${MESES[cumple.getMonth()]}. Mientras tanto, gira la perilla ↻ para ver los otros canales.`;
         }
         return;
       }
