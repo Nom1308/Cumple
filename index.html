@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=VT323&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
 
 <script>
 /* =====================================================================
@@ -31,55 +31,103 @@ const CONFIG = {
 
   intro: "Hoy cumples 19 años, y yo celebro tu vida y doy gracias porque ahora también es parte de la mía.",
 
+  // El cuarto que se va decorando antes del cumpleaños.
+  // Las cosas aparecen en este orden, repartidas entre "desde" y el día del cumpleaños.
+  //  tipo:   cuadro | letrero | luces | globos | cafe | libros | rosas | regalos | globo19
+  //  foto:   para los cuadros (y opcional en las demás cosas)
+  //  titulo / texto: lo que se lee al tocarla y verla de cerca
+  // Los cuadros se van colgando en la pared en el orden en que aparecen (el primero va en el centro).
+  cuarto: {
+    desde: "2026-10-15T12:00",
+    cosas: [
+      { tipo: "letrero", titulo: "Feliz cumpleaños", texto: "Lo primero que colgué, para que no se te olvide: este cuarto se está preparando solo para ti." },
+      { tipo: "cuadro", foto: "fotos/01-tu-y-yo.jpg", titulo: "Tú y yo", texto: "Mi foto favorita de nosotros. Cada vez que la veo pienso en lo bonito que es ver la vida a tu lado." },
+      { tipo: "luces", titulo: "Lucecitas", texto: "Para que este cuarto brille un poquito como brillas tú." },
+      { tipo: "cuadro", foto: "fotos/18-selfie-juntos.jpg", titulo: "Nuestra selfie más chistosa", texto: "Desde abajo, despeinados y en el peor ángulo… y aun así es de mis fotos favoritas, porque estás tú." },
+      { tipo: "globos", titulo: "Globos", texto: "Uno por cada vez que me has hecho reír. Me quedé corto de globos." },
+      { tipo: "cuadro", foto: "fotos/14-pecas.jpg", titulo: "El viento y tus pecas", texto: "El viento no te dejaba en paz el pelo y tú igual saliste preciosa." },
+      { tipo: "cafe", foto: "fotos/28-cafe.jpg", titulo: "Un café contigo", texto: "Contigo hasta un café cualquiera se vuelve un recuerdo que quiero guardar." },
+      { tipo: "cuadro", foto: "fotos/20-equipo.jpg", titulo: "Equipo", texto: "Tú y yo somos equipo: en lo bonito, en lo chistoso y en todo lo que venga." },
+      { tipo: "libros", foto: "fotos/29-libreria.jpg", titulo: "Tus libros", texto: "Tu lugar feliz es una librería. El mío es cualquier lugar donde estés tú." },
+      { tipo: "cuadro", foto: "fotos/16-mirador.jpg", titulo: "La vista", texto: "Toda la ciudad a tus pies, y yo solo te miraba a ti." },
+      { tipo: "rosas", foto: "fotos/23-rosas.jpg", titulo: "Flores", texto: "Para la más bonita. Tu sonrisa cuando las recibiste vale más que cualquier ramo." },
+      { tipo: "cuadro", foto: "videos/juntos.jpg", titulo: "Haciendo el tonto", texto: "Nadie me hace reír como tú. Contigo hacer el tonto es mi plan favorito." },
+      { tipo: "cuadro", foto: "fotos/24-mirada.jpg", titulo: "Esa mirada", texto: "La forma en que me miras cuando me escuchas. Gracias por entenderme siempre." },
+      { tipo: "regalos", titulo: "Regalos", texto: "Estos no se abren aquí… se abren en persona. 😉" },
+      { tipo: "cuadro", foto: "fotos/21-ojos-cerrados.jpg", titulo: "Mi constelación", texto: "Tus pecas son mi constelación favorita. Podría pasarme la vida contándolas." },
+      { tipo: "cuadro", foto: "fotos/06-tunel-rosa.jpg", titulo: "El túnel rosa", texto: "Hasta los lugares más bonitos se ven mejor contigo." },
+      { tipo: "cuadro", foto: "fotos/09-premios.jpg", titulo: "Mi premio", texto: "Si la vida repartiera premios, yo ya tengo el mío." },
+      { tipo: "globo19", titulo: "19", texto: "Diecinueve años de ti. Y yo, agradecido de estar en esta parte de tu historia." }
+    ]
+  },
+
   // Fotos y videos, en el orden en que salen.
   //  foto:  una imagen
   //  video: un video con sonido (se reproduce al tocarlo)
   //  viva:  un video cortito sin sonido que se mueve solo, como foto viva
-  //  pie:   texto corto escrito en la polaroid
-  //  frase: la notica escrita a mano que aparece al abrir la foto en grande
+  //  pie:   texto corto escrito a mano en la polaroid
   momentos: [
-    { foto: "fotos/14-pecas.jpg",       pie: "El viento, tu pelo y tus pecas", frase: "Empecemos por lo obvio: eres preciosa." },
-    { foto: "fotos/02-sonrisa.jpg",     pie: "Esa sonrisa",                    frase: "Esa sonrisa tranquila que me desarma cada vez." },
-    { foto: "fotos/12-libros.jpg",      pie: "Entre libros y caritas",         frase: "Haces caritas en todas las fotos y aun así sales preciosa. No es justo." },
-    { foto: "fotos/08-parque.jpg",      pie: "Ese puchero",                    frase: "Ese día en el parque… y ese puchero que me encanta." },
-    { video: "videos/juntos.mp4", poster: "videos/juntos.jpg", pie: "Nosotros, haciendo el tonto", frase: "Nosotros, haciendo el tonto. De mis momentos favoritos." },
-    { foto: "fotos/06-tunel-rosa.jpg",  pie: "Un besito en el túnel rosa",     frase: "Un besito desde el túnel rosa." },
-    { foto: "fotos/03-luces.jpg",       pie: "Tú mirando las luces",           frase: "Tú mirando las luces. Yo mirándote a ti." },
-    { foto: "fotos/10-cine.jpg",        pie: "Noche de cine",                  frase: "Cine y música: tu plan perfecto, y el mío si es contigo." },
-    { foto: "fotos/15-escaleras.jpg",   pie: "Como en un estreno",             frase: "Bajando las escaleras como si fuera tu estreno." },
-    { foto: "fotos/05-campus.jpg",      pie: "Toda una modelo",                frase: "Posando como toda una modelo, porque lo eres." },
-    { viva: "videos/sara-viva.mp4", poster: "videos/sara-viva.jpg", pie: "Hasta en un segundo", frase: "Hasta en un segundo de video te ves así." },
-    { foto: "fotos/13-gafas.jpg",       pie: "Esas gafas, esa mirada",         frase: "Esas gafas, esa mirada. Me tienes perdido." },
-    { foto: "fotos/07-selfie.jpg",      pie: "Tu ángulo especial",             frase: "La selfie desde abajo: tu ángulo especial." },
-    { foto: "fotos/04-concentrada.jpg", pie: "Concentrada",                    frase: "Tú, concentrada en lo tuyo. Yo, tomándote fotos a escondidas." },
-    { foto: "fotos/11-aprobado.jpg",    pie: "Aprobado por Sara",              frase: "Esta página: aprobada por Sara. Eso espero." },
-    { foto: "fotos/09-premios.jpg",     pie: "Mi premio mayor",                frase: "Si la vida repartiera premios… el mío eres tú." },
-    { foto: "fotos/01-tu-y-yo.jpg",     pie: "Tú y yo",                        frase: "Y aquí estamos, tú y yo. Feliz cumpleaños, mi amor." }
+    { foto: "fotos/14-pecas.jpg",         pie: "El viento, tu pelo y tus pecas" },
+    { foto: "fotos/24-mirada.jpg",        pie: "Esa mirada que me desarma" },
+    { foto: "fotos/16-mirador.jpg",       pie: "La vista más bonita eras tú" },
+    { foto: "fotos/02-sonrisa.jpg",       pie: "Esa sonrisa tranquila" },
+    { foto: "fotos/22-cascanueces.jpg",   pie: "¿¡Y este señor quién es!?" },
+    { foto: "fotos/12-libros.jpg",        pie: "Entre libros y caritas" },
+    { foto: "fotos/18-selfie-juntos.jpg", pie: "Nuestra selfie más chistosa" },
+    { video: "videos/juntos.mp4", poster: "videos/juntos.jpg", pie: "Nosotros, haciendo el tonto" },
+    { foto: "fotos/21-ojos-cerrados.jpg", pie: "Mi constelación favorita" },
+    { foto: "fotos/17-caballo.jpg",       pie: "Toda una vaquera" },
+    { foto: "fotos/08-parque.jpg",        pie: "Ese puchero que me encanta" },
+    { foto: "fotos/19-gorra.jpg",         pie: "Carita de travesura" },
+    { foto: "fotos/06-tunel-rosa.jpg",    pie: "Un besito en el túnel rosa" },
+    { foto: "fotos/03-luces.jpg",         pie: "Tú mirando las luces; yo, a ti" },
+    { foto: "fotos/27-luz-roja.jpg",      pie: "Brillas hasta en rojo" },
+    { foto: "fotos/29-libreria.jpg",      pie: "Tu lugar feliz: una librería" },
+    { foto: "fotos/28-cafe.jpg",          pie: "Un café contigo" },
+    { foto: "fotos/10-cine.jpg",          pie: "Noche de cine" },
+    { foto: "fotos/20-equipo.jpg",        pie: "Choca esos cinco, equipo" },
+    { foto: "fotos/15-escaleras.jpg",     pie: "Como en un estreno" },
+    { foto: "fotos/05-campus.jpg",        pie: "Toda una modelo" },
+    { viva: "videos/sara-viva.mp4", poster: "videos/sara-viva.jpg", pie: "Hasta en un segundo" },
+    { foto: "fotos/26-mural.jpg",         pie: "Más bonita que cualquier obra" },
+    { foto: "fotos/13-gafas.jpg",         pie: "Esas gafas, esa mirada" },
+    { foto: "fotos/25-luchador.jpg",      pie: "Peligro en el aire y tú tan tranquila" },
+    { foto: "fotos/07-selfie.jpg",        pie: "Tu ángulo especial" },
+    { foto: "fotos/30-pecas-ojos.jpg",    pie: "Esas pecas, esos ojos" },
+    { foto: "fotos/23-rosas.jpg",         pie: "Flores para la más bonita" },
+    { foto: "fotos/04-concentrada.jpg",   pie: "Concentrada en lo tuyo" },
+    { foto: "fotos/11-aprobado.jpg",      pie: "Aprobado por Sara" },
+    { foto: "fotos/09-premios.jpg",       pie: "Mi premio mayor" },
+    { foto: "fotos/01-tu-y-yo.jpg",       pie: "Tú y yo" }
   ],
 
   // Cada frase completa: "Gracias por tu vida, porque…"
   razones: [
-    "cuando tocas el piano, todo lo demás se queda en silencio para escucharte.",
-    "tus manos le sacan música a cualquier instrumento que tocan.",
+    "eres la persona más inteligente que conozco, y nunca lo usas para hacer sentir menos a nadie.",
+    "me entiendes incluso cuando yo no sé cómo explicarme.",
+    "tienes un corazón enorme y una paciencia infinita.",
+    "tienes talento para todo lo que te propones.",
+    "contigo el tiempo pasa distinto: más bonito, más tranquilo.",
+    "ver la vida a tu lado es mi plan favorito.",
     "llegas a cualquier lugar y lo llenas de vida.",
-    "hablas con todo el mundo y todos terminan queriéndote.",
     "tus pecas son mi constelación favorita.",
     "tu risa es contagiosa.",
-    "me haces reír hasta en los días pesados.",
+    "contigo hasta un café cualquiera se vuelve un recuerdo.",
     "haces caritas en todas las fotos y aun así sales preciosa.",
-    "contigo cualquier plan se vuelve una aventura.",
     "me animas a ser mejor sin hacerme sentir menos.",
     "eres valiente, aunque a veces no lo notes.",
-    "eres la persona más increíble que existe, y lo digo en serio."
+    "cualquier día a tu lado se vuelve mi día favorito.",
+    "eres maravillosa, y lo digo en serio."
   ],
 
   saludo: "Mi Sara:",
   carta: [
     "Hoy cumples 19 años y quise regalarte algo que no se acabe cuando termine el día: un lugar al que puedas volver cada vez que quieras recordar lo mucho que te quiero.",
     "Doy gracias a Dios por tu vida. Por el día en que naciste, por tu familia y por la mujer tan increíble que eres hoy. Y le doy gracias también porque, de todas las personas del mundo, me dejó conocerte a ti.",
-    "Me encanta verte tocar. Cuando te sientas al piano todo lo demás se calla, y la música te sale tan natural que parece fácil. Admiro tu talento, pero admiro todavía más todo lo que pones de ti en cada canción.",
-    "Gracias por tu alegría, por esa forma tuya de llegar a cualquier lugar y llenarlo de vida, por hacerme reír, por tus caritas en las fotos y por tenerme paciencia.",
-    "Que estos 19 años te traigan salud, paz, sueños cumplidos y mucha, mucha música. Yo quiero estar ahí para aplaudirte en primera fila."
+    "Admiro lo inteligente que eres, lo comprensiva que eres conmigo y con todos, y ese talento que tienes para todo lo que te propones. Pero lo que más admiro es tu corazón: la forma tan bonita en que quieres y cuidas a los tuyos.",
+    "El tiempo a tu lado es especial. Un café, una caminata, una tarde cualquiera… contigo todo se vuelve un recuerdo que quiero guardar. Es muy bonito ver la vida junto a ti.",
+    "Gracias por tu alegría, por hacerme reír, por tus caritas en las fotos y por tenerme tanta paciencia.",
+    "Que estos 19 años te traigan salud, paz, sueños cumplidos y muchísima felicidad. Yo quiero estar ahí para verlos cumplirse, a tu lado."
   ],
   firma: "Te quiero muchísimo,\nBrandon",
 
@@ -118,31 +166,154 @@ button{font:inherit;cursor:pointer;color:inherit}
 .btn svg{width:16px;height:16px}
 [hidden]{display:none!important}
 
-/* ---------- Portada ---------- */
-#portada{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;background:rgba(16,10,30,.55);transition:opacity 1s ease,visibility 1s}
+/* ---------- Portada: la tele vieja ---------- */
+#portada{position:fixed;inset:0;z-index:50;background:#1b1330;transition:opacity 1s ease,visibility 1s;overflow:hidden}
 #portada.fuera{opacity:0;visibility:hidden}
-.portada-in{text-align:center;width:100%;max-width:420px}
-.arriba{font-family:var(--mano);font-size:34px;color:var(--vela);margin:0 0 30px;line-height:1.1}
-.sobre{position:relative;display:block;width:min(320px,80vw);aspect-ratio:16/10;margin:0 auto;border:0;padding:0;background:none;perspective:1000px}
+.tv{position:absolute;left:290px;bottom:414px;width:420px;z-index:4}
+.antena-base{position:absolute;bottom:100%;left:50%;width:48px;height:14px;margin:0 0 -3px -24px;background:linear-gradient(#c7a6b2,#9a7884);border-radius:24px 24px 4px 4px}
+.antena{position:absolute;bottom:100%;left:50%;width:3px;height:70px;margin-left:-1.5px;background:linear-gradient(#efe3d6,#9c8a7a);border-radius:2px;transform-origin:50% 100%}
+.antena.izq{transform:rotate(-32deg)}
+.antena.der{transform:rotate(26deg)}
+.antena::after{content:"♥";position:absolute;top:-16px;left:50%;transform:translateX(-50%);color:var(--rosa);font-size:17px;line-height:1;text-shadow:0 0 10px rgba(238,143,174,.8)}
+.tv-cuerpo{position:relative;display:flex;align-items:stretch;gap:4%;padding:6% 4% 6% 6%;border-radius:28px;
+  background:linear-gradient(160deg,#f8e3e8 0%,#ecc3ce 50%,#d9a5b5 100%);
+  box-shadow:0 34px 80px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.7),inset 0 -7px 0 rgba(120,60,80,.22)}
+.pantalla{position:relative;flex:1;aspect-ratio:4/3;border:0;padding:0;border-radius:16% / 20%;overflow:hidden;background:#0d0b10;
+  box-shadow:0 0 0 7px #3b2a34,0 0 0 10px #c98ea0,inset 0 0 40px rgba(0,0,0,.9);-webkit-tap-highlight-color:transparent;isolation:isolate}
+.escena-tv{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#5a3f86,#22183d 70%,#140e26);
+  filter:grayscale(1) contrast(1.5) brightness(.75) blur(.7px);transition:filter 1.6s ease;animation:sinSenal 2.6s steps(1) infinite}
+@keyframes sinSenal{0%{transform:none}18%{transform:translateX(4px) skewX(-3deg)}21%{transform:none}52%{transform:translateY(-5px)}54%{transform:none}78%{transform:translateX(-6px) skewX(4deg)}80%{transform:none}}
+#ruido{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;opacity:.78;transition:opacity 1.4s ease;mix-blend-mode:screen;pointer-events:none}
+.lineas{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.3) 0 1px,transparent 1px 3px)}
+.barra-roll{position:absolute;left:0;right:0;top:-35%;height:35%;pointer-events:none;background:linear-gradient(transparent,rgba(255,255,255,.13),transparent);animation:roll 3.4s linear infinite}
+@keyframes roll{to{top:100%}}
+.vidrio{position:absolute;inset:0;pointer-events:none;background:radial-gradient(110% 80% at 28% 18%,rgba(255,255,255,.17),transparent 42%),radial-gradient(closest-side,transparent 72%,rgba(0,0,0,.6))}
+.osd{position:absolute;z-index:3;font-family:"VT323",ui-monospace,monospace;color:#9dffbf;text-shadow:0 0 6px rgba(120,255,160,.85);letter-spacing:.05em;line-height:1;pointer-events:none;transition:opacity .4s,color 1s}
+.osd.ch{top:10%;left:11%;font-size:24px}
+.osd.reloj{bottom:10%;left:0;right:0;text-align:center;font-size:24px}
+.panel{width:19%;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:4%}
+.perilla{position:relative;width:76%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3d6,#e3b062 55%,#a8742f);box-shadow:0 3px 6px rgba(0,0,0,.35)}
+.perilla::after{content:"";position:absolute;left:44%;top:8%;width:12%;height:36%;background:#7a4c1c;border-radius:2px;transform-origin:50% 117%}
+.perilla.k1::after{transform:rotate(-40deg)}
+.perilla.k2::after{transform:rotate(70deg)}
+.rejilla{width:76%;flex:1;min-height:24px;border-radius:6px;background:repeating-linear-gradient(0deg,rgba(110,50,70,.35) 0 2px,transparent 2px 6px)}
+.patas{display:flex;justify-content:space-between;width:66%;margin:0 auto}
+.patas::before,.patas::after{content:"";width:12px;height:20px;background:#a87d8b;border-radius:0 0 5px 5px}
+.patas::before{transform:skewX(14deg)} .patas::after{transform:skewX(-14deg)}
+/* Estados de la tele */
+.tv.lista #ruido{opacity:.42}
+.tv.lista .pantalla{animation:llamaTv 1.8s ease-in-out infinite}
+@keyframes llamaTv{50%{box-shadow:0 0 0 7px #3b2a34,0 0 0 10px #c98ea0,0 0 40px 14px rgba(238,143,174,.55),inset 0 0 40px rgba(0,0,0,.9)}}
+.tv.al-aire .escena-tv{filter:none;animation:none;background:radial-gradient(circle at 50% 38%,#ffd9e4,#f2a7bf 55%,#c9739a)}
+.tv.al-aire #ruido{opacity:.05}
+.tv.al-aire .pantalla{animation:none}
+.tv.al-aire .osd{color:#fff;text-shadow:0 0 8px rgba(201,86,125,.9)}
+.tv.sintoniza .pantalla::after{content:"";position:absolute;inset:0;z-index:4;background:#fff;pointer-events:none;animation:destello .7s ease forwards}
+@keyframes destello{from{opacity:.95}to{opacity:0}}
+.tv.golpe{animation:golpe .45s ease}
+.tv.golpe #ruido{opacity:1;transition:none}
+@keyframes golpe{20%{transform:translateX(-7px) rotate(-1.5deg)}40%{transform:translateX(6px) rotate(1deg)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+#portada.entrando .osd{opacity:0}
+.sobre{position:relative;display:block;width:64%;aspect-ratio:16/10;margin:6% auto 0;border:0;padding:0;background:none;perspective:1000px}
 .sobre .fondo{position:absolute;inset:0;background:#e6d8c2;border-radius:6px;box-shadow:0 26px 60px rgba(0,0,0,.55)}
 .sobre .tarjeta{position:absolute;left:6%;right:6%;top:7%;height:86%;z-index:1;background:var(--papel);border-radius:4px;display:grid;justify-items:center;align-items:start;padding-top:9%;
-  font-family:var(--mano);font-size:clamp(26px,7vw,34px);color:var(--tinta);transition:transform .9s cubic-bezier(.2,.8,.2,1) .55s}
+  font-family:var(--mano);font-size:22px;line-height:1.1;color:var(--tinta);transition:transform .9s cubic-bezier(.2,.8,.2,1) .55s}
 .sobre .bolsillo{position:absolute;inset:0;z-index:2;border-radius:6px;
   background:linear-gradient(to top right,transparent 49.7%,rgba(80,50,30,.08) 50%,transparent 50.3%) left bottom/50% 100% no-repeat,
     linear-gradient(to top left,transparent 49.7%,rgba(80,50,30,.08) 50%,transparent 50.3%) right bottom/50% 100% no-repeat,#f6ecdc;
   clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
 .sobre .solapa{position:absolute;left:0;right:0;top:0;height:60%;z-index:3;background:#efe2cc;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top center;
   transition:transform .75s cubic-bezier(.4,0,.2,1),z-index 0s linear .38s}
-.sobre .sello{position:absolute;left:50%;top:60%;z-index:4;width:56px;height:56px;border-radius:50%;transform:translate(-50%,-50%);display:grid;place-items:center;color:#fff3f6;font-style:italic;font-size:26px;
+.sobre .sello{position:absolute;left:50%;top:60%;z-index:4;width:36px;height:36px;border-radius:50%;transform:translate(-50%,-50%);display:grid;place-items:center;color:#fff3f6;font-size:17px;line-height:1;
   background:radial-gradient(circle at 35% 30%,#f7aec4,#c9567d 70%,#a8405f);box-shadow:0 4px 10px rgba(0,0,0,.35),inset 0 0 0 4px rgba(255,255,255,.12);transition:opacity .3s,transform .3s}
 .sobre.abierto .solapa{transform:rotateX(180deg);z-index:0}
 .sobre.abierto .sello{opacity:0;transform:translate(-50%,-50%) scale(.5)}
 .sobre.abierto .tarjeta{transform:translateY(-62%)}
-.sobre:not(.abierto):hover .sello{transform:translate(-50%,-50%) scale(1.06)}
-.sobre.tiembla{animation:tiembla .45s ease}
-@keyframes tiembla{20%{transform:translateX(-7px) rotate(-2deg)}40%{transform:translateX(6px) rotate(1.5deg)}60%{transform:translateX(-4px) rotate(-1deg)}80%{transform:translateX(2px)}}
-.toca{margin:34px 0 6px;font-size:17px}
-.sube{color:var(--suave);font-size:15px;margin:0}
+
+/* ---------- El cuarto que se va decorando ---------- */
+.cuarto{position:absolute;inset:0;overflow:hidden}
+.escenario{position:absolute;left:0;top:0;width:1000px;height:1500px;transform-origin:0 0;transition:transform 1s cubic-bezier(.65,0,.3,1)}
+.escenario.quieto{transition:none}
+.pared{position:absolute;left:-3000px;right:-3000px;top:-3000px;height:4170px;
+  background:radial-gradient(circle,rgba(238,143,174,.16) 2.5px,transparent 3px) 0 0/92px 92px,
+    repeating-linear-gradient(90deg,#3f2c60 0 46px,#46316b 46px 92px)}
+.pared::after{content:"";position:absolute;inset:0;background:radial-gradient(900px 760px at 3500px 3640px,rgba(255,206,224,.2),transparent 70%)}
+.zocalo{position:absolute;left:-3000px;right:-3000px;top:1170px;height:22px;background:linear-gradient(#f3e3d3,#cdb39d);box-shadow:0 5px 10px rgba(0,0,0,.35)}
+.piso-c{position:absolute;left:-3000px;right:-3000px;top:1192px;height:3000px;
+  background:repeating-linear-gradient(90deg,rgba(0,0,0,.2) 0 2px,transparent 2px 130px),linear-gradient(#86604f,#57392d 320px,#3a261f 700px)}
+.penumbra{position:absolute;left:-3000px;right:-3000px;top:-3000px;bottom:-3000px;background:#0b0716;opacity:var(--oscuro,.5);transition:opacity 2s ease;pointer-events:none}
+.aviso-cuarto{position:absolute;left:0;right:0;top:0;z-index:3;height:120px;display:grid;place-content:center;text-align:center;padding:12px 16px;pointer-events:none;transition:opacity .5s;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.aviso-cuarto .arriba{font-family:var(--mano);font-size:clamp(28px,6.6vw,36px);color:var(--vela);margin:0 0 2px;line-height:1.1}
+.aviso-cuarto .sube{color:var(--texto);font-size:15px;margin:0;min-height:1.4em}
+.aviso-cuarto .pista{color:var(--suave);font-size:14px;margin:4px 0 0;min-height:1.4em;line-height:1.35}
+.cuarto.enfocado .aviso-cuarto,.cuarto.final .aviso-cuarto{opacity:0}
+.cuarto::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(circle at 50% 33%,transparent 32%,rgba(8,5,16,.72) 78%);opacity:0;transition:opacity .8s}
+.cuarto.enfocado::after{opacity:1}
+
+/* Las cosas del cuarto */
+.cosa{position:absolute;border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:filter .3s}
+.cosa svg{display:block;width:100%;height:100%;overflow:visible}
+@media (hover:hover){ .cosa:hover{filter:brightness(1.1) drop-shadow(0 0 14px rgba(245,201,122,.6))} }
+.cosa .chispa{position:absolute;top:-24px;right:-20px;z-index:3;font-size:30px;line-height:1;pointer-events:none;display:none;animation:titila 1.3s ease-in-out infinite}
+.cosa.sin-ver .chispa{display:block}
+@keyframes titila{50%{opacity:.35;scale:.7}}
+.cosa.aparece{animation:aparecer 1.4s cubic-bezier(.2,.9,.3,1.3) backwards}
+@keyframes aparecer{0%{opacity:0;scale:.2;translate:0 -70px;filter:brightness(3)}55%{opacity:1;filter:brightness(1.7) drop-shadow(0 0 30px #f5c97a)}100%{opacity:1;scale:1;translate:0 0}}
+.cuadro{transform:rotate(var(--r,0deg));box-shadow:0 16px 28px rgba(0,0,0,.5)}
+.cuadro img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.cuadro.oro{padding:12px;background:linear-gradient(135deg,#fff1c9,#e3b062 30%,#a8742f 55%,#f3d28a 80%,#b9853e)}
+.cuadro.madera{padding:13px;background:linear-gradient(135deg,#a8774f,#6b432c 50%,#8f5f3f)}
+.cuadro.blanco{padding:16px;background:#fbf7f0}
+.cuadro.blanco img{outline:3px solid #e6dccd}
+.cuadro.ovalo{padding:10px;border-radius:50%;background:linear-gradient(135deg,#fff1c9,#d9a65a 40%,#a8742f 70%,#f0c47e)}
+.cuadro.ovalo img{border-radius:50%}
+.cuadro::before{content:"";position:absolute;left:50%;top:-30px;width:46%;height:32px;transform:translateX(-50%);
+  background:linear-gradient(to bottom right,transparent calc(50% - 1.5px),rgba(235,220,205,.7) 50%,transparent calc(50% + 1.5px)) left/50% 100% no-repeat,
+    linear-gradient(to bottom left,transparent calc(50% - 1.5px),rgba(235,220,205,.7) 50%,transparent calc(50% + 1.5px)) right/50% 100% no-repeat}
+.cuadro.ovalo::before{top:-24px;height:26px}
+.clavo{position:absolute;left:50%;top:-38px;width:13px;height:13px;margin-left:-6.5px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#c9b49c 55%,#6d5a48)}
+.cuadro.ovalo .clavo{top:-32px}
+.letrero .banderita{position:absolute;top:0;width:var(--w);height:98px;margin-left:calc(var(--w) / -2);transform-origin:50% 0;transform:rotate(var(--a));
+  display:grid;justify-items:center;padding-top:12px;font:italic 600 46px/1 var(--serif);color:var(--t);background:var(--c);
+  clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%);animation:mecer 3.2s ease-in-out infinite alternate;animation-delay:var(--d)}
+@keyframes mecer{from{rotate:-3deg}to{rotate:3deg}}
+.letrero svg{position:absolute;inset:0}
+.luces .foco{animation:foco 1.8s ease-in-out infinite alternate}
+@keyframes foco{from{opacity:.55}to{opacity:1}}
+.globos .flota{animation:flota 4s ease-in-out infinite alternate}
+@keyframes flota{to{translate:0 -14px}}
+.cafe .vapor path{animation:vapor 2.6s ease-in-out infinite}
+.cafe .vapor path+path{animation-delay:1.3s}
+@keyframes vapor{0%{opacity:0;translate:0 8px}40%{opacity:1}100%{opacity:0;translate:0 -14px}}
+.libro{position:absolute;border-radius:3px;background:linear-gradient(90deg,rgba(0,0,0,.2) 0 7px,transparent 7px),var(--c);box-shadow:inset 0 -5px 0 rgba(255,255,255,.65),0 3px 5px rgba(0,0,0,.3)}
+.libros .cora{position:absolute;left:42px;bottom:64px;color:var(--rosa);font-size:24px;line-height:1}
+.caja{position:absolute;border-radius:4px;background:linear-gradient(90deg,transparent 44%,var(--l) 44% 56%,transparent 56%),linear-gradient(transparent 38%,var(--l) 38% 52%,transparent 52%),var(--c);
+  box-shadow:inset 0 -8px 0 rgba(0,0,0,.12),0 8px 14px rgba(0,0,0,.35)}
+.caja::before,.caja::after{content:"";position:absolute;top:-20px;width:20px;height:16px;border:5px solid var(--l);border-radius:50%}
+.caja::before{left:calc(50% - 25px)} .caja::after{left:calc(50% - 5px)}
+.mueble{position:absolute;left:180px;top:1086px;width:640px;height:200px;z-index:3}
+.mueble .tabla{position:absolute;left:-12px;right:-12px;top:0;height:24px;border-radius:6px;background:linear-gradient(#c4956d,#8a5f40);box-shadow:0 6px 10px rgba(0,0,0,.35)}
+.mueble .cajon{position:absolute;top:24px;width:50%;height:120px;background:linear-gradient(#a3724f,#7a5137);border:3px solid #65412b}
+.mueble .cajon.i{left:0} .mueble .cajon.d{right:0}
+.mueble .cajon::after{content:"";position:absolute;left:50%;top:50%;width:30px;height:10px;margin:-5px 0 0 -15px;border-radius:5px;background:#e3b062}
+.mueble .pata{position:absolute;top:144px;width:18px;height:56px;background:#65412b;border-radius:0 0 4px 4px}
+.mueble .pata.i{left:28px;transform:skewX(8deg)} .mueble .pata.d{right:28px;transform:skewX(-8deg)}
+
+/* Vista de cerca */
+.detalle{position:absolute;left:0;right:0;bottom:0;z-index:5;display:grid;justify-items:center;gap:12px;padding:40px 16px max(22px,env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,rgba(14,9,26,.92) 34%);transform:translateY(105%);transition:transform .55s cubic-bezier(.2,.9,.3,1.1)}
+.detalle.on{transform:none}
+.detalle-tarjeta{position:relative;width:100%;max-width:460px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;text-align:left;
+  background:linear-gradient(170deg,#fffdf8,#f4ecdf);color:var(--tinta);padding:18px 20px;box-shadow:0 18px 44px rgba(0,0,0,.55);transform:rotate(-1deg)}
+.detalle-tarjeta::before{content:"";position:absolute;top:-11px;left:50%;width:84px;height:22px;transform:translateX(-50%) rotate(-3deg);background:rgba(238,143,174,.6)}
+#detFoto img{display:block;width:92px;height:116px;object-fit:cover;border:6px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.25);transform:rotate(-3deg)}
+.detalle-texto-box{grid-column:2;min-width:0}
+#detFoto[hidden]+.detalle-texto-box{grid-column:1 / -1}
+.detalle-titulo{font-family:var(--mano);font-size:30px;line-height:1;margin:0 0 6px;color:#c9567d}
+.detalle-texto{margin:0;font-size:17px;line-height:1.45}
+.aviso-nuevo{position:absolute;left:50%;bottom:max(26px,env(safe-area-inset-bottom));z-index:6;transform:translate(-50%,180%);background:var(--papel);color:var(--tinta);
+  font-family:var(--mano);font-size:24px;line-height:1.1;padding:10px 22px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:transform .55s cubic-bezier(.2,.9,.3,1.25),opacity .4s,visibility .55s;white-space:nowrap;pointer-events:none;opacity:0;visibility:hidden}
+.aviso-nuevo.on{transform:translate(-50%,0);opacity:1;visibility:visible}
 
 /* ---------- Hero ---------- */
 .hero{min-height:100svh;display:grid;place-items:center;text-align:center;padding:90px 20px 110px;position:relative;max-width:none}
@@ -181,9 +352,16 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .ph small{font-family:system-ui,sans-serif;font-size:12px;opacity:.7;word-break:break-all}
 .insignia{position:absolute;right:8px;bottom:8px;width:34px;height:34px;border-radius:50%;background:rgba(27,19,48,.7);display:grid;place-items:center}
 .insignia svg{width:13px;height:13px;margin-left:2px;fill:#fff}
-.mesa{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 16px;max-width:520px;margin:14px auto 0}
+.mesa{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 16px;max-width:1000px;margin:14px auto 0}
+@media (min-width:700px){ .mesa{grid-template-columns:repeat(3,minmax(0,1fr));gap:44px 28px} }
+@media (min-width:1000px){ .mesa{grid-template-columns:repeat(4,minmax(0,1fr))} }
 .pola{position:relative;display:block;width:100%;background:linear-gradient(170deg,#fffdf8,#f4ecdf);border:0;padding:9px 9px 0;color:var(--tinta);text-align:center;box-shadow:0 12px 28px rgba(0,0,0,.45);transform:rotate(var(--rot));-webkit-tap-highlight-color:transparent;touch-action:manipulation;opacity:0}
-.mesa:not(.regada) .pola:nth-child(even){margin-top:26px}
+.pola .marco{aspect-ratio:4/5}
+.pola .marco img{object-position:50% 30%}
+@media (hover:hover){
+  .pola.visto{transition:transform .3s ease,box-shadow .3s ease}
+  .pola.visto:hover{transform:rotate(0deg) translateY(-6px) scale(1.03);box-shadow:0 26px 50px rgba(0,0,0,.55),0 0 0 2px rgba(238,143,174,.35)}
+}
 /* Cinta adhesiva */
 .pola::before,.tarjeta-v::before{content:"";position:absolute;top:-11px;left:calc(50% + var(--cx,0px));z-index:2;width:78px;height:22px;transform:translateX(-50%) rotate(var(--cr,-3deg));
   background:repeating-linear-gradient(45deg,rgba(255,255,255,.2) 0 4px,transparent 4px 9px),var(--cinta,rgba(238,143,174,.6));box-shadow:0 1px 3px rgba(0,0,0,.18)}
@@ -192,12 +370,7 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 @keyframes posa{from{opacity:0;transform:translateY(-50px) rotate(calc(var(--rot) * -1.8)) scale(1.12)}to{opacity:1;transform:rotate(var(--rot))}}
 .pola .marco>img,.pola .marco>video{filter:sepia(.55) brightness(1.6) contrast(.5) saturate(.3) blur(2px);transition:filter 2.8s ease;transition-delay:calc(var(--n,0) * 130ms + .5s)}
 .pola.visto .marco>img,.pola.visto .marco>video{filter:none}
-.pie{display:block;font-family:var(--mano);font-size:19px;line-height:1.15;padding:9px 4px 13px;min-height:52px}
-.mesa.regada{display:block;max-width:none}
-.mesa.regada .pola{position:absolute;width:220px;padding:11px 11px 0;cursor:grab;transition:transform .25s,box-shadow .25s}
-.mesa.regada .pie{font-size:21px;min-height:58px}
-.mesa.regada .pola:hover{transform:rotate(0deg) scale(1.03)}
-.mesa.regada .pola.alzada{cursor:grabbing;transform:rotate(0deg) scale(1.07);box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.pie{display:block;font-family:var(--mano);font-size:clamp(18px,2.2vw,21px);line-height:1.15;padding:9px 4px 13px;min-height:52px}
 
 .visor{position:fixed;inset:0;z-index:85;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:20px;background:rgba(12,8,24,.94);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .visor.on{opacity:1;visibility:visible}
@@ -232,6 +405,16 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .frasco:active{transform:scale(.95) rotate(-3deg)}
 .frasco svg{width:100%;height:auto;display:block;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45))}
 .contador{color:var(--suave);font-size:16px;margin:8px 0 20px;min-height:1.6em}
+
+/* ---------- Corazón que se llena ---------- */
+.corazon-zona{display:grid;justify-items:center}
+.gran-corazon{position:relative;width:min(250px,66vw);border:0;padding:0;background:none;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:transform .2s ease}
+.gran-corazon svg{width:100%;height:auto;display:block;overflow:visible;filter:drop-shadow(0 18px 34px rgba(0,0,0,.45)) drop-shadow(0 0 22px rgba(238,143,174,.25))}
+.gran-corazon.apretando{transform:scale(.95)}
+.gran-corazon.lleno{animation:latido 1.2s ease-in-out infinite}
+@keyframes latido{0%,100%{transform:scale(1)}14%{transform:scale(1.1)}28%{transform:scale(.98)}42%{transform:scale(1.06)}}
+.medidor{font-family:var(--mano);font-size:clamp(28px,5.4vw,36px);color:var(--rosa);min-height:1.3em;margin:18px 0 0;line-height:1.2}
+.corazon-final{font-style:italic;font-size:clamp(22px,3.4vw,28px);line-height:1.4;max-width:24ch;margin:4px auto 0;animation:aparece 1s ease}
 
 /* ---------- Piano ---------- */
 .piano-zona{max-width:760px;margin:0 auto}
@@ -344,17 +527,51 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
 <canvas id="confeti" aria-hidden="true"></canvas>
 
 <div id="portada">
-  <div class="portada-in">
-    <p class="arriba">Tienes una carta</p>
-    <button class="sobre" id="sobre" type="button" aria-label="Abrir el sobre">
-      <span class="fondo"></span>
-      <span class="tarjeta" id="paraNombre">Para ti</span>
-      <span class="bolsillo"></span>
-      <span class="solapa"></span>
-      <span class="sello" id="sello">B</span>
-    </button>
-    <p class="toca" id="toca">Toca el sobre para abrirlo</p>
-    <p class="sube" id="cuenta"></p>
+  <div class="cuarto" id="cuarto">
+   <div class="escenario" id="escenario">
+    <span class="pared" aria-hidden="true"></span>
+    <span class="zocalo" aria-hidden="true"></span>
+    <span class="piso-c" aria-hidden="true"></span>
+    <span class="penumbra" aria-hidden="true"></span>
+    <div class="mueble" id="mueble" aria-hidden="true">
+      <span class="tabla"></span><span class="cajon i"></span><span class="cajon d"></span><span class="pata i"></span><span class="pata d"></span>
+    </div>
+    <div class="tv" id="tv">
+      <span class="antena-base" aria-hidden="true"></span><span class="antena izq" aria-hidden="true"></span><span class="antena der" aria-hidden="true"></span>
+      <div class="tv-cuerpo">
+        <button class="pantalla" id="pantalla" type="button" aria-label="Encender la tele">
+          <span class="escena-tv">
+            <span class="sobre" id="sobre">
+              <span class="fondo"></span>
+              <span class="tarjeta" id="paraNombre">Para ti</span>
+              <span class="bolsillo"></span>
+              <span class="solapa"></span>
+              <span class="sello">♥</span>
+            </span>
+          </span>
+          <canvas id="ruido" aria-hidden="true"></canvas>
+          <span class="lineas" aria-hidden="true"></span><span class="barra-roll" aria-hidden="true"></span><span class="vidrio" aria-hidden="true"></span>
+          <span class="osd ch" id="osdCh">CH 19</span>
+          <span class="osd reloj" id="osdReloj"></span>
+        </button>
+        <span class="panel" aria-hidden="true"><span class="perilla k1"></span><span class="perilla k2"></span><span class="rejilla"></span></span>
+      </div>
+      <span class="patas" aria-hidden="true"></span>
+    </div>
+   </div>
+   <div class="aviso-cuarto" id="avisoCuarto">
+     <p class="arriba" id="arriba">Estoy decorando algo para ti…</p>
+     <p class="sube" id="cuenta"></p>
+     <p class="pista" id="pista"></p>
+   </div>
+   <div class="detalle" id="detalle" aria-live="polite">
+     <div class="detalle-tarjeta">
+       <div id="detFoto" hidden></div>
+       <div class="detalle-texto-box"><p class="detalle-titulo" id="detTitulo"></p><p class="detalle-texto" id="detTexto"></p></div>
+     </div>
+     <button class="btn sec" id="detVolver" type="button">Volver al cuarto</button>
+   </div>
+   <p class="aviso-nuevo" id="avisoNuevo" aria-live="polite"></p>
   </div>
 </div>
 
@@ -380,7 +597,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
 
   <section id="momentos" class="centro">
     <h2>Momentos que guardo</h2>
-    <p class="nota" id="notaFotos">Toca una foto para leer lo que te escribí.</p>
+    <p class="nota">Cada una es un pedacito de tiempo contigo que no cambiaría por nada. Toca cualquiera para verla en grande.</p>
     <div class="mesa" id="mesa"></div>
   </section>
 
@@ -406,15 +623,39 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     </div>
   </section>
 
+  <section id="corazon" class="centro">
+    <h2>Lo que siento por ti</h2>
+    <p class="nota">Mantén presionado el corazón para medirlo.</p>
+    <div class="corazon-zona">
+      <button class="gran-corazon" id="granCorazon" type="button" aria-label="Mantén presionado para llenar el corazón">
+        <svg viewBox="0 0 100 90" aria-hidden="true">
+          <defs>
+            <clipPath id="corClip"><path d="M50 86 C20 64 4 48 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 48 80 64 50 86 Z"/></clipPath>
+            <linearGradient id="corLiq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc2d3"/><stop offset=".5" stop-color="#ee8fae"/><stop offset="1" stop-color="#c9567d"/></linearGradient>
+          </defs>
+          <path d="M50 86 C20 64 4 48 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 48 80 64 50 86 Z" fill="rgba(238,143,174,.1)"/>
+          <g clip-path="url(#corClip)">
+            <rect id="corNivel" x="0" y="90" width="100" height="95" fill="url(#corLiq)"/>
+            <rect id="corOla" x="0" y="90" width="100" height="2.2" fill="rgba(255,255,255,.55)"/>
+          </g>
+          <path d="M50 86 C20 64 4 48 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 48 80 64 50 86 Z" fill="none" stroke="#fbe3ef" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M23 15 C16 17 12 23 12 30" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <p class="medidor" id="medidor" aria-live="polite"></p>
+      <p class="corazon-final" id="corFinal" hidden>Infinito. Y aun así, se queda corto.</p>
+    </div>
+  </section>
+
   <section id="piano" class="centro">
-    <h2>Tu canción, tocada por ti</h2>
-    <p class="nota">Eres la pianista de esta historia, así que esta parte es tuya. Toca las teclas que se iluminan.</p>
+    <h2>Una canción para ti</h2>
+    <p class="nota">Esta vez la tocas tú: sigue las teclas que se iluminan.</p>
     <div class="piano-zona">
       <p class="letra-c" id="letraC" aria-live="off"></p>
       <div class="piano"><div class="teclas" id="teclas"></div></div>
       <p class="estado-p" id="estadoP"></p>
       <div id="bravo" hidden>
-        <p class="bravo">¡Bravo, pianista!</p>
+        <p class="bravo">¡Qué bonito sonó!</p>
         <div class="acciones" style="margin-top:14px">
           <a class="btn" href="#pastel">Ahora pide un deseo</a>
           <button class="btn sec" id="otraVezPiano" type="button">Tocarla otra vez</button>
@@ -562,56 +803,284 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     return m;
   }
 
-  /* ---------- Portada ---------- */
+  /* ---------- Portada: el cuarto que se va decorando, con la tele vieja ---------- */
   const cumple = fecha(C.fechaCumple);
   $("#paraNombre").textContent = C.sobre || `Para ${C.nombre}`;
-  $("#sello").textContent = (C.de || "♥").trim().charAt(0).toUpperCase();
-  if(cumple) $("#heroFecha").textContent = `${cumple.getDate()} de ${MESES[cumple.getMonth()]}`;
+  if(cumple) $("#heroFecha").textContent = `${cumple.getDate()} de ${MESES[cumple.getMonth()]} ♥`;
+  const tv = $("#tv"), pantalla = $("#pantalla"), cuarto = $("#cuarto"), escenario = $("#escenario"), detalle = $("#detalle");
+  const leer = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } };
+  const guardar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
 
-  // El sobre no se abre hasta el día del cumpleaños.
-  // Truco para revisarla antes: tocar el sobre 28 veces seguidas (modo prueba, dura hasta cerrar el navegador).
+  // El escenario mide 1000×1500 y se escala para caber en la pantalla, dejando arriba espacio para el aviso
+  const ANCHO = 1000, ALTO = 1500, RESERVA = 120;
+  let vista = {s:1, tx:0, ty:0}, enfocado = null, final = false;
+  function ponerVista(s, tx, ty){ vista = {s, tx, ty}; escenario.style.transform = `translate(${tx.toFixed(1)}px,${ty.toFixed(1)}px) scale(${s.toFixed(4)})`; }
+  function vistaBase(){
+    const vw = innerWidth, vh = innerHeight, s = Math.min(vw/ANCHO, (vh - RESERVA)/ALTO);
+    ponerVista(s, (vw - ANCHO*s)/2, vh - ALTO*s);
+    $("#avisoCuarto").style.height = Math.max(RESERVA, vh - ALTO*s) + "px";
+  }
+  function rectLocal(el){ let x = 0, y = 0, n = el; while(n && n !== escenario){ x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; } return {x, y, w: el.offsetWidth, h: el.offsetHeight}; }
+  // Acerca la cámara a un elemento: fw/fh = cuánto del ancho/alto de la pantalla ocupa, cy = a qué altura queda su centro
+  function enfocar(el, fw, fh, cy, tope){
+    const l = rectLocal(el), vw = innerWidth, vh = innerHeight;
+    const base = Math.min(vw/ANCHO, (vh - RESERVA)/ALTO);
+    const s = Math.min(vw*fw/l.w, vh*fh/l.h, tope ? base*tope : Infinity);
+    ponerVista(s, vw/2 - (l.x + l.w/2)*s, vh*cy - (l.y + l.h/2)*s);
+  }
+  escenario.classList.add("quieto"); vistaBase();
+  requestAnimationFrame(() => requestAnimationFrame(() => escenario.classList.remove("quieto")));
+
+  // Dónde va cada cosa (en unidades del escenario)
+  const LUGAR = {
+    luces:   {x:0,   y:-8,   w:1000, h:170, z:1},
+    letrero: {x:0,   y:140,  w:1000, h:260, z:2},
+    globos:  {x:8,   y:830,  w:230,  h:420, z:2},
+    globo19: {x:800, y:840,  w:190,  h:330, z:2},
+    cafe:    {x:192, y:986,  w:88,   h:100, z:5},
+    libros:  {x:716, y:992,  w:100,  h:94,  z:5},
+    rosas:   {x:28,  y:1100, w:170,  h:300, z:5},
+    regalos: {x:792, y:1196, w:190,  h:200, z:5}
+  };
+  const HUECOS = [
+    {x:390, y:398, w:220, h:262, m:"oro",    r:0},
+    {x:765, y:412, w:175, h:212, m:"ovalo",  r:2},
+    {x:55,  y:418, w:205, h:158, m:"madera", r:-2},
+    {x:690, y:668, w:200, h:150, m:"blanco", r:1.5},
+    {x:80,  y:622, w:160, h:190, m:"blanco", r:-1.5},
+    {x:630, y:432, w:110, h:110, m:"ovalo",  r:0},
+    {x:268, y:432, w:105, h:135, m:"oro",    r:-3},
+    {x:625, y:572, w:95,  h:82,  m:"madera", r:2.5},
+    {x:268, y:604, w:105, h:96,  m:"madera", r:-2}
+  ];
+  function dibujo(c){
+    switch(c.tipo){
+      case "cuadro": return `<span class="clavo"></span><img alt="" src="${esc(miniDe(c.foto))}" data-full="${esc(c.foto)}">`;
+      case "luces": {
+        const cols = ["#ffd98a","#ffb3c8","#c9b8ff","#a8f0d4"]; let focos = "", k = 0;
+        for(const [a, b, d] of [[[0,26],[250,130],[500,36]], [[500,36],[750,130],[1000,26]]]) for(let i = 0; i < 9; i++){
+          const t = (i + .5)/9, u = 1 - t, x = u*u*a[0] + 2*u*t*b[0] + t*t*d[0], y = u*u*a[1] + 2*u*t*b[1] + t*t*d[1], col = cols[k % 4];
+          focos += `<g class="foco" style="animation-delay:${(k*.37 % 1.8).toFixed(2)}s"><circle cx="${x.toFixed(1)}" cy="${(y+18).toFixed(1)}" r="20" fill="${col}" opacity=".35" filter="url(#difu)"/><rect x="${(x-4).toFixed(1)}" y="${(y-1).toFixed(1)}" width="8" height="8" rx="2" fill="#5c4a3a"/><ellipse cx="${x.toFixed(1)}" cy="${(y+16).toFixed(1)}" rx="7" ry="10" fill="${col}"/></g>`;
+          k++;
+        }
+        return `<svg viewBox="0 0 1000 170" aria-hidden="true"><defs><filter id="difu" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="6"/></filter></defs><path d="M0 26 Q250 130 500 36 Q750 130 1000 26" fill="none" stroke="#2c2233" stroke-width="3"/>${focos}</svg>`;
+      }
+      case "letrero": {
+        const filas = [{t:"FELIZ", y:6, x0:250, x1:750, sag:24, w:76}, {t:"CUMPLEAÑOS", y:128, x0:30, x1:970, sag:28, w:80}];
+        const col = [["#ee8fae","#fff"],["#f5c97a","#3b2b4f"],["#c3b5f0","#3b2b4f"],["#9fd8c8","#3b2b4f"],["#c9567d","#fff"]];
+        let cuerdas = "", banderas = "", k = 0;
+        for(const f of filas){
+          const P0 = [f.x0 - 24, f.y], P1 = [(f.x0 + f.x1)/2, f.y + 2*f.sag], P2 = [f.x1 + 24, f.y];
+          cuerdas += `<path d="M${P0[0]} ${P0[1]} Q${P1[0]} ${P1[1]} ${P2[0]} ${P2[1]}" fill="none" stroke="#efe3d6" stroke-width="3"/>`;
+          [...f.t].forEach((ch, j) => {
+            const t = (j + 1)/(f.t.length + 1), u = 1 - t;
+            const x = u*u*P0[0] + 2*u*t*P1[0] + t*t*P2[0], y = u*u*P0[1] + 2*u*t*P1[1] + t*t*P2[1];
+            const a = Math.atan2(2*u*(P1[1]-P0[1]) + 2*t*(P2[1]-P1[1]), 2*u*(P1[0]-P0[0]) + 2*t*(P2[0]-P1[0]))*180/Math.PI;
+            const [c1, c2] = col[k % col.length];
+            banderas += `<span class="banderita" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;--w:${f.w}px;--a:${a.toFixed(1)}deg;--c:${c1};--t:${c2};--d:${(-k*.27).toFixed(2)}s">${esc(ch)}</span>`;
+            k++;
+          });
+        }
+        return `<svg viewBox="0 0 1000 260" aria-hidden="true">${cuerdas}</svg>${banderas}`;
+      }
+      case "globos": {
+        const g = [[70,88,"#ee8fae"],[160,72,"#c3b5f0"],[112,170,"#f5c97a"],[188,182,"#9fd8c8"]];
+        return `<svg viewBox="0 0 230 420" aria-hidden="true">${g.map(([x, y, c], i) => `<g class="flota" style="animation-delay:${-i*1.1}s"><path d="M${x} ${y+64} Q${x-14} ${y+170} 115 420" fill="none" stroke="#efe3d6" stroke-width="2"/><ellipse cx="${x}" cy="${y}" rx="52" ry="63" fill="${c}"/><ellipse cx="${x-18}" cy="${y-24}" rx="11" ry="19" fill="#fff" opacity=".45"/><path d="M${x-6} ${y+61} l6 10 l6 -10z" fill="${c}"/></g>`).join("")}</svg>`;
+      }
+      case "globo19": return `<svg viewBox="0 0 190 330" aria-hidden="true"><defs><linearGradient id="oro19" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff1c9"/><stop offset=".45" stop-color="#f5c97a"/><stop offset="1" stop-color="#c98a3c"/></linearGradient></defs><path d="M95 236 Q78 290 100 330" fill="none" stroke="#efe3d6" stroke-width="2"/><g class="flota" style="animation:flota 5s ease-in-out infinite alternate"><text x="95" y="226" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-style="italic" font-weight="700" font-size="${String(C.edad || "♥").length > 1 ? 180 : 230}" fill="url(#oro19)" stroke="#b9853e" stroke-width="4" paint-order="stroke">${esc(C.edad || "♥")}</text></g></svg>`;
+      case "cafe": return `<svg viewBox="0 -24 88 124" aria-hidden="true"><g class="vapor" fill="none" stroke="rgba(255,255,255,.65)" stroke-width="3" stroke-linecap="round"><path d="M34 22 q-7 -8 0 -16 q7 -8 0 -16"/><path d="M54 22 q-7 -8 0 -16 q7 -8 0 -16"/></g><path d="M14 30 h60 l-8 70 h-44z" fill="#c8102e"/><path d="M19.5 56 h49 l-1.6 15 h-45.8z" fill="#f3e6d6"/><rect x="10" y="24" width="68" height="9" rx="3" fill="#ece3d8"/></svg>`;
+      case "libros": return `<span class="libro" style="--c:#c3b5f0;left:2px;bottom:0;width:96px;height:26px"></span><span class="libro" style="--c:#ee8fae;left:9px;bottom:25px;width:84px;height:22px;transform:rotate(-3deg)"></span><span class="libro" style="--c:#9fd8c8;left:5px;bottom:46px;width:90px;height:20px;transform:rotate(2deg)"></span><span class="cora" aria-hidden="true">♥</span>`;
+      case "rosas": {
+        const rosas = [[58,70],[85,52],[113,72],[38,104],[132,104]];
+        return `<svg viewBox="0 0 170 300" aria-hidden="true"><g stroke="#3f7a4a" stroke-width="4" fill="none">${rosas.map(([x, y]) => `<path d="M85 214 Q${(x+85)/2} ${(y+214)/2+10} ${x} ${y}"/>`).join("")}</g><g fill="#4f9a5a"><ellipse cx="62" cy="150" rx="17" ry="7" transform="rotate(-32 62 150)"/><ellipse cx="110" cy="146" rx="17" ry="7" transform="rotate(30 110 146)"/><ellipse cx="80" cy="120" rx="14" ry="6" transform="rotate(-60 80 120)"/></g>${rosas.map(([x, y]) => `<g transform="translate(${x} ${y})"><circle r="19" fill="#b80d2b"/><circle r="12" fill="#de2f4e"/><path d="M-6 1 a6 6 0 1 1 6 6 a3 3 0 1 1 -3 -3" fill="none" stroke="#8f0d23" stroke-width="2"/></g>`).join("")}<path d="M48 204 h74 l-7 88 q-30 10 -60 0z" fill="rgba(195,181,240,.38)" stroke="rgba(255,255,255,.65)" stroke-width="3"/><path d="M60 214 l-3 66" stroke="rgba(255,255,255,.45)" stroke-width="5" stroke-linecap="round"/></svg>`;
+      }
+      case "regalos": return `<span class="caja" style="left:0;bottom:0;width:120px;height:112px;--c:#ee8fae;--l:#f5c97a"></span><span class="caja" style="left:24px;bottom:112px;width:76px;height:60px;--c:#9fd8c8;--l:#ee8fae"></span><span class="caja" style="left:100px;bottom:0;width:88px;height:80px;--c:#c3b5f0;--l:#fff"></span>`;
+    }
+    return "";
+  }
+
+  const COSAS = ((C.cuarto && C.cuarto.cosas) || []).filter(c => c && c.tipo);
+  const desdeDeco = (C.cuarto && C.cuarto.desde) ? new Date(C.cuarto.desde) : hoy();
+  const elsCosas = [];
+  let nCuadro = 0;
+  COSAS.forEach((c, i) => {
+    const l = c.tipo === "cuadro" ? HUECOS[nCuadro++] : LUGAR[c.tipo];
+    if(!l) return;
+    const b = document.createElement("button");
+    b.type = "button"; b.className = `cosa ${c.tipo}${l.m ? " " + l.m : ""}`; b.hidden = true;
+    b.style.cssText = `left:${l.x}px;top:${l.y}px;width:${l.w}px;height:${l.h}px;--r:${l.r || 0}deg;z-index:${l.z || 2}`;
+    b.setAttribute("aria-label", c.titulo || c.tipo);
+    b.innerHTML = dibujo(c) + `<span class="chispa" aria-hidden="true">✨</span>`;
+    const img = b.querySelector("img");
+    if(img) img.onerror = () => { img.onerror = null; img.src = c.foto; };
+    b.addEventListener("click", e => { e.stopPropagation(); if(enfocado) cerrarCosa(); else abrirCosa(i); });
+    escenario.appendChild(b);
+    elsCosas[i] = b;
+  });
+
+  // Para probar cómo se ve el cuarto otro día: ?avance=0.5 (0 = recién empieza, 1 = todo listo)
+  const qAvance = new URLSearchParams(location.search).get("avance");
+  const avanceForzado = qAvance !== null && qAvance !== "" && isFinite(+qAvance) ? Math.max(0, Math.min(1, +qAvance)) : null;
+
+  // Estática de tele sin señal
+  const rc = $("#ruido"), rx = rc.getContext("2d");
+  rc.width = 160; rc.height = 120;
+  const ruidoImg = rx.createImageData(160, 120);
+  let rafRuido = 0, ultRuido = 0;
+  function pintarRuido(t){
+    if(t - ultRuido > 45){
+      ultRuido = t;
+      const d = ruidoImg.data;
+      for(let i = 0; i < d.length; i += 4){ const v = Math.random()*255 | 0; d[i] = d[i+1] = d[i+2] = v; d[i+3] = 255; }
+      rx.putImageData(ruidoImg, 0, 0);
+    }
+    if(!reduce) rafRuido = requestAnimationFrame(pintarRuido);
+  }
+  pintarRuido(100);
+
+  // La tele no se sintoniza hasta el día del cumpleaños.
+  // Truco para revisarla antes: tocar la pantalla 28 veces seguidas (modo prueba, dura hasta cerrar el navegador).
   let modoPrueba = false;
   try { modoPrueba = sessionStorage.getItem("cumple-prueba") === "1"; } catch(e){}
   const bloqueada = () => !!cumple && new Date() < cumple && !modoPrueba;
+  const dos = n => String(n).padStart(2, "0");
+
+  // Cuántas cosas ya se colgaron: se reparten entre "desde" y el cumpleaños
+  function avance(){
+    if(avanceForzado !== null) return avanceForzado;
+    if(!bloqueada() || !cumple) return 1;
+    const total = cumple - desdeDeco;
+    return total > 0 ? Math.max(0, Math.min(1, (Date.now() - desdeDeco)/total)) : 1;
+  }
+  const cuantas = () => { const a = avance(); return a >= 1 ? COSAS.length : Math.min(COSAS.length, 1 + Math.floor(a*COSAS.length)); };
+  const abiertas = new Set(leer("cuarto-abiertas", []));
+  let aparecidas = leer("cuarto-aparecidas", 0), mostradas = -1, avisoT = 0;
+  function avisar(t){
+    if(!t || final) return;
+    const a = $("#avisoNuevo"); a.textContent = t; a.classList.add("on");
+    clearTimeout(avisoT); avisoT = setTimeout(() => a.classList.remove("on"), 4200);
+  }
+  function actualizarCuarto(){
+    const n = cuantas();
+    if(n === mostradas) return;
+    const primera = mostradas < 0; mostradas = n;
+    let nuevas = 0;
+    elsCosas.forEach((el, i) => {
+      const vis = i < n;
+      if(vis && el.hidden){
+        el.hidden = false;
+        if(!primera || i >= aparecidas){ el.style.animationDelay = primera ? `${(.5 + nuevas*.4).toFixed(2)}s` : "0s"; el.classList.add("aparece"); nuevas++; }
+      } else if(!vis) el.hidden = true;
+      el.classList.toggle("sin-ver", vis && !abiertas.has(i));
+    });
+    if(nuevas && !(primera && aparecidas === 0)){
+      avisar(!primera ? "¡Apareció algo nuevo en el cuarto! 🔍" : nuevas === 1 ? "Desde tu última visita apareció algo nuevo 🔍" : `Desde tu última visita aparecieron ${nuevas} cosas nuevas 🔍`);
+    }
+    if(n > aparecidas){ aparecidas = n; guardar("cuarto-aparecidas", n); }
+    escenario.style.setProperty("--oscuro", (.5*(1 - n/Math.max(1, COSAS.length))).toFixed(2));
+  }
+
   let avisoHasta = 0;
   function pintarCuenta(){
-    if(!cumple) return;
-    if(bloqueada()){
+    const b = bloqueada();
+    tv.classList.toggle("lista", !b);
+    actualizarCuarto();
+    const N = COSAS.length;
+    if(b){
       const ms = cumple - new Date();
       const d = Math.floor(ms/DIA), h = Math.floor(ms/36e5)%24, m = Math.floor(ms/6e4)%60, s = Math.floor(ms/1e3)%60;
-      if(Date.now() > avisoHasta) $("#toca").textContent = `Este sobre se abre el ${cumple.getDate()} de ${MESES[cumple.getMonth()]}`;
+      $("#arriba").textContent = "Estoy decorando algo para ti…";
+      $("#osdCh").textContent = "CH 19";
+      $("#osdReloj").textContent = `${d > 0 ? d + "D " : ""}${dos(h)}:${dos(m)}:${dos(s)}`;
       $("#cuenta").textContent = (d > 0 ? `Faltan ${d} ${d === 1 ? "día" : "días"}, ` : "Faltan ") + `${h} h, ${m} min y ${s} s`;
+      if(Date.now() > avisoHasta) $("#pista").textContent = mostradas < N
+        ? `Llevo ${mostradas} de ${N} sorpresas · toca cada una para verla de cerca 🔍`
+        : "Ya está todo colgado… solo falta que llegue el día ♥";
     } else {
-      $("#toca").textContent = "Toca el sobre para abrirlo";
-      $("#cuenta").textContent = modoPrueba && new Date() < cumple ? "Modo prueba: solo tú puedes ver esto."
-        : Math.round((cumple - hoy())/DIA) === 0 ? "Hoy es tu día. Sube el volumen." : "Sube el volumen.";
+      $("#arriba").textContent = "¡Todo está listo para ti!";
+      $("#osdCh").textContent = "CH 19 ♥";
+      $("#osdReloj").textContent = "SEÑAL LISTA";
+      $("#cuenta").textContent = modoPrueba && cumple && new Date() < cumple ? "Modo prueba: solo tú puedes ver esto." : "Toca la tele para empezar. Sube el volumen.";
+      $("#pista").textContent = "También puedes tocar las cosas para verlas de cerca 🔍";
     }
   }
   pintarCuenta();
   const relojT = setInterval(pintarCuenta, 1000);
 
+  // Modo detective: tocar una cosa acerca la cámara y muestra su recuerdo
+  let detT = 0;
+  function abrirCosa(i){
+    const el = elsCosas[i], c = COSAS[i];
+    if(!el || final) return;
+    enfocado = el; cuarto.classList.add("enfocado");
+    enfocar(el, .88, .5, .33, 3.4);
+    abiertas.add(i); guardar("cuarto-abiertas", [...abiertas]); el.classList.remove("sin-ver");
+    const img = el.querySelector("img[data-full]");
+    if(img && !img.dataset.grande){ img.dataset.grande = "1"; const g = new Image(); g.onload = () => { img.src = g.src; }; g.src = img.dataset.full; }
+    $("#detTitulo").textContent = c.titulo || "";
+    $("#detTexto").textContent = c.texto || "";
+    const df = $("#detFoto"); df.innerHTML = "";
+    if(c.foto && c.tipo !== "cuadro"){ const im = new Image(); im.alt = ""; im.onerror = () => { im.onerror = null; im.src = c.foto; }; im.src = miniDe(c.foto); df.appendChild(im); }
+    df.hidden = !df.firstChild;
+    const r = el.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, 8);
+    clearTimeout(detT); detT = setTimeout(() => detalle.classList.add("on"), reduce ? 0 : 750);
+  }
+  function cerrarCosa(){
+    if(!enfocado || final) return;
+    enfocado = null; clearTimeout(detT);
+    detalle.classList.remove("on"); cuarto.classList.remove("enfocado"); vistaBase();
+  }
+  cuarto.addEventListener("click", e => { if(enfocado && !e.target.closest(".detalle-tarjeta")) cerrarCosa(); });
+  document.addEventListener("keydown", e => { if(e.key === "Escape") cerrarCosa(); });
+  addEventListener("resize", () => { if(final) return; if(enfocado) enfocar(enfocado, .88, .5, .33, 3.4); else vistaBase(); });
+
   let abierto = false, toques = 0, ultToque = 0;
-  $("#sobre").addEventListener("click", () => {
+  pantalla.addEventListener("click", e => {
+    e.stopPropagation();
     if(abierto) return;
+    if(enfocado){ cerrarCosa(); return; }
     if(bloqueada()){
       const t = performance.now();
       toques = t - ultToque < 1500 ? toques + 1 : 1; ultToque = t;
       if(toques < 28){
-        const s = $("#sobre"); s.classList.remove("tiembla"); void s.offsetWidth; s.classList.add("tiembla");
-        $("#toca").textContent = "Todavía no… un poquito de paciencia."; avisoHasta = Date.now() + 2200;
+        tv.classList.remove("golpe"); void tv.offsetWidth; tv.classList.add("golpe");
+        $("#pista").textContent = `La tele todavía no tiene señal… vuelve el ${cumple.getDate()} ♥`; avisoHasta = Date.now() + 2600;
         return;
       }
-      modoPrueba = true;
+      // Modo prueba: se cuelga todo y la tele queda lista
+      modoPrueba = true; toques = 0;
       try { sessionStorage.setItem("cumple-prueba", "1"); } catch(e){}
+      pintarCuenta();
+      return;
     }
     abierto = true; clearInterval(relojT);
-    $("#sobre").classList.add("abierto");
-    musicaIniciada = true; sonar();
-    setTimeout(() => {
-      $("#portada").classList.add("fuera"); $("#portada").setAttribute("aria-hidden","true");
-      document.body.classList.remove("locked"); document.body.classList.add("empezo");
-    }, reduce ? 200 : 1900);
+    encender();
   });
+
+  // Entramos a la tele: se sintoniza a todo color, se abre el sobre y empieza todo
+  async function encender(){
+    musicaIniciada = true; sonar();
+    final = true; enfocado = null; clearTimeout(detT); clearTimeout(avisoT);
+    $("#avisoNuevo").classList.remove("on"); detalle.classList.remove("on"); cuarto.classList.remove("enfocado"); cuarto.classList.add("final");
+    enfocar(pantalla, .92, .62, .46);
+    await esperar(reduce ? 0 : 1100);
+    tv.classList.remove("golpe", "lista"); tv.classList.add("sintoniza", "al-aire");
+    $("#osdCh").textContent = "CH 19 ♥ EN VIVO"; $("#osdReloj").textContent = "";
+    await esperar(reduce ? 0 : 1300);
+    $("#sobre").classList.add("abierto"); $("#osdCh").style.opacity = 0;
+    await esperar(reduce ? 0 : 900);
+    const r = pantalla.getBoundingClientRect();
+    corazones(r.left + r.width/2, r.top + r.height*.35, 34);
+    await esperar(reduce ? 0 : 1300);
+    enfocar(pantalla, 1.8, 1.8, .5);
+    $("#portada").classList.add("entrando");
+    await esperar(reduce ? 0 : 1000);
+    $("#portada").classList.add("fuera"); $("#portada").setAttribute("aria-hidden","true");
+    document.body.classList.remove("locked"); document.body.classList.add("empezo");
+    cancelAnimationFrame(rafRuido);
+    confeti(80);
+    setTimeout(() => { $("#portada").hidden = true; }, 1100);
+  }
 
   /* ---------- Hero ---------- */
   const hn = $("#heroNombre"); hn.setAttribute("aria-label", APODO);
@@ -641,9 +1110,13 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     io.observe($("#dedicatoria"));
   } else $("#dedicatoria").classList.add("visto");
 
-  /* ---------- Cielo + polvo de estrellas al tocar ---------- */
+  /* ---------- Cielo + polvo de estrellas y corazones al tocar ---------- */
+  function trazoCorazon(c, s){
+    c.beginPath(); c.moveTo(0,s*.3); c.bezierCurveTo(0,0,-s*.5,0,-s*.5,s*.3); c.bezierCurveTo(-s*.5,s*.62,0,s*.8,0,s);
+    c.bezierCurveTo(0,s*.8,s*.5,s*.62,s*.5,s*.3); c.bezierCurveTo(s*.5,0,0,0,0,s*.3); c.fill();
+  }
   const cv = $("#cielo"), cx = cv.getContext("2d");
-  let W = 0, H = 0, est = [], fugaz = null, polvo = [];
+  let W = 0, H = 0, est = [], fugaz = null, polvo = [], flotan = [];
   function tamCielo(){
     W = innerWidth; H = innerHeight; cv.width = W*dpr; cv.height = H*dpr; cx.setTransform(dpr,0,0,dpr,0,0);
     est = Array.from({length: Math.round(W*H/4200)}, () => ({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.25+.2, f:Math.random()*6.3, v:.4+Math.random()*1.4}));
@@ -653,10 +1126,20 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     cx.clearRect(0,0,W,H); cx.fillStyle = "#fff6e0";
     for(const s of est){ cx.globalAlpha = reduce ? .7 : .3 + .7*Math.abs(Math.sin(s.f + t*.0005*s.v)); cx.beginPath(); cx.arc(s.x,s.y,s.r,0,6.3); cx.fill(); }
     if(reduce){ cx.globalAlpha = 1; return; }
+    // Corazoncitos que suben despacio por el cielo
+    if(flotan.length < 9 && Math.random() < .012) flotan.push({x:rnd(0,W), y:H + 20, s:rnd(7,15), v:rnd(.25,.6), f:rnd(0,6), a:rnd(.12,.3)});
+    flotan = flotan.filter(h => h.y > -30);
+    cx.fillStyle = "#ee8fae";
+    for(const h of flotan){
+      h.y -= h.v; h.f += .012;
+      cx.globalAlpha = h.a; cx.save(); cx.translate(h.x + Math.sin(h.f)*14, h.y); trazoCorazon(cx, h.s); cx.restore();
+    }
     polvo = polvo.filter(p => p.v > 0);
     for(const p of polvo){
       p.x += p.vx; p.y += p.vy; p.vy += .02; p.v -= .018;
-      cx.globalAlpha = Math.max(0,p.v); cx.fillStyle = p.c; cx.beginPath(); cx.arc(p.x,p.y,p.r*Math.max(.3,p.v),0,6.3); cx.fill();
+      cx.globalAlpha = Math.max(0,p.v); cx.fillStyle = p.c;
+      if(p.h){ cx.save(); cx.translate(p.x, p.y); trazoCorazon(cx, p.r*3.4*Math.max(.4,p.v)); cx.restore(); }
+      else { cx.beginPath(); cx.arc(p.x,p.y,p.r*Math.max(.3,p.v),0,6.3); cx.fill(); }
     }
     cx.globalAlpha = 1;
     if(!fugaz && Math.random() < .0025) fugaz = {x:W*(.35+Math.random()*.6), y:H*Math.random()*.35, n:0};
@@ -670,49 +1153,38 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     requestAnimationFrame(dibujarCielo);
   }
   let ultPolvo = 0;
-  function echarPolvo(x, y, n){
+  function echarPolvo(x, y, n, conCorazones){
     if(reduce) return;
-    for(let i=0;i<n;i++) polvo.push({x, y, vx:rnd(-1.2,1.2), vy:rnd(-1.6,.4), r:rnd(1,2.6), v:1, c: Math.random()<.6 ? "#f5c97a" : "#fbe3ef"});
+    for(let i=0;i<n;i++){
+      const h = conCorazones && Math.random() < .4;
+      polvo.push({x, y, vx:rnd(-1.2,1.2), vy:rnd(-1.6,.4), r:rnd(1,2.6), v:1, h, c: h ? "#ee8fae" : Math.random()<.6 ? "#f5c97a" : "#fbe3ef"});
+    }
     if(polvo.length > 260) polvo.splice(0, polvo.length-260);
   }
   addEventListener("pointermove", e => { const t = performance.now(); if(t - ultPolvo > 30){ ultPolvo = t; echarPolvo(e.clientX, e.clientY, 2); } }, {passive:true});
-  addEventListener("pointerdown", e => echarPolvo(e.clientX, e.clientY, 12), {passive:true});
+  addEventListener("pointerdown", e => echarPolvo(e.clientX, e.clientY, 12, true), {passive:true});
   tamCielo();
   if(!reduce) requestAnimationFrame(dibujarCielo);
 
   /* ---------- Galería ---------- */
   if(!momentos.length) $("#momentos").hidden = true;
-  const mesa = $("#mesa"); let zTop = 10;
+  const mesa = $("#mesa");
   const CINTAS = ["rgba(238,143,174,.6)","rgba(195,181,240,.62)","rgba(245,201,122,.6)","rgba(159,216,200,.6)"];
   const polas = momentos.map((mo, i) => {
     const b = document.createElement("button");
     b.type = "button"; b.className = "pola";
     b.setAttribute("aria-label", `${mo.foto ? "Ver foto" : "Ver video"}: ${mo.pie || i+1}`);
-    b.style.setProperty("--rot", rnd(-6,6).toFixed(1)+"deg");
+    b.style.setProperty("--rot", ((i % 2 ? 1 : -1) * rnd(.8,2.8)).toFixed(1)+"deg");
     b.style.setProperty("--cinta", CINTAS[i % CINTAS.length]);
     b.style.setProperty("--cr", rnd(-9,9).toFixed(1)+"deg");
-    b.style.setProperty("--cx", rnd(-20,20).toFixed(0)+"px");
+    b.style.setProperty("--cx", rnd(-16,16).toFixed(0)+"px");
     b.appendChild(medio(mo, {mini:true, insignia:true}));
     const pie = document.createElement("span"); pie.className = "pie"; pie.textContent = mo.pie || ""; b.appendChild(pie);
     mesa.appendChild(b);
-    let sx, sy, ox, oy, mov = false, arr = false;
-    b.addEventListener("pointerdown", e => {
-      if(!mesa.classList.contains("regada") || e.pointerType !== "mouse" || e.button !== 0) return;
-      arr = true; mov = false; sx = e.clientX; sy = e.clientY; ox = b.offsetLeft; oy = b.offsetTop;
-      b.setPointerCapture(e.pointerId); b.style.zIndex = ++zTop; b.classList.add("alzada");
+    b.addEventListener("click", () => {
+      const r = b.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, 14);
+      setTimeout(() => abrirVisor(i), reduce ? 0 : 260);
     });
-    b.addEventListener("pointermove", e => {
-      if(!arr) return;
-      const dx = e.clientX - sx, dy = e.clientY - sy;
-      if(Math.abs(dx) + Math.abs(dy) > 6) mov = true;
-      if(mov){
-        b.style.left = Math.max(-30, Math.min(mesa.clientWidth - b.offsetWidth + 30, ox + dx)) + "px";
-        b.style.top  = Math.max(-30, Math.min(mesa.clientHeight - b.offsetHeight + 30, oy + dy)) + "px";
-      }
-    });
-    const soltar = () => { arr = false; b.classList.remove("alzada"); };
-    b.addEventListener("pointerup", soltar); b.addEventListener("pointercancel", soltar);
-    b.addEventListener("click", e => { if(mov){ mov = false; e.preventDefault(); return; } abrirVisor(i); });
     return b;
   });
   // Cada polaroid cae y se revela cuando llega a la pantalla
@@ -722,29 +1194,6 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     }, {threshold:.25});
     polas.forEach(p => ioP.observe(p));
   } else polas.forEach(p => p.classList.add("visto"));
-  let anchoMesa = 0;
-  function acomodar(){
-    const w = mesa.parentElement.clientWidth - 40;
-    if(Math.abs(w - anchoMesa) < 2) return; anchoMesa = w;
-    if(w < 700){
-      mesa.classList.remove("regada"); mesa.style.height = "";
-      polas.forEach(p => { p.style.left = p.style.top = p.style.zIndex = ""; });
-      $("#notaFotos").textContent = "Toca una foto para leer lo que te escribí.";
-      return;
-    }
-    mesa.classList.add("regada");
-    $("#notaFotos").textContent = "Arrastra las fotos para acomodarlas, o tócalas para leer lo que te escribí.";
-    const pw = 220, alto = 288;
-    const cols = Math.max(2, Math.min(4, Math.floor(w/(pw+34))));
-    const filas = Math.ceil(polas.length/cols), cw = w/cols;
-    polas.forEach((p, i) => {
-      const c = i % cols, r = Math.floor(i/cols);
-      p.style.left = Math.max(0, Math.min(w-pw, c*cw + (cw-pw)/2 + rnd(-20,20))) + "px";
-      p.style.top  = (r*(alto-8) + 16 + (c%2 ? 28 : 0) + rnd(-12,12)) + "px";
-    });
-    mesa.style.height = (filas*(alto-8) + 60) + "px";
-  }
-  acomodar();
 
   const visor = $("#visor"); let vi = 0, focoPrevio = null;
   function pararVisorVideo(){ const v = $("#vimg video"); if(v){ v.pause(); } soltarM("visor-video"); }
@@ -754,7 +1203,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     box.appendChild(medio(mo, {controles:true}));
     const v = box.querySelector("video");
     if(v && mo.video){ retener("visor-video"); v.play().catch(()=>{}); v.addEventListener("ended", () => soltarM("visor-video")); }
-    $("#vpie").textContent = mo.frase || mo.pie || "";
+    $("#vpie").textContent = mo.pie || "";
     $("#vnum").textContent = `${vi+1} de ${momentos.length}`;
     const card = $("#vcard");
     ["--cinta","--cr","--cx"].forEach(k => card.style.setProperty(k, polas[vi].style.getPropertyValue(k)));
@@ -800,6 +1249,40 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   $("#btnPapel").addEventListener("click", sacarPapel);
   $("#frasco").addEventListener("click", sacarPapel);
   pintarFrasco(); contar();
+
+  /* ---------- Corazón que se llena ---------- */
+  const gc = $("#granCorazon"), nivel = $("#corNivel"), ola = $("#corOla");
+  const MEDIDA = [[.06,"Un poquito…"],[.3,"Más…"],[.55,"Mucho más…"],[.8,"Muchísimo más…"]];
+  let carga = 0, apretado = false, rafCor = 0, tCor = 0, lleno = false;
+  function pintarCor(){
+    const y = 90 - 92*carga;
+    nivel.setAttribute("y", y.toFixed(2)); ola.setAttribute("y", (y - 1).toFixed(2));
+    if(!lleno){ let m = ""; for(const [u, t] of MEDIDA) if(carga >= u) m = t; $("#medidor").textContent = m; }
+  }
+  function pasoCor(t){
+    const dt = tCor ? Math.min(50, t - tCor) : 16; tCor = t;
+    carga = Math.max(0, Math.min(1, carga + (apretado ? dt/2800 : -dt/2400)));
+    pintarCor();
+    if(apretado && Math.random() < .18){ const r = gc.getBoundingClientRect(); corazones(r.left + r.width*rnd(.25,.75), r.top + r.height*rnd(.2,.6), 1); }
+    if(carga >= 1 && !lleno) llenar();
+    if(!lleno && (apretado || carga > 0)) rafCor = requestAnimationFrame(pasoCor); else { rafCor = 0; tCor = 0; }
+  }
+  function llenar(){
+    lleno = true; apretado = false;
+    gc.classList.remove("apretando"); gc.classList.add("lleno");
+    $("#medidor").textContent = "¿Que cuánto te quiero?";
+    $("#corFinal").hidden = false;
+    const r = gc.getBoundingClientRect();
+    corazones(r.left + r.width/2, r.top + r.height*.45, 60);
+    confeti(120);
+  }
+  const apretar = e => { if(lleno) return; e.preventDefault(); apretado = true; gc.classList.add("apretando"); if(!rafCor) rafCor = requestAnimationFrame(pasoCor); };
+  const aflojar = () => { apretado = false; gc.classList.remove("apretando"); };
+  gc.addEventListener("pointerdown", e => { try { gc.setPointerCapture(e.pointerId); } catch(err){} apretar(e); });
+  gc.addEventListener("pointerup", aflojar); gc.addEventListener("pointercancel", aflojar); gc.addEventListener("lostpointercapture", aflojar);
+  gc.addEventListener("keydown", e => { if((e.key === " " || e.key === "Enter") && !e.repeat) apretar(e); });
+  gc.addEventListener("keyup", e => { if(e.key === " " || e.key === "Enter") aflojar(); });
+  gc.addEventListener("contextmenu", e => e.preventDefault());
 
   /* ---------- Piano ---------- */
   let ac = null, master = null;
@@ -954,16 +1437,26 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   /* ---------- Confeti y notas mágicas ---------- */
   const cf = $("#confeti"), fx = cf.getContext("2d");
   let parts = [], rafCf = 0;
-  function corazon(s){ fx.beginPath(); fx.moveTo(0,s*.3); fx.bezierCurveTo(0,0,-s*.5,0,-s*.5,s*.3); fx.bezierCurveTo(-s*.5,s*.62,0,s*.8,0,s);
-    fx.bezierCurveTo(0,s*.8,s*.5,s*.62,s*.5,s*.3); fx.bezierCurveTo(s*.5,0,0,0,0,s*.3); fx.fill(); }
-  function prepCanvas(){ cf.width = innerWidth*dpr; cf.height = innerHeight*dpr; fx.setTransform(dpr,0,0,dpr,0,0); }
+  const corazon = s => trazoCorazon(fx, s);
+  function prepCanvas(){
+    const w = Math.round(innerWidth*dpr), h = Math.round(innerHeight*dpr);
+    if(cf.width !== w || cf.height !== h){ cf.width = w; cf.height = h; }
+    fx.setTransform(dpr,0,0,dpr,0,0);
+  }
   const PALETA = ["#f5c97a","#ee8fae","#c3b5f0","#fbf5ec","#9fd8c8","#ffb27a"];
   function confeti(n){
     prepCanvas(); const w = innerWidth, h = innerHeight; n = reduce ? Math.min(n, 40) : n;
     for(let i = 0; i < n; i++){
       const izq = i % 2 === 0;
-      parts.push({tipo:"c", x: izq ? -10 : w+10, y: h*.8, vx:(izq?1:-1)*rnd(3,11), vy:-rnd(9,19), rot:rnd(0,6), vr:rnd(-.25,.25), w:rnd(6,12), h:rnd(4,8), c:PALETA[i % PALETA.length], cor: Math.random() < .22, t:0, fase:rnd(0,6)});
+      parts.push({tipo:"c", x: izq ? -10 : w+10, y: h*.8, vx:(izq?1:-1)*rnd(3,11), vy:-rnd(9,19), rot:rnd(0,6), vr:rnd(-.25,.25), w:rnd(6,12), h:rnd(4,8), c:PALETA[i % PALETA.length], cor: Math.random() < .4, t:0, fase:rnd(0,6)});
     }
+    if(!rafCf) rafCf = requestAnimationFrame(pasoCf);
+  }
+  // Lluvia de corazones que sube desde un punto
+  const ROSAS = ["#ee8fae","#f7aec4","#ff7a9c","#fbe3ef","#c9567d"];
+  function corazones(x, y, n){
+    prepCanvas(); n = reduce ? Math.min(n, 6) : n;
+    for(let i = 0; i < n; i++) parts.push({tipo:"h", x: x + rnd(-24,24), y: y + rnd(-12,12), vx: rnd(-2.6,2.6), vy: -rnd(1.4,5), s: rnd(10,24), c: ROSAS[i % ROSAS.length], t:0, vida: rnd(70,130), fase: rnd(0,6)});
     if(!rafCf) rafCf = requestAnimationFrame(pasoCf);
   }
   function notasMagicas(x, y, n){
@@ -975,11 +1468,17 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   function pasoCf(){
     const w = innerWidth, h = innerHeight;
     fx.clearRect(0,0,w,h);
-    parts = parts.filter(p => p.tipo === "n" ? p.t < p.vida : (p.y < h + 40 && p.t < 520));
+    parts = parts.filter(p => p.tipo === "c" ? (p.y < h + 40 && p.t < 520) : p.t < p.vida);
     for(const p of parts){
       p.t++;
       fx.save();
-      if(p.tipo === "n"){
+      if(p.tipo === "h"){
+        p.vx *= .965; p.vy = p.vy*.97 - .03;
+        p.x += p.vx + Math.sin(p.t*.07 + p.fase)*.6; p.y += p.vy;
+        fx.globalAlpha = Math.max(0, Math.min(1, (p.vida - p.t)/35, p.t/6));
+        fx.translate(p.x, p.y - p.s/2); fx.rotate(Math.sin(p.t*.05 + p.fase)*.25); fx.fillStyle = p.c;
+        fx.shadowColor = "rgba(238,143,174,.7)"; fx.shadowBlur = 8; corazon(p.s);
+      } else if(p.tipo === "n"){
         p.x += p.vx + Math.sin(p.t*.05 + p.fase)*.9; p.y += p.vy; p.vy *= .995;
         fx.globalAlpha = Math.min(1, (p.vida - p.t)/50, p.t/12);
         fx.fillStyle = p.c; fx.shadowColor = "rgba(245,201,122,.8)"; fx.shadowBlur = 12;
@@ -1051,7 +1550,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   let tRes = 0, anchoPrev = innerWidth;
   addEventListener("resize", () => {
     clearTimeout(tRes);
-    tRes = setTimeout(() => { if(innerWidth !== anchoPrev || Math.abs(innerHeight - H) > 160){ anchoPrev = innerWidth; tamCielo(); } acomodar(); }, 150);
+    tRes = setTimeout(() => { if(innerWidth !== anchoPrev || Math.abs(innerHeight - H) > 160){ anchoPrev = innerWidth; tamCielo(); } }, 150);
   });
 })();
 </script>
