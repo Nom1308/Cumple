@@ -29,6 +29,25 @@ const CONFIG = {
   musica: "musica/la-medalla.mp3",
   musicaInicio: 0,                 // Segundo en que arranca la canción (ej: 45 para empezar en el coro)
 
+  // Secretos: corazoncitos casi invisibles escondidos en el cuarto (el cuarto mide 1000 de ancho × 1500 de alto).
+  secretos: [
+    { x: 955, y: 236,  texto: "Me sé de memoria cómo te ríes." },
+    { x: 28,  y: 190,  texto: "Cada vez que me dices que no te tome más fotos, te tomo dos más." },
+    { x: 760, y: 1180, texto: "Eres mi persona favorita para no hacer nada." },
+    { x: 92,  y: 1440, texto: "Decoré este cuarto pensando en ti en cada detalle." },
+    { x: 905, y: 1440, texto: "El domingo tengo algo para ti… 🎁" }
+  ],
+
+  // Los regalos del cuarto se abren desde esta fecha, y adentro hay vales.
+  regalos: {
+    abren: "2026-10-18T00:00",
+    texto: "Ábrelos… son para ti:",
+    vales: [
+      { icono: "🍽️", texto: "Vale por una comidita juntos este domingo. Yo invito." },
+      { icono: "🎁", texto: "Vale por un regalito que se lleva en la muñeca… para que cada vez que mires la hora te acuerdes de mí." }
+    ]
+  },
+
   // Los canales de la tele: un recorrido por su vida en fotos antiguas, de bebé hasta hoy.
   // El canal 19 queda guardado hasta el cumpleaños. Las fotos están en la carpeta "fotos/ninez".
   //  texto: corto, sale en la pantalla de la tele · nota: lo que se lee debajo
@@ -453,6 +472,31 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .mueble .pata{position:absolute;top:144px;width:16px;height:58px;background:linear-gradient(90deg,#3a2414,#6b4529 50%,#3a2414);border-radius:0 0 3px 3px;box-shadow:inset 0 -6px 0 #c9a25a}
 .mueble .pata.i{left:30px;transform:skewX(10deg)} .mueble .pata.d{right:30px;transform:skewX(-10deg)}
 
+/* Secretos escondidos */
+.secreto{position:absolute;z-index:7;width:30px;height:30px;border:0;padding:0;background:none;cursor:pointer;color:#ee8fae;font-size:22px;line-height:30px;text-align:center;opacity:.28;
+  -webkit-tap-highlight-color:transparent;animation:latSecreto 2.8s ease-in-out infinite}
+.secreto::before{content:"";position:absolute;inset:-16px}
+.secreto.hallado{opacity:1;color:#f5c97a;text-shadow:0 0 10px rgba(245,201,122,.9);animation:none}
+@keyframes latSecreto{50%{opacity:.5;transform:scale(1.18)}}
+/* Medianoche en vivo */
+.cuenta-grande{position:absolute;inset:0;z-index:7;display:grid;place-items:center;pointer-events:none}
+.cuenta-grande span{display:block;font:italic 700 min(52vw,320px)/1 var(--serif);padding:0 .1em;color:transparent;
+  background:linear-gradient(180deg,#fff0c8,#f5c97a 55%,#e3a35c);-webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 0 28px rgba(245,201,122,.75));animation:pum 1s ease-out forwards}
+@keyframes pum{0%{opacity:0;transform:scale(1.8)}25%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:scale(.85)}}
+.destello-cuarto{position:absolute;inset:0;z-index:8;background:#fff;opacity:0;pointer-events:none}
+.destello-cuarto.on{animation:destello 1.4s ease forwards}
+.cuarto.fiesta .luces .foco{animation-duration:.22s}
+.cuarto.fiesta .penumbra{opacity:0}
+/* Regalos que se abren */
+.vales{display:grid;gap:8px;margin-top:10px}
+.vale{display:flex;gap:10px;align-items:center;padding:8px 12px;border:2px dashed #e08aa8;border-radius:10px;background:#fff5f8;font-family:var(--mano);font-size:21px;line-height:1.15}
+.vale b{font-size:26px;font-weight:400}
+.cosa.regalos.abiertos .caja{animation:saltaCaja .7s cubic-bezier(.3,1.6,.5,1)}
+.cosa.regalos.abiertos .caja::before,.cosa.regalos.abiertos .caja::after{animation:vuelaMono .8s ease forwards}
+@keyframes saltaCaja{40%{transform:translateY(-16px)}}
+@keyframes vuelaMono{to{translate:0 -34px;rotate:25deg;opacity:0}}
+
 /* Vista de cerca */
 .detalle{position:absolute;left:0;right:0;bottom:0;z-index:5;display:grid;justify-items:center;gap:12px;padding:40px 16px max(22px,env(safe-area-inset-bottom));
   background:linear-gradient(transparent,rgba(14,9,26,.92) 34%);transform:translateY(105%);transition:transform .55s cubic-bezier(.2,.9,.3,1.1)}
@@ -766,6 +810,8 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     </div>
    </div>
    <div class="motas" id="motas" aria-hidden="true"></div>
+   <div class="cuenta-grande" id="cuentaGrande" aria-live="assertive"></div>
+   <div class="destello-cuarto" id="destelloCuarto" aria-hidden="true"></div>
    <div class="aviso-cuarto" id="avisoCuarto">
      <p class="arriba" id="arriba">Estoy decorando algo para ti…</p>
      <p class="sube" id="cuenta"></p>
@@ -1029,7 +1075,9 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   }
 
   /* ---------- Portada: el cuarto que se va decorando, con la tele vieja ---------- */
-  const cumple = fecha(C.fechaCumple);
+  // Para probar la medianoche: ?medianoche=15 hace que el cumpleaños llegue en 15 segundos
+  const qMed = new URLSearchParams(location.search).get("medianoche");
+  const cumple = qMed !== null ? new Date(Date.now() + Math.max(3, +qMed || 15)*1000) : fecha(C.fechaCumple);
   $("#paraNombre").textContent = C.sobre || `Para ${C.nombre}`;
   if(cumple) $("#heroFecha").textContent = `${cumple.getDate()} de ${MESES[cumple.getMonth()]} ♥`;
   const tv = $("#tv"), pantalla = $("#pantalla"), cuarto = $("#cuarto"), escenario = $("#escenario"), detalle = $("#detalle");
@@ -1160,6 +1208,39 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     escenario.appendChild(b);
     elsCosas[i] = b;
   });
+
+  // Secretos escondidos: corazoncitos casi invisibles por el cuarto
+  const SECRETOS = (C.secretos || []).filter(s => s && s.texto);
+  const hallados = new Set(leer("secretos-hallados", []));
+  const elsSecretos = SECRETOS.map((s, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "secreto" + (hallados.has(i) ? " hallado" : "");
+    b.style.cssText = `left:${s.x}px;top:${s.y}px;animation-delay:${(-i*.9).toFixed(1)}s`;
+    b.textContent = "♥"; b.setAttribute("aria-label", "Un corazoncito escondido");
+    b.addEventListener("click", e => { e.stopPropagation(); if(enfocado) cerrarCosa(); else abrirSecreto(i); });
+    escenario.appendChild(b);
+    return b;
+  });
+  const textoSecretos = () => SECRETOS.length ? ` · secretos ${hallados.size}/${SECRETOS.length}` : "";
+  function abrirSecreto(i){
+    if(final) return;
+    const el = elsSecretos[i], nuevo = !hallados.has(i);
+    hallados.add(i); guardar("secretos-hallados", [...hallados]); el.classList.add("hallado");
+    enfocado = el; cuarto.classList.add("enfocado"); $("#avisoNuevo").classList.remove("on");
+    enfocar(el, .3, .2, .33, 2.4);
+    const todos = nuevo && hallados.size === SECRETOS.length;
+    $("#detTitulo").textContent = todos ? `¡Encontraste los ${SECRETOS.length} secretos!` : `Secreto ${hallados.size} de ${SECRETOS.length}`;
+    $("#detTexto").textContent = SECRETOS[i].texto;
+    $("#detFoto").hidden = true; $("#detFoto").innerHTML = "";
+    const r = el.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, nuevo ? 22 : 8);
+    if(todos) setTimeout(() => confeti(160), 700);
+    clearTimeout(detT); detT = setTimeout(() => detalle.classList.add("on"), reduce ? 0 : 650);
+    pintarCuenta();
+  }
+
+  // Los regalos se abren desde su fecha (o en modo prueba)
+  const R = C.regalos || {};
+  const regalosListos = () => { const t = R.abren ? new Date(R.abren) : cumple; return modoPrueba || (avanceForzado !== null && avanceForzado >= 1) || (!isNaN(t) && Date.now() >= t); };
 
   // Para probar cómo se ve el cuarto otro día: ?avance=0.5 (0 = recién empieza, 1 = todo listo)
   const qAvance = new URLSearchParams(location.search).get("avance");
@@ -1341,9 +1422,32 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   $("#vinOtros").addEventListener("click", () => { pararVoz(); pintarListaVin(); });
   $("#vinVolver").addEventListener("click", e => { e.stopPropagation(); cerrarCosa(); });
 
-  let avisoHasta = 0, canal = 19;
+  let avisoHasta = 0, canal = 19, estabaBloqueada = bloqueada(), ultimoNumero = 0;
+  // Medianoche en vivo: los últimos 10 segundos en grande y, a las 12, la fiesta
+  function numeroGrande(n){
+    if(n === ultimoNumero) return;
+    if(!ultimoNumero && enfocado) cerrarCosa();
+    ultimoNumero = n;
+    cuarto.classList.add("fiesta");
+    $("#cuentaGrande").innerHTML = `<span>${n}</span>`;
+    try { sonarNota(n <= 3 ? 84 : 79); } catch(e){}
+  }
+  function celebrarMedianoche(){
+    if(enfocado) cerrarCosa();
+    ultimoNumero = 0; $("#cuentaGrande").innerHTML = "";
+    cuarto.classList.add("fiesta");
+    const d = $("#destelloCuarto"); d.classList.remove("on"); void d.offsetWidth; d.classList.add("on");
+    tv.classList.add("sintoniza"); setTimeout(() => tv.classList.remove("sintoniza"), 900);
+    confeti(240);
+    const r = pantalla.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, 40);
+    setTimeout(() => notasMagicas(innerWidth/2, innerHeight*.55, 36), 600);
+    try { [60,64,67,72,76,79,84].forEach((m, i) => setTimeout(() => sonarNota(m), 300 + i*110)); } catch(e){}
+    setTimeout(() => avisar(`¡Feliz cumpleaños, ${C.nombre}! Toca la tele ♥`), 900);
+  }
   function pintarCuenta(){
     const b = bloqueada();
+    if(estabaBloqueada && !b && !modoPrueba && !final) celebrarMedianoche();
+    estabaBloqueada = b;
     tv.classList.toggle("lista", !b);
     actualizarCuarto();
     actualizarVinilos();
@@ -1351,6 +1455,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     if(b){
       const ms = cumple - new Date();
       const d = Math.floor(ms/DIA), h = Math.floor(ms/36e5)%24, m = Math.floor(ms/6e4)%60, s = Math.floor(ms/1e3)%60;
+      if(ms <= 10000) numeroGrande(Math.max(1, Math.ceil(ms/1000)));
       $("#arriba").textContent = "Estoy decorando algo para ti…";
       if(canal === 19){
         $("#osdCh").textContent = "CH 19";
@@ -1358,17 +1463,18 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       }
       $("#cuenta").textContent = (d > 0 ? `Faltan ${d} ${d === 1 ? "día" : "días"}, ` : "Faltan ") + `${h} h, ${m} min y ${s} s`;
       if(Date.now() > avisoHasta) $("#pista").textContent = mostradas < N
-        ? `Llevo ${mostradas} de ${N} sorpresas · toca cada una para verla de cerca 🔍`
-        : "Ya está todo colgado… solo falta que llegue el día ♥";
+        ? `Llevo ${mostradas} de ${N} sorpresas${textoSecretos()} · toca todo 🔍`
+        : `Ya está todo colgado${textoSecretos()} · solo falta que llegue el día ♥`;
     } else {
-      $("#arriba").textContent = "¡Todo está listo para ti!";
+      const prueba = modoPrueba && cumple && new Date() < cumple;
+      $("#arriba").textContent = prueba ? "¡Todo está listo para ti!" : `¡Feliz cumpleaños, ${C.nombre}!`;
       if(canal === 19 && !final){ $("#osdCh").textContent = "CH 19 ♥"; $("#osdReloj").textContent = "SEÑAL LISTA"; }
-      $("#cuenta").textContent = modoPrueba && cumple && new Date() < cumple ? "Modo prueba: solo tú puedes ver esto." : "Toca la tele para empezar. Sube el volumen.";
-      $("#pista").textContent = "También puedes tocar las cosas para verlas de cerca 🔍";
+      $("#cuenta").textContent = prueba ? "Modo prueba: solo tú puedes ver esto." : "Toca la tele para empezar. Sube el volumen.";
+      $("#pista").textContent = `También puedes tocar las cosas para verlas de cerca${textoSecretos()} 🔍`;
     }
   }
   pintarCuenta();
-  const relojT = setInterval(pintarCuenta, 1000);
+  const relojT = setInterval(pintarCuenta, 250);
 
   // Música de espera: suena en el tocadiscos desde el primer toque en el cuarto
   const tocadiscos = $("#tocadiscos");
@@ -1458,8 +1564,17 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     abiertas.add(i); guardar("cuarto-abiertas", [...abiertas]); el.classList.remove("sin-ver");
     const img = el.querySelector("img[data-full]");
     if(img && !img.dataset.grande){ img.dataset.grande = "1"; const g = new Image(); g.onload = () => { img.src = g.src; }; g.src = img.dataset.full; }
-    $("#detTitulo").textContent = c.titulo || "";
-    $("#detTexto").textContent = c.texto || "";
+    if(c.tipo === "regalos" && regalosListos() && (R.vales || []).length){
+      // Se abren: vuelan los moños y salen los vales
+      const abrir = !el.classList.contains("abiertos");
+      el.classList.add("abiertos");
+      $("#detTitulo").textContent = "¡Tus regalos!";
+      $("#detTexto").innerHTML = `${esc(R.texto || "")}<span class="vales">${R.vales.map(v => `<span class="vale"><b>${esc(v.icono || "🎁")}</b><span>${esc(v.texto)}</span></span>`).join("")}</span>`;
+      if(abrir) setTimeout(() => confeti(90), 500);
+    } else {
+      $("#detTitulo").textContent = c.titulo || "";
+      $("#detTexto").textContent = c.texto || "";
+    }
     const df = $("#detFoto"); df.innerHTML = "";
     if(c.foto && c.tipo !== "cuadro"){ const im = new Image(); im.alt = ""; im.onerror = () => { im.onerror = null; im.src = c.foto; }; im.src = miniDe(c.foto); df.appendChild(im); }
     df.hidden = !df.firstChild;
@@ -1552,6 +1667,8 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     e.stopPropagation();
     if(abierto) return;
     if(enfocado && enfocado !== tv){ cerrarCosa(); return; }
+    // El día del cumpleaños, un solo toque en el canal 19 entra directo
+    if(!bloqueada() && canal === 19){ abierto = true; clearInterval(relojT); encender(); return; }
     const recien = enfocado !== tv;
     if(recien) abrirTele();
     if(canal !== 19){ cambiarCanal(1); return; }
@@ -1573,9 +1690,6 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       pintarCuenta(); textoTele();
       return;
     }
-    if(recien) return;
-    abierto = true; clearInterval(relojT);
-    encender();
   });
 
   // Entramos a la tele: se sintoniza a todo color, se abre el sobre y empieza todo
