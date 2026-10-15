@@ -335,19 +335,9 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 /* Tocadiscos */
 .tocadiscos{position:absolute;left:384px;top:1290px;width:232px;height:156px;z-index:6}
 .td-cuerpo{position:absolute;inset:0;border:0;padding:0;background:none;border-radius:12px;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.td-boton{position:absolute;z-index:2;width:26px;height:26px;border:0;padding:0;border-radius:50%;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .1s}
+.td-boton{position:absolute;z-index:2;width:26px;height:26px;border:0;padding:0;border-radius:14px;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .1s}
 .td-boton:active{transform:scale(.8);background:rgba(255,230,170,.35)}
 .cuarto.td .td-boton{animation:llamaBoton 1.6s ease-in-out infinite}
-.control-td{position:absolute;left:50%;bottom:max(22px,env(safe-area-inset-bottom));z-index:6;width:min(340px,calc(100vw - 32px));padding:12px 16px 14px;border-radius:18px;text-align:center;
-  background:linear-gradient(170deg,#fffdf8,#f4ecdf);color:var(--tinta);box-shadow:0 14px 34px rgba(0,0,0,.55);
-  transform:translate(-50%,160%);opacity:0;visibility:hidden;transition:transform .5s cubic-bezier(.2,.9,.3,1.2),opacity .3s,visibility .5s}
-.control-td.on{transform:translate(-50%,0);opacity:1;visibility:visible}
-.ctd-nombre{font-family:var(--mano);font-size:24px;line-height:1.1;margin:0;color:#c9567d}
-.ctd-ayuda{font-size:12.5px;line-height:1.35;margin:3px 0 10px;color:#6a5a7a}
-.ctd-botones{display:flex;justify-content:center;align-items:center;gap:16px}
-.ctd-botones button{width:46px;height:46px;border:0;border-radius:50%;background:linear-gradient(#f3dc9d,#c9a25a);color:#4a2f12;font-size:15px;line-height:1;box-shadow:0 3px 8px rgba(0,0,0,.3);transition:transform .1s}
-.ctd-botones button:active{transform:scale(.9)}
-#ctdPausa{width:56px;height:56px;font-size:18px;background:linear-gradient(#f4a6bd,#c9567d);color:#fff}
 @keyframes llamaBoton{50%{box-shadow:0 0 0 2px rgba(255,225,160,.95),0 0 14px 5px rgba(255,200,110,.7)}}
 .tocadiscos svg{display:block;width:100%;height:100%;overflow:visible}
 .tocadiscos .gira{transform-box:fill-box;transform-origin:center}
@@ -730,8 +720,8 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
         <rect x="8" y="122" width="14" height="14" rx="3" fill="url(#tdBronce)"/><rect x="210" y="122" width="14" height="14" rx="3" fill="url(#tdBronce)"/>
       </svg>
       <button class="td-cuerpo" id="tdCuerpo" type="button" aria-label="Tocadiscos: poner o pausar la música"></button>
-      <button class="td-boton" id="tdAtras" type="button" aria-label="Canción anterior" style="left:31px;top:89px"></button>
-      <button class="td-boton" id="tdSiguiente" type="button" aria-label="Siguiente canción" style="left:57px;top:89px"></button>
+      <button class="td-boton" id="tdAtras" type="button" aria-label="Canción anterior" style="left:2px;top:72px;width:55px;height:80px"></button>
+      <button class="td-boton" id="tdSiguiente" type="button" aria-label="Siguiente canción" style="left:57px;top:72px;width:55px;height:80px"></button>
       <span class="chispa" aria-hidden="true">✨</span>
     </div>
     <button class="cajon-vinilos" id="cajonVinilos" type="button" aria-label="Vinilos con mensajes para ti" hidden>
@@ -800,15 +790,6 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
        </div>
      </div>
      <button class="btn sec" id="vinVolver" type="button">Volver al cuarto</button>
-   </div>
-   <div class="control-td" id="controlTd">
-     <p class="ctd-nombre" id="ctdNombre" aria-live="polite"></p>
-     <p class="ctd-ayuda">Toca el tocadiscos para pausar · los botoncitos cambian de canción</p>
-     <div class="ctd-botones">
-       <button type="button" id="ctdAtras" aria-label="Canción anterior">◂◂</button>
-       <button type="button" id="ctdPausa" aria-label="Pausar">❚❚</button>
-       <button type="button" id="ctdSig" aria-label="Siguiente canción">▸▸</button>
-     </div>
    </div>
    <p class="aviso-nuevo" id="avisoNuevo" aria-live="polite"></p>
   </div>
@@ -1381,27 +1362,9 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   const LISTA_ESPERA = [].concat(C.musicaEspera || []).map(x => typeof x === "string" ? {archivo: x} : x).filter(x => x && x.archivo);
   const audioEspera = LISTA_ESPERA.length ? new Audio() : null;
   let esperaFalla = !audioEspera, esperaSonando = false, esperaPausada = false, primerToque = true, fadeEsp = 0, notasEsp = 0, iEspera = 0, fallasEspera = 0;
-  let tdEnfocado = false, ctdT = 0;
-  const controlTd = $("#controlTd");
-  const anunciarEspera = () => {
-    if(controlTd.classList.contains("on")){ textoTocadiscos(); return; }
-    if(enfocado) return;
-    const c = LISTA_ESPERA[iEspera]; if(c && c.nombre) avisar(`♪ ${c.nombre}`);
-  };
-  // Tarjetita de control del tocadiscos (sin zoom)
-  function textoTocadiscos(){
-    const c = LISTA_ESPERA[iEspera];
-    $("#ctdNombre").textContent = c && c.nombre ? `♪ ${c.nombre}` : "♪ El tocadiscos";
-    $("#ctdPausa").textContent = esperaSonando ? "❚❚" : "▶";
-    $("#ctdPausa").setAttribute("aria-label", esperaSonando ? "Pausar" : "Poner la música");
-  }
-  function mostrarControl(){
-    if(final || esperaFalla) return;
-    $("#avisoNuevo").classList.remove("on"); textoTocadiscos();
-    controlTd.classList.add("on"); cuarto.classList.add("td");
-    clearTimeout(ctdT); ctdT = setTimeout(ocultarControl, 7000);
-  }
-  function ocultarControl(){ clearTimeout(ctdT); controlTd.classList.remove("on"); cuarto.classList.remove("td"); }
+  let tdEnfocado = false;
+  const anunciarEspera = () => { if(enfocado) return; const c = LISTA_ESPERA[iEspera]; if(c && c.nombre) avisar(`♪ ${c.nombre}`); };
+  const textoTocadiscos = () => {};
   function cargarEspera(i){ iEspera = (i + LISTA_ESPERA.length) % LISTA_ESPERA.length; audioEspera.src = LISTA_ESPERA[iEspera].archivo; }
   if(audioEspera){
     audioEspera.preload = "auto"; audioEspera.loop = LISTA_ESPERA.length === 1;
@@ -1449,11 +1412,10 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     else { esperaFalla = false; ponerEspera(); }
   }
   cuarto.addEventListener("pointerdown", e => {
-    if(!primerToque || e.target.closest("#tocadiscos, #controlTd")) return;
+    if(!primerToque || e.target.closest("#tocadiscos")) return;
     primerToque = false;
     if(!esperaPausada) ponerEspera();
   });
-  cuarto.addEventListener("click", e => { if(!e.target.closest("#tocadiscos, #controlTd")) ocultarControl(); });
   function alternarEspera(){
     if(vozActual >= 0){ pararVoz(); return; }
     if(esperaFalla){ if(modoPrueba) avisar("Faltan las canciones en la carpeta musica"); return; }
@@ -1464,15 +1426,14 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     e.stopPropagation();
     primerToque = false; tocadiscos.classList.remove("sin-ver");
     if(enfocado && enfocado.id !== "zonaMusica"){ cerrarCosa(); return; }
-    alternarEspera(); mostrarControl();
+    alternarEspera();
   });
-  [["#tdAtras", -1], ["#tdSiguiente", 1], ["#ctdAtras", -1], ["#ctdSig", 1]].forEach(([sel, d]) => $(sel).addEventListener("click", e => {
+  [["#tdAtras", -1], ["#tdSiguiente", 1]].forEach(([sel, d]) => $(sel).addEventListener("click", e => {
     e.stopPropagation();
     primerToque = false; tocadiscos.classList.remove("sin-ver");
     if(enfocado && enfocado.id !== "zonaMusica"){ cerrarCosa(); return; }
-    cambiarCancion(d); mostrarControl();
+    cambiarCancion(d);
   }));
-  $("#ctdPausa").addEventListener("click", e => { e.stopPropagation(); alternarEspera(); mostrarControl(); });
 
   // Modo detective: tocar una cosa acerca la cámara y muestra su recuerdo
   let detT = 0;
@@ -1601,7 +1562,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
 
   // Entramos a la tele: se sintoniza a todo color, se abre el sobre y empieza todo
   async function encender(){
-    pararVoz(true); quitarEspera(); ocultarControl(); panelVin.classList.remove("on");
+    pararVoz(true); quitarEspera(); panelVin.classList.remove("on");
     musicaIniciada = true; sonar();
     final = true; enfocado = null; clearTimeout(detT); clearTimeout(avisoT); tv.classList.remove("enfocada");
     $("#avisoNuevo").classList.remove("on"); detalle.classList.remove("on"); cuarto.classList.remove("enfocado"); cuarto.classList.add("final");
