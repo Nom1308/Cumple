@@ -29,6 +29,15 @@ const CONFIG = {
   musica: "musica/la-medalla.mp3",
   musicaInicio: 0,                 // Segundo en que arranca la canción (ej: 45 para empezar en el coro)
 
+  // Los cajones del mueble de la tele: se abren al tocarlos.
+  //  dentro: notas | fotos   ·   fotos: (solo para "fotos") las de la tira de fotomatón
+  cajones: [
+    { titulo: "El cajón de las notitas", dentro: "notas",
+      texto: "Aquí guardo las notitas, los tickets y todas esas cositas que me recuerdan a ti. Sí, todas. 🙈" },
+    { titulo: "Nuestra tira de fotos", dentro: "fotos", fotos: ["fotos/01-tu-y-yo.jpg", "fotos/18-selfie-juntos.jpg", "videos/juntos.jpg"],
+      texto: "Mis fotos favoritas no son las más bonitas… son las nuestras." }
+  ],
+
   // Secretos: corazoncitos casi invisibles escondidos en el cuarto (el cuarto mide 1000 de ancho × 1500 de alto).
   secretos: [
     { x: 955, y: 236,  texto: "Me sé de memoria cómo te ríes." },
@@ -468,6 +477,18 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .mueble .tabla{position:absolute;left:-14px;right:-14px;top:0;height:26px;border-radius:7px;background:var(--grano) 0 0/400px 200px,linear-gradient(#d39f71,#8a5f40);box-shadow:0 7px 12px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,230,200,.4)}
 .mueble .cajon{position:absolute;top:26px;width:50%;height:118px;background:var(--grano) 0 0/400px 200px,linear-gradient(#a9764f,#744c33);box-shadow:inset 0 0 0 3px #5a3a25,inset 0 0 0 7px rgba(0,0,0,.12),inset 0 -10px 16px rgba(0,0,0,.25)}
 .mueble .cajon.i{left:0} .mueble .cajon.d{right:0}
+/* Cajones que se abren */
+.mueble .cajon{border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .55s cubic-bezier(.3,1.35,.5,1),box-shadow .55s}
+.mueble .cajon.abierto{z-index:2;transform:translateY(18px) scale(1.05);box-shadow:inset 0 0 0 3px #5a3a25,inset 0 0 0 7px rgba(0,0,0,.12),inset 0 -10px 16px rgba(0,0,0,.25),0 22px 26px rgba(0,0,0,.55)}
+@media (hover:hover){ .mueble .cajon:not(.abierto):hover{filter:brightness(1.08)} }
+.cajon .interior{position:absolute;left:3%;right:3%;bottom:100%;height:0;overflow:hidden;background:linear-gradient(#0d0703,#2a170c);transition:height .55s cubic-bezier(.3,1.35,.5,1)}
+.cajon.abierto .interior{height:34px;overflow:visible}
+.cajon .interior .nota-c{position:absolute;bottom:4px;width:62px;height:48px;background:#fbf5ec;border-radius:2px;box-shadow:0 2px 4px rgba(0,0,0,.4);transform:translateY(40px) rotate(var(--r));transition:transform .6s cubic-bezier(.3,1.4,.5,1) .15s}
+.cajon .interior .nota-c::after{content:"♥";position:absolute;left:50%;top:6px;transform:translateX(-50%);color:#ee8fae;font-size:16px;line-height:1}
+.cajon.abierto .interior .nota-c{transform:translateY(0) rotate(var(--r))}
+.cajon .interior .tira{position:absolute;bottom:2px;left:50%;display:flex;gap:5px;padding:5px;margin-left:-110px;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.5);transform:translateY(70px) rotate(-3deg);transition:transform .6s cubic-bezier(.3,1.4,.5,1) .15s}
+.cajon .interior .tira img{display:block;width:66px;height:52px;object-fit:cover;object-position:50% 30%}
+.cajon.abierto .interior .tira{transform:translateY(-4px) rotate(-3deg)}
 .mueble .cajon::after{content:"";position:absolute;left:50%;top:50%;width:46px;height:12px;margin:-6px 0 0 -23px;border-radius:6px;background:linear-gradient(#f3dc9d,#b88a3e);box-shadow:0 2px 3px rgba(0,0,0,.45)}
 .mueble .pata{position:absolute;top:144px;width:16px;height:58px;background:linear-gradient(90deg,#3a2414,#6b4529 50%,#3a2414);border-radius:0 0 3px 3px;box-shadow:inset 0 -6px 0 #c9a25a}
 .mueble .pata.i{left:30px;transform:skewX(10deg)} .mueble .pata.d{right:30px;transform:skewX(-10deg)}
@@ -780,8 +801,11 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     </button>
     <span class="zona-musica" id="zonaMusica" aria-hidden="true"></span>
     <span class="penumbra" aria-hidden="true"></span>
-    <div class="mueble" id="mueble" aria-hidden="true">
-      <span class="tabla"></span><span class="cajon i"></span><span class="cajon d"></span><span class="pata i"></span><span class="pata d"></span>
+    <div class="mueble" id="mueble">
+      <span class="tabla" aria-hidden="true"></span>
+      <button class="cajon i" id="cajonI" type="button" aria-label="Abrir el cajón de la izquierda"><span class="interior" aria-hidden="true"></span></button>
+      <button class="cajon d" id="cajonD" type="button" aria-label="Abrir el cajón de la derecha"><span class="interior" aria-hidden="true"></span></button>
+      <span class="pata i" aria-hidden="true"></span><span class="pata d" aria-hidden="true"></span>
     </div>
     <div class="tv" id="tv">
       <span class="antena-base" aria-hidden="true"></span><span class="antena izq" aria-hidden="true"></span><span class="antena der" aria-hidden="true"></span>
@@ -1238,6 +1262,31 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     pintarCuenta();
   }
 
+  // Cajones del mueble: se deslizan, asoma lo de adentro y sale su notita
+  const CAJONES = C.cajones || [];
+  const elsCajones = [$("#cajonI"), $("#cajonD")];
+  elsCajones.forEach((el, k) => {
+    const c = CAJONES[k];
+    if(!c){ el.disabled = true; return; }
+    const int = el.querySelector(".interior");
+    if(c.dentro === "fotos") int.innerHTML = `<span class="tira">${(c.fotos || []).slice(0, 3).map(f => `<img alt="" src="${esc(miniDe(f))}">`).join("")}</span>`;
+    else int.innerHTML = [[14, -8], [64, 5], [116, -3], [168, 7]].map(([x, r]) => `<span class="nota-c" style="left:${x}px;--r:${r}deg"></span>`).join("");
+    int.querySelectorAll("img").forEach((im, j) => { im.onerror = () => { im.onerror = null; im.src = c.fotos[j]; }; });
+    el.addEventListener("click", e => { e.stopPropagation(); if(enfocado) cerrarCosa(); else abrirCajon(k); });
+  });
+  function abrirCajon(k){
+    if(final) return;
+    const el = elsCajones[k], c = CAJONES[k];
+    el.classList.add("abierto");
+    enfocado = el; cuarto.classList.add("enfocado"); $("#avisoNuevo").classList.remove("on");
+    enfocar(el, .9, .3, .4, 3);
+    $("#detTitulo").textContent = c.titulo || "";
+    $("#detTexto").textContent = c.texto || "";
+    $("#detFoto").hidden = true; $("#detFoto").innerHTML = "";
+    setTimeout(() => { const r = el.getBoundingClientRect(); corazones(r.left + r.width/2, r.top, 10); }, reduce ? 0 : 450);
+    clearTimeout(detT); detT = setTimeout(() => detalle.classList.add("on"), reduce ? 0 : 750);
+  }
+
   // Los regalos se abren desde su fecha (o en modo prueba)
   const R = C.regalos || {};
   const regalosListos = () => { const t = R.abren ? new Date(R.abren) : cumple; return modoPrueba || (avanceForzado !== null && avanceForzado >= 1) || (!isNaN(t) && Date.now() >= t); };
@@ -1585,6 +1634,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     if(!enfocado || final) return;
     if(enfocado === tv){ tv.classList.remove("enfocada"); if(canal !== 19){ giro = 0; $("#perillaCanal").style.setProperty("--giro", "0deg"); ponerCanal({num: 19}, true); } }
     enfocado = null; tdEnfocado = false; cuarto.classList.remove("td"); clearTimeout(detT); pararVoz();
+    elsCajones.forEach(c => c.classList.remove("abierto"));
     detalle.classList.remove("on"); panelVin.classList.remove("on"); cuarto.classList.remove("enfocado"); vistaBase();
   }
   cuarto.addEventListener("click", e => { if(enfocado && !e.target.closest(".detalle-tarjeta, .vinilos-hoja")) cerrarCosa(); });
