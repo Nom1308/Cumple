@@ -409,8 +409,27 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .vin-item svg,.vin-tapa svg{display:block;width:100%;height:100%;border-radius:4px}
 .vin-item.nuevo::after{content:"nuevo";position:absolute;top:-8px;right:-6px;background:#c9567d;color:#fff;font:600 11px/1 system-ui,sans-serif;padding:4px 7px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .vin-item.falta{opacity:.45}
-.vin-item.proximo{box-shadow:none;opacity:.8;animation:respira 2.6s ease-in-out infinite}
-@keyframes respira{50%{opacity:.5}}
+.vin-item.proximo{box-shadow:none;animation:respira 2.6s ease-in-out infinite}
+@keyframes respira{50%{filter:brightness(.8) opacity(.7)}}
+/* La rocola */
+.rocola{position:relative;margin:2px auto 0;padding:26px 0 26px;border-radius:150px 150px 18px 18px;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 0,#5a2f70,#2a1538 55%,#170b20);box-shadow:inset 0 0 0 4px #d9b46a,inset 0 0 0 7px #5c3d18,inset 0 0 40px rgba(0,0,0,.6),0 10px 24px rgba(0,0,0,.35)}
+.rocola-neon{position:absolute;inset:11px 11px 30px;border-radius:140px 140px 10px 10px;border:3px solid #ff8fc4;pointer-events:none;
+  box-shadow:0 0 10px #ff8fc4,inset 0 0 10px #ff8fc4;animation:neon 6s linear infinite}
+@keyframes neon{to{filter:hue-rotate(360deg)}}
+.rocola-focos{position:absolute;left:18px;right:18px;bottom:9px;height:12px;pointer-events:none;
+  background:radial-gradient(circle,#ffe7a8 0 3px,transparent 4px) 0 50%/22px 12px repeat-x;filter:drop-shadow(0 0 4px #f5c97a);animation:focos 1s steps(2) infinite}
+@keyframes focos{50%{background-position:11px 50%}}
+.rocola .vinilos-lista{display:block;position:relative;height:150px;max-height:none;overflow:visible;padding:0;perspective:700px;touch-action:pan-y}
+.rocola .vin-item{position:absolute;left:50%;top:0;width:140px;height:140px;margin-left:-70px;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .45s,filter .45s;will-change:transform}
+.rocola .vin-item.nuevo::after{top:-6px;right:-4px}
+.rocola-nombre{font-family:var(--mano);font-size:26px;line-height:1.1;margin:12px 0 6px;color:#c9567d;min-height:1.1em}
+.rocola-controles{display:flex;justify-content:center;align-items:center;gap:14px}
+.roc-flecha{width:44px;height:44px;border:0;border-radius:50%;background:linear-gradient(#f3dc9d,#c9a25a);color:#4a2f12;font-size:20px;line-height:1;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.roc-flecha:disabled{opacity:.35}
+#rocPoner{padding:10px 22px;font-size:16px}
+#rocPoner:disabled{opacity:.4}
+.rocola-num{font-size:12px;color:#8a7a9a;margin:8px 0 0}
 .vin-sonando{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;text-align:left;padding-right:4px}
 .vin-tapa{position:relative;width:min(128px,32vw);aspect-ratio:1;margin-right:28px}
 .vin-tapa::before{content:"";position:absolute;top:5%;left:5%;width:90%;height:90%;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform 1s cubic-bezier(.2,.9,.3,1);
@@ -874,8 +893,19 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
      <div class="vinilos-hoja">
        <div id="vinLista">
          <p class="vinilos-titulo">Vinilos para ti</p>
-         <p class="vinilos-sub">Mensajes de la gente que te quiere. Toca uno para ponerlo.</p>
-         <div class="vinilos-lista" id="vinilosLista"></div>
+         <p class="vinilos-sub">Mensajes de la gente que te quiere. Elige uno en la rocola.</p>
+         <div class="rocola">
+           <span class="rocola-neon" aria-hidden="true"></span>
+           <div class="vinilos-lista" id="vinilosLista"></div>
+           <span class="rocola-focos" aria-hidden="true"></span>
+         </div>
+         <p class="rocola-nombre" id="rocolaNombre"></p>
+         <div class="rocola-controles">
+           <button type="button" class="roc-flecha" id="rocAnt" aria-label="Disco anterior">◂</button>
+           <button type="button" class="btn" id="rocPoner">Poner ▶</button>
+           <button type="button" class="roc-flecha" id="rocSig" aria-label="Disco siguiente">▸</button>
+         </div>
+         <p class="rocola-num" id="rocolaNum"></p>
        </div>
        <div class="vin-sonando" id="vinSonando" hidden>
          <div class="vin-tapa" id="vinTapa"></div>
@@ -1468,27 +1498,75 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     }
     if(panelVin.classList.contains("on") && $("#vinSonando").hidden) pintarListaVin();
   }
+  // La rocola: las portadas pasan en carrusel 3D
+  let tarjetasRoc = [], iRoc = -1;
+  function clac(){
+    try {
+      const a = audioCtx(), b = a.createBuffer(1, Math.floor(a.sampleRate*.05), a.sampleRate), d = b.getChannelData(0);
+      for(let i = 0; i < d.length; i++) d[i] = (Math.random()*2 - 1)*Math.pow(1 - i/d.length, 4);
+      const n = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+      f.type = "bandpass"; f.frequency.value = 2200; g.gain.value = .5; n.buffer = b; n.connect(f).connect(g).connect(master); n.start();
+    } catch(e){}
+  }
+  function moverRocola(i, silencio){
+    if(!tarjetasRoc.length) return;
+    iRoc = Math.max(0, Math.min(tarjetasRoc.length - 1, i));
+    tarjetasRoc.forEach((t, k) => {
+      const d = k - iRoc, a = Math.abs(d);
+      t.el.style.transform = `translateX(${d*62}%) translateZ(${-a*70}px) rotateY(${-Math.sign(d)*Math.min(a, 2)*28}deg) scale(${d ? .8 : 1})`;
+      t.el.style.opacity = a > 2 ? 0 : a === 2 ? .45 : 1;
+      t.el.style.zIndex = 10 - a;
+      t.el.style.filter = d ? "brightness(.75)" : "none";
+      t.el.tabIndex = d ? -1 : 0;
+    });
+    const t = tarjetasRoc[iRoc];
+    $("#rocolaNombre").textContent = t.j >= 0 ? `De ${VINILOS[t.j].de}` : "Vienen más mensajes…";
+    $("#rocolaNum").textContent = `${iRoc + 1} / ${tarjetasRoc.length}`;
+    $("#rocPoner").disabled = t.j < 0;
+    $("#rocAnt").disabled = iRoc === 0; $("#rocSig").disabled = iRoc === tarjetasRoc.length - 1;
+    if(!silencio) clac();
+  }
   function pintarListaVin(){
     const disp = vinilosDisponibles(), lista = $("#vinilosLista");
-    lista.innerHTML = "";
+    lista.innerHTML = ""; tarjetasRoc = [];
     VINILOS.forEach((v, j) => {
       if(!disp[j]) return;
       const b = document.createElement("button");
       b.type = "button"; b.className = "vin-item" + (oidos.has(j) ? "" : " nuevo") + (estadoVin[j].ok ? "" : " falta");
       b.setAttribute("aria-label", `De ${v.de} para ${C.nombre}`);
       b.innerHTML = portadaVinilo(v);
-      b.addEventListener("click", () => ponerVinilo(j));
-      lista.appendChild(b);
+      const k = tarjetasRoc.length;
+      b.addEventListener("click", e => { e.stopPropagation(); if(k === iRoc) ponerVinilo(j); else moverRocola(k); });
+      lista.appendChild(b); tarjetasRoc.push({el: b, j});
     });
     // Si todavía faltan vinilos por llegar, una portada translúcida que avisa que vienen más
     if(bloqueada() && disp.some(x => !x)){
       const p = document.createElement("div");
       p.className = "vin-item proximo"; p.setAttribute("aria-label", "Próximamente llegan más vinilos");
       p.innerHTML = `<svg viewBox="0 0 200 200" aria-hidden="true"><rect x="5" y="5" width="190" height="190" rx="6" fill="rgba(195,181,240,.16)" stroke="#b9a6dc" stroke-width="3" stroke-dasharray="10 7"/><g transform="translate(100 78)"><circle r="40" fill="none" stroke="#b9a6dc" stroke-width="3"/><circle r="26" fill="none" stroke="#cbbde6" stroke-width="2"/><circle r="9" fill="#d9cdef"/></g><text x="100" y="152" text-anchor="middle" font-family="Caveat, cursive" font-weight="600" font-size="32" fill="#8a76b3">Próximamente…</text><text x="100" y="180" text-anchor="middle" font-family="Caveat, cursive" font-size="22" fill="#8a76b3" fill-opacity=".85">llegan más ♥</text></svg>`;
-      lista.appendChild(p);
+      const k = tarjetasRoc.length;
+      p.addEventListener("click", e => { e.stopPropagation(); moverRocola(k); });
+      lista.appendChild(p); tarjetasRoc.push({el: p, j: -1});
     }
+    // Empieza en el primero que no ha escuchado
+    const primero = tarjetasRoc.findIndex(t => t.j >= 0 && !oidos.has(t.j));
+    const previo = iRoc;
+    moverRocola(previo >= 0 && previo < tarjetasRoc.length ? previo : Math.max(0, primero), true);
     $("#vinLista").hidden = false; $("#vinSonando").hidden = true;
   }
+  $("#rocAnt").addEventListener("click", e => { e.stopPropagation(); moverRocola(iRoc - 1); });
+  $("#rocSig").addEventListener("click", e => { e.stopPropagation(); moverRocola(iRoc + 1); });
+  $("#rocPoner").addEventListener("click", e => { e.stopPropagation(); const t = tarjetasRoc[iRoc]; if(t && t.j >= 0) ponerVinilo(t.j); });
+  // Deslizar con el dedo para pasar de disco
+  let rocX = null, rocDeslizo = 0;
+  $("#vinilosLista").addEventListener("pointerdown", e => { rocX = e.clientX; });
+  $("#vinilosLista").addEventListener("pointerup", e => {
+    if(rocX === null) return;
+    const dx = e.clientX - rocX; rocX = null;
+    if(Math.abs(dx) > 40){ rocDeslizo = Date.now(); moverRocola(iRoc + (dx < 0 ? 1 : -1)); }
+  });
+  // Si acaba de deslizar, ese toque no cuenta como "poner"
+  $("#vinilosLista").addEventListener("click", e => { if(Date.now() - rocDeslizo < 400){ e.stopPropagation(); e.preventDefault(); } }, true);
   function abrirVinilos(){
     if(final) return;
     enfocado = $("#zonaMusica"); tdEnfocado = false; detalle.classList.remove("on"); cuarto.classList.remove("td"); cuarto.classList.add("enfocado"); $("#avisoNuevo").classList.remove("on");
