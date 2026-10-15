@@ -29,6 +29,30 @@ const CONFIG = {
   musica: "musica/la-medalla.mp3",
   musicaInicio: 0,                 // Segundo en que arranca la canción (ej: 45 para empezar en el coro)
 
+  // Los canales de la tele: fotos de Sara de pequeñita, un canal por año (se ven como fotos antiguas).
+  // El canal 19 queda guardado hasta el cumpleaños. Pon las fotos en la carpeta "fotos/ninez".
+  // Si una foto no está, ese canal se salta solo. Puedes cambiar los textos o agregar "nota".
+  canales: [
+    { canal: 1,  foto: "fotos/ninez/01.jpg", texto: "1 año" },
+    { canal: 2,  foto: "fotos/ninez/02.jpg", texto: "2 años" },
+    { canal: 3,  foto: "fotos/ninez/03.jpg", texto: "3 años" },
+    { canal: 4,  foto: "fotos/ninez/04.jpg", texto: "4 años" },
+    { canal: 5,  foto: "fotos/ninez/05.jpg", texto: "5 años" },
+    { canal: 6,  foto: "fotos/ninez/06.jpg", texto: "6 años" },
+    { canal: 7,  foto: "fotos/ninez/07.jpg", texto: "7 años" },
+    { canal: 8,  foto: "fotos/ninez/08.jpg", texto: "8 años" },
+    { canal: 9,  foto: "fotos/ninez/09.jpg", texto: "9 años" },
+    { canal: 10, foto: "fotos/ninez/10.jpg", texto: "10 años" },
+    { canal: 11, foto: "fotos/ninez/11.jpg", texto: "11 años" },
+    { canal: 12, foto: "fotos/ninez/12.jpg", texto: "12 años" },
+    { canal: 13, foto: "fotos/ninez/13.jpg", texto: "13 años" },
+    { canal: 14, foto: "fotos/ninez/14.jpg", texto: "14 años" },
+    { canal: 15, foto: "fotos/ninez/15.jpg", texto: "15 años" },
+    { canal: 16, foto: "fotos/ninez/16.jpg", texto: "16 años" },
+    { canal: 17, foto: "fotos/ninez/17.jpg", texto: "17 años" },
+    { canal: 18, foto: "fotos/ninez/18.jpg", texto: "18 años" }
+  ],
+
   // Las canciones de espera: suenan en el tocadiscos del cuarto, una tras otra, antes del cumpleaños.
   // Pon los mp3 en la carpeta "musica". Puedes agregar o quitar las que quieras.
   //  nombre: lo que sale en el aviso cuando empieza a sonar
@@ -228,6 +252,23 @@ button{font:inherit;cursor:pointer;color:inherit}
 .perilla::after{content:"";position:absolute;left:44%;top:8%;width:12%;height:38%;background:#e8d6a8;border-radius:2px;transform-origin:50% 110%}
 .perilla.k1::after{transform:rotate(-40deg)}
 .perilla.k2::after{transform:rotate(70deg)}
+button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;transform:rotate(var(--giro,0deg));transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.tv.enfocada .perilla.k1{animation:llamaPerilla 1.6s ease-in-out infinite}
+@keyframes llamaPerilla{50%{box-shadow:0 0 0 3px #c9a25a,0 0 0 5px #5c3d18,0 0 18px 8px rgba(255,200,110,.75)}}
+/* Canales de la tele: fotos antiguas */
+.canal{position:absolute;inset:0;display:none;background:#14100b}
+.tv.en-canal .canal{display:block}
+.tv.en-canal .escena-tv{visibility:hidden}
+.tv.en-canal #ruido{opacity:.18}
+.canal img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:sepia(.6) saturate(.7) contrast(1.1) brightness(.95);animation:parpadeoTv 4s steps(1) infinite}
+@keyframes parpadeoTv{0%,100%{opacity:1}31%{opacity:.86}33%{opacity:1}72%{opacity:.92}73%{opacity:1}}
+.canal::after{content:"";position:absolute;inset:0;background:radial-gradient(closest-side,transparent 55%,rgba(30,15,0,.55)),linear-gradient(rgba(255,190,110,.1),rgba(255,190,110,.1))}
+.barras-prueba{position:absolute;inset:0;background:linear-gradient(90deg,#c0c0c0 0 14.3%,#c0c000 14.3% 28.6%,#00c0c0 28.6% 42.9%,#00c000 42.9% 57.1%,#c000c0 57.1% 71.4%,#c00000 71.4% 85.7%,#0000c0 85.7%);filter:saturate(.7) brightness(.85)}
+.barras-prueba::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;background:linear-gradient(90deg,#0000c0 0 14.3%,#111 14.3% 28.6%,#c000c0 28.6% 42.9%,#111 42.9% 57.1%,#00c0c0 57.1% 71.4%,#111 71.4% 85.7%,#c0c0c0 85.7%)}
+.tv.cambiando #ruido{opacity:1!important;transition:none}
+.tv.cambiando .canal,.tv.cambiando .escena-tv{opacity:0}
+.tv.cambiando .pantalla{animation:saltoCanal .3s steps(3)}
+@keyframes saltoCanal{33%{transform:translateY(-3px)}66%{transform:translateY(4px) skewX(2deg)}}
 .rejilla{width:80%;flex:1;min-height:30px;margin-bottom:10px;border-radius:5px;box-shadow:inset 0 0 0 2px #c9a25a,inset 0 0 8px rgba(0,0,0,.6);
   background:repeating-linear-gradient(45deg,rgba(0,0,0,.25) 0 1px,transparent 1px 3px),repeating-linear-gradient(-45deg,rgba(0,0,0,.25) 0 1px,transparent 1px 3px),linear-gradient(#a8865c,#7d5f3e)}
 .patas{display:flex;justify-content:space-between;width:74%;margin:0 auto}
@@ -697,12 +738,13 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
               <span class="sello">♥</span>
             </span>
           </span>
+          <span class="canal" aria-hidden="true"><img id="canalImg" alt=""><span class="barras-prueba" id="canalBarras"></span></span>
           <canvas id="ruido" aria-hidden="true"></canvas>
           <span class="lineas" aria-hidden="true"></span><span class="barra-roll" aria-hidden="true"></span><span class="vidrio" aria-hidden="true"></span>
           <span class="osd ch" id="osdCh">CH 19</span>
           <span class="osd reloj" id="osdReloj"></span>
         </button>
-        <span class="panel" aria-hidden="true"><span class="perilla k1"></span><span class="perilla k2"></span><span class="rejilla"></span></span>
+        <span class="panel"><button class="perilla k1" id="perillaCanal" type="button" aria-label="Siguiente canal"></button><button class="perilla k2" id="perillaAtras" type="button" aria-label="Canal anterior"></button><span class="rejilla" aria-hidden="true"></span></span>
         <span class="placa" aria-hidden="true">Saravisión</span>
       </div>
       <span class="patas" aria-hidden="true"></span>
@@ -1276,7 +1318,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   $("#vinOtros").addEventListener("click", () => { pararVoz(); pintarListaVin(); });
   $("#vinVolver").addEventListener("click", e => { e.stopPropagation(); cerrarCosa(); });
 
-  let avisoHasta = 0;
+  let avisoHasta = 0, canal = 19;
   function pintarCuenta(){
     const b = bloqueada();
     tv.classList.toggle("lista", !b);
@@ -1287,16 +1329,17 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       const ms = cumple - new Date();
       const d = Math.floor(ms/DIA), h = Math.floor(ms/36e5)%24, m = Math.floor(ms/6e4)%60, s = Math.floor(ms/1e3)%60;
       $("#arriba").textContent = "Estoy decorando algo para ti…";
-      $("#osdCh").textContent = "CH 19";
-      $("#osdReloj").textContent = `${d > 0 ? d + "D " : ""}${dos(h)}:${dos(m)}:${dos(s)}`;
+      if(canal === 19){
+        $("#osdCh").textContent = "CH 19";
+        $("#osdReloj").textContent = `${d > 0 ? d + "D " : ""}${dos(h)}:${dos(m)}:${dos(s)}`;
+      }
       $("#cuenta").textContent = (d > 0 ? `Faltan ${d} ${d === 1 ? "día" : "días"}, ` : "Faltan ") + `${h} h, ${m} min y ${s} s`;
       if(Date.now() > avisoHasta) $("#pista").textContent = mostradas < N
         ? `Llevo ${mostradas} de ${N} sorpresas · toca cada una para verla de cerca 🔍`
         : "Ya está todo colgado… solo falta que llegue el día ♥";
     } else {
       $("#arriba").textContent = "¡Todo está listo para ti!";
-      $("#osdCh").textContent = "CH 19 ♥";
-      $("#osdReloj").textContent = "SEÑAL LISTA";
+      if(canal === 19 && !final){ $("#osdCh").textContent = "CH 19 ♥"; $("#osdReloj").textContent = "SEÑAL LISTA"; }
       $("#cuenta").textContent = modoPrueba && cumple && new Date() < cumple ? "Modo prueba: solo tú puedes ver esto." : "Toca la tele para empezar. Sube el volumen.";
       $("#pista").textContent = "También puedes tocar las cosas para verlas de cerca 🔍";
     }
@@ -1380,6 +1423,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   }
   function cerrarCosa(){
     if(!enfocado || final) return;
+    if(enfocado === tv){ tv.classList.remove("enfocada"); if(canal !== 19){ giro = 0; $("#perillaCanal").style.setProperty("--giro", "0deg"); ponerCanal({num: 19}, true); } }
     enfocado = null; clearTimeout(detT); pararVoz();
     detalle.classList.remove("on"); panelVin.classList.remove("on"); cuarto.classList.remove("enfocado"); vistaBase();
   }
@@ -1387,25 +1431,99 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   document.addEventListener("keydown", e => { if(e.key === "Escape") cerrarCosa(); });
   addEventListener("resize", () => { if(final) return; if(enfocado && ultimoEnfoque) enfocar(...ultimoEnfoque); else vistaBase(); });
 
+  // Canales de la tele: un recorrido por sus años en fotos antiguas; el 19 queda guardado
+  const CANALES = (C.canales || []).filter(c => c && c.foto).map((c, i) => ({...c, num: +c.canal || i + 1, ok: false}));
+  CANALES.forEach(c => { const im = new Image(); im.onload = () => { c.ok = true; }; im.src = c.foto; });
+  const PRUEBA = {num: 3, prueba: true, texto: "Sin señal"};
+  const listaCanales = () => { const fotos = CANALES.filter(c => c.ok).sort((a, b) => a.num - b.num); return [{num: 19}, ...(fotos.length ? fotos : [PRUEBA])]; };
+  let giro = 0;
+  function estatica(){
+    try {
+      const a = audioCtx(), b = a.createBuffer(1, Math.floor(a.sampleRate*.28), a.sampleRate), d = b.getChannelData(0);
+      for(let i = 0; i < d.length; i++) d[i] = (Math.random()*2 - 1)*Math.pow(1 - i/d.length, 1.5);
+      const n = a.createBufferSource(), g = a.createGain(); g.gain.value = .22; n.buffer = b; n.connect(g).connect(master); n.start();
+    } catch(e){}
+  }
+  function textoTele(){
+    const c = listaCanales().find(x => x.num === canal) || {};
+    if(canal === 19){
+      $("#detTitulo").textContent = "Canal 19";
+      $("#detTexto").textContent = bloqueada()
+        ? `Este canal se transmite el ${cumple.getDate()} de ${MESES[cumple.getMonth()]}. Mientras tanto, gira la perilla de arriba ↻ para ver los otros canales.`
+        : "¡Ya hay señal! Toca la pantalla para empezar ♥";
+    } else {
+      $("#detTitulo").textContent = c.prueba ? `Canal ${dos(canal)}` : c.texto || `Canal ${canal}`;
+      $("#detTexto").textContent = c.prueba ? "Este canal todavía no tiene señal… Gira la perilla para volver al 19." : c.nota || "Gira la perilla para seguir el recorrido por tus años ↻";
+    }
+    $("#detFoto").hidden = true; $("#detFoto").innerHTML = "";
+  }
+  function ponerCanal(c, silencio){
+    canal = c.num;
+    if(!silencio){ estatica(); tv.classList.remove("cambiando"); void tv.offsetWidth; tv.classList.add("cambiando"); }
+    clearTimeout(ponerCanal.t);
+    ponerCanal.t = setTimeout(() => {
+      tv.classList.remove("cambiando");
+      tv.classList.toggle("en-canal", canal !== 19);
+      if(canal !== 19){
+        $("#canalImg").hidden = !!c.prueba; $("#canalBarras").hidden = !c.prueba;
+        if(!c.prueba) $("#canalImg").src = c.foto;
+        $("#osdCh").textContent = `CH ${dos(canal)}`;
+        $("#osdReloj").textContent = String(c.texto || "").toUpperCase();
+      } else pintarCuenta();
+      if(enfocado === tv) textoTele();
+    }, silencio || reduce ? 0 : 300);
+  }
+  function cambiarCanal(d){
+    const l = listaCanales(), i = Math.max(0, l.findIndex(x => x.num === canal));
+    giro += d*32; $("#perillaCanal").style.setProperty("--giro", giro + "deg");
+    ponerCanal(l[(i + d + l.length) % l.length]);
+  }
+  function abrirTele(){
+    enfocado = tv; tv.classList.add("enfocada"); cuarto.classList.add("enfocado"); $("#avisoNuevo").classList.remove("on");
+    enfocar(tv, .94, .52, .34, 4);
+    textoTele();
+    clearTimeout(detT); detT = setTimeout(() => detalle.classList.add("on"), reduce ? 0 : 700);
+  }
+  [["#perillaCanal", 1], ["#perillaAtras", -1]].forEach(([sel, d]) => $(sel).addEventListener("click", e => {
+    e.stopPropagation();
+    if(abierto || final) return;
+    if(enfocado !== tv){ if(enfocado) cerrarCosa(); abrirTele(); return; }
+    cambiarCanal(d);
+  }));
+
+  // Tocar el mueble de la tele (no la pantalla ni las perillas) también la acerca
+  tv.addEventListener("click", e => {
+    e.stopPropagation();
+    if(abierto || final) return;
+    if(enfocado && enfocado !== tv){ cerrarCosa(); return; }
+    if(!enfocado) abrirTele();
+  });
+
   let abierto = false, toques = 0, ultToque = 0;
   pantalla.addEventListener("click", e => {
     e.stopPropagation();
     if(abierto) return;
-    if(enfocado){ cerrarCosa(); return; }
+    if(enfocado && enfocado !== tv){ cerrarCosa(); return; }
+    const recien = enfocado !== tv;
+    if(recien) abrirTele();
+    if(canal !== 19){ cambiarCanal(1); return; }
     if(bloqueada()){
       const t = performance.now();
       toques = t - ultToque < 1500 ? toques + 1 : 1; ultToque = t;
       if(toques < 28){
-        tv.classList.remove("golpe"); void tv.offsetWidth; tv.classList.add("golpe");
-        $("#pista").textContent = `La tele todavía no tiene señal… vuelve el ${cumple.getDate()} ♥`; avisoHasta = Date.now() + 2600;
+        if(!recien){
+          tv.classList.remove("golpe"); void tv.offsetWidth; tv.classList.add("golpe");
+          $("#detTexto").textContent = `Todavía no hay señal… el canal 19 se transmite el ${cumple.getDate()} de ${MESES[cumple.getMonth()]} ♥ Gira la perilla para ver los otros canales.`;
+        }
         return;
       }
       // Modo prueba: se cuelga todo y la tele queda lista
       modoPrueba = true; toques = 0;
       try { sessionStorage.setItem("cumple-prueba", "1"); } catch(e){}
-      pintarCuenta();
+      pintarCuenta(); textoTele();
       return;
     }
+    if(recien) return;
     abierto = true; clearInterval(relojT);
     encender();
   });
@@ -1414,7 +1532,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   async function encender(){
     pararVoz(true); quitarEspera(); panelVin.classList.remove("on");
     musicaIniciada = true; sonar();
-    final = true; enfocado = null; clearTimeout(detT); clearTimeout(avisoT);
+    final = true; enfocado = null; clearTimeout(detT); clearTimeout(avisoT); tv.classList.remove("enfocada");
     $("#avisoNuevo").classList.remove("on"); detalle.classList.remove("on"); cuarto.classList.remove("enfocado"); cuarto.classList.add("final");
     enfocar(pantalla, .92, .62, .46);
     await esperar(reduce ? 0 : 1100);
