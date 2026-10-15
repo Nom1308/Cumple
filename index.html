@@ -29,28 +29,24 @@ const CONFIG = {
   musica: "musica/la-medalla.mp3",
   musicaInicio: 0,                 // Segundo en que arranca la canción (ej: 45 para empezar en el coro)
 
-  // Los canales de la tele: fotos de Sara de pequeñita, un canal por año (se ven como fotos antiguas).
-  // El canal 19 queda guardado hasta el cumpleaños. Pon las fotos en la carpeta "fotos/ninez".
-  // Si una foto no está, ese canal se salta solo. Puedes cambiar los textos o agregar "nota".
+  // Los canales de la tele: un recorrido por su vida en fotos antiguas, de bebé hasta hoy.
+  // El canal 19 queda guardado hasta el cumpleaños. Las fotos están en la carpeta "fotos/ninez".
+  //  texto: corto, sale en la pantalla de la tele · nota: lo que se lee debajo
   canales: [
-    { canal: 1,  foto: "fotos/ninez/01.jpg", texto: "1 año" },
-    { canal: 2,  foto: "fotos/ninez/02.jpg", texto: "2 años" },
-    { canal: 3,  foto: "fotos/ninez/03.jpg", texto: "3 años" },
-    { canal: 4,  foto: "fotos/ninez/04.jpg", texto: "4 años" },
-    { canal: 5,  foto: "fotos/ninez/05.jpg", texto: "5 años" },
-    { canal: 6,  foto: "fotos/ninez/06.jpg", texto: "6 años" },
-    { canal: 7,  foto: "fotos/ninez/07.jpg", texto: "7 años" },
-    { canal: 8,  foto: "fotos/ninez/08.jpg", texto: "8 años" },
-    { canal: 9,  foto: "fotos/ninez/09.jpg", texto: "9 años" },
-    { canal: 10, foto: "fotos/ninez/10.jpg", texto: "10 años" },
-    { canal: 11, foto: "fotos/ninez/11.jpg", texto: "11 años" },
-    { canal: 12, foto: "fotos/ninez/12.jpg", texto: "12 años" },
-    { canal: 13, foto: "fotos/ninez/13.jpg", texto: "13 años" },
-    { canal: 14, foto: "fotos/ninez/14.jpg", texto: "14 años" },
-    { canal: 15, foto: "fotos/ninez/15.jpg", texto: "15 años" },
-    { canal: 16, foto: "fotos/ninez/16.jpg", texto: "16 años" },
-    { canal: 17, foto: "fotos/ninez/17.jpg", texto: "17 años" },
-    { canal: 18, foto: "fotos/ninez/18.jpg", texto: "18 años" }
+    { canal: 1,  foto: "fotos/ninez/01.jpg", texto: "Recién nacida",   nota: "El día en que el mundo se volvió más bonito." },
+    { canal: 2,  foto: "fotos/ninez/02.jpg", texto: "Primeros días",   nota: "Desde chiquita escondiéndote de la cámara." },
+    { canal: 3,  foto: "fotos/ninez/03.jpg", texto: "Tu manita",       nota: "Esa manita tan pequeña que hoy ocupa un lugar tan grande en mi vida." },
+    { canal: 4,  foto: "fotos/ninez/04.jpg", texto: "Primera sonrisa", nota: "La misma sonrisa que todavía me desarma." },
+    { canal: 5,  foto: "fotos/ninez/05.jpg", texto: "Esos ojitos",     nota: "Esa mirada ya era especial." },
+    { canal: 6,  foto: "fotos/ninez/06.jpg", texto: "Pura travesura",  nota: "Esa carita ya avisaba todo lo que me ibas a hacer reír." },
+    { canal: 7,  foto: "fotos/ninez/07.jpg", texto: "Siempre feliz",   nota: "Desde pequeña llenando de vida cualquier lugar." },
+    { canal: 8,  foto: "fotos/ninez/08.jpg", texto: "Una princesa",    nota: "Con tu florecita en el pelo, toda una princesa." },
+    { canal: 9,  foto: "fotos/ninez/09.jpg", texto: "Jugando afuera",  nota: "Tardes de juego que te ayudaron a ser quien eres." },
+    { canal: 10, foto: "fotos/ninez/10.jpg", texto: "Lista y bonita",  nota: "Arreglada, con flores en el pelo y la sonrisa lista." },
+    { canal: 11, foto: "fotos/ninez/11.jpg", texto: "En familia",      nota: "Rodeada de la gente que te quiere." },
+    { canal: 12, foto: "fotos/ninez/12.jpg", texto: "Toda una modelo", nota: "Posando desde pequeña. Algunas cosas no cambian." },
+    { canal: 13, foto: "fotos/ninez/13.jpg", texto: "Creciendo",       nota: "Cada año más bonita, más inteligente y más tú." },
+    { canal: 14, foto: "fotos/ninez/14.jpg", texto: "Tu música",       nota: "Y un día descubriste tu talento. Qué bonito es verte tocar." }
   ],
 
   // Las canciones de espera: suenan en el tocadiscos del cuarto, una tras otra, antes del cumpleaños.
