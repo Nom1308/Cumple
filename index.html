@@ -914,7 +914,15 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .letra-c .s.hecha{color:var(--texto)}
 .letra-c .s.actual{color:var(--vela);text-shadow:0 0 14px rgba(245,201,122,.6)}
 /* La cajita musical: madera, terciopelo, espejo y una muñequita que gira */
-.cajita{display:block;margin:6px auto 0;width:min(340px,86vw);border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 26px 34px rgba(0,0,0,.55))}
+.cajita{display:block;margin:6px auto 0;width:min(340px,86vw);border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 26px 34px rgba(0,0,0,.55));
+  touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+/* Mientras no tiene cuerda, la llave brilla pidiendo que la giren */
+.cajita.espera #llave{animation:llamaLlave 1.4s ease-in-out infinite}
+@keyframes llamaLlave{50%{filter:drop-shadow(0 0 6px #ffe7a8) drop-shadow(0 0 12px #f5c97a)}}
+.cajita.cuerda{animation:tiembla .14s linear infinite}
+@keyframes tiembla{50%{transform:translateX(.6px) rotate(.25deg)}}
+.cuerda-medidor{width:min(180px,50vw);height:9px;margin:16px auto 0;border-radius:6px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(232,194,122,.4);overflow:hidden}
+.cuerda-medidor span{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#c9913f,#f5c97a,#fff0c0);box-shadow:0 0 10px rgba(245,201,122,.7);transition:width .15s linear}
 .cajita svg{display:block;width:100%;height:auto;overflow:visible}
 @media (hover:hover){ .cajita:not(.sonando):hover{filter:drop-shadow(0 26px 34px rgba(0,0,0,.55)) brightness(1.08)} }
 #figura{transform-box:fill-box;transform-origin:50% 100%}
@@ -926,7 +934,7 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 #llave{transform-box:fill-box;transform-origin:50% 50%}
 .cajita.sonando #llave{animation:giraLlave 1.8s linear infinite}
 .cajita.cansada #llave{animation-duration:3.6s}
-.cajita.cuerda #llave{animation:giraLlave .33s linear infinite}
+.cajita.cuerda #llave{animation:giraLlave .3s linear infinite}
 @keyframes giraLlave{0%{transform:scaleX(1)}25%{transform:scaleX(.1)}50%{transform:scaleX(-1)}75%{transform:scaleX(-.1)}100%{transform:scaleX(1)}}
 .cj-brillo{animation:brilloEspejo 4s ease-in-out infinite}
 @keyframes brilloEspejo{50%{opacity:.45}}
@@ -1430,7 +1438,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
 
   <section id="piano" class="centro">
     <h2>Una canción para ti</h2>
-    <p class="nota">Una cajita musical que toca solo para ti. Si se le acaba la cuerda, dale otra vez.</p>
+    <p class="nota">Una cajita musical que toca solo para ti… pero primero tienes que darle cuerda.</p>
     <div class="piano-zona">
       <p class="letra-c" id="letraC" aria-live="off"></p>
       <button class="cajita" id="cajita" type="button" aria-label="Darle cuerda a la cajita musical">
@@ -1484,12 +1492,13 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
           </g>
         </svg>
       </button>
+      <div class="cuerda-medidor" aria-hidden="true"><span id="cuerdaNivel"></span></div>
       <p class="estado-p" id="estadoP"></p>
       <div id="bravo" hidden>
         <p class="bravo">¡Qué bonito sonó!</p>
         <div class="acciones" style="margin-top:14px">
           <a class="btn" href="#pastel">Ahora pide un deseo</a>
-          <button class="btn sec" id="otraVezPiano" type="button">Darle cuerda otra vez ↻</button>
+          <button class="btn sec" id="otraVezPiano" type="button">Escucharla otra vez ↻</button>
         </div>
       </div>
     </div>
@@ -2965,43 +2974,69 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     } catch(e){}
   }
   const caja = $("#cajita");
-  let sonandoCaja = false, yaSono = false;
-  $("#estadoP").textContent = "Toca la cajita para darle cuerda ↻";
-  async function darCuerda(){
-    if(sonandoCaja) return; sonandoCaja = true;
-    $("#bravo").hidden = true; $("#estadoP").textContent = "";
-    // Clic-clic-clic: se le da cuerda
-    caja.classList.add("cuerda");
-    for(let i = 0; i < 7; i++){ clac(); await esperar(reduce ? 0 : 120); }
-    caja.classList.remove("cuerda");
+  // La cuerda se gasta mientras suena: con la cuerda llena alcanza para toda la canción
+  let cuerda = 0, posCaja = 0, sonandoCaja = false, girando = 0;
+  const POR_NOTA = 1/MELODIA.length;
+  const pintarCuerda = () => { $("#cuerdaNivel").style.width = (cuerda*100).toFixed(0) + "%"; };
+  function textoCaja(){
+    $("#estadoP").textContent = sonandoCaja || posCaja >= MELODIA.length ? "" : posCaja > 0 ? "Se le acabó la cuerda… dale más para que siga ↻" : "Mantén presionada la cajita para darle cuerda ↻";
+  }
+  caja.classList.add("espera"); textoCaja();
+  function empezarCuerda(e){
+    if(e) e.preventDefault();
+    if(girando) return;
+    if(posCaja >= MELODIA.length){ posCaja = 0; $("#bravo").hidden = true; }
+    caja.classList.remove("espera"); caja.classList.add("cuerda");
+    const vuelta = () => { if(cuerda < 1){ cuerda = Math.min(1, cuerda + .06); clac(); pintarCuerda(); } };
+    vuelta(); girando = setInterval(vuelta, 140);
+  }
+  function soltarCuerda(){
+    if(!girando) return;
+    clearInterval(girando); girando = 0; caja.classList.remove("cuerda");
+    if(cuerda > 0 && !sonandoCaja) tocarCajita();
+    else if(cuerda <= 0) caja.classList.add("espera");
+  }
+  async function tocarCajita(){
+    sonandoCaja = true; textoCaja();
     retener("piano");
     caja.classList.add("sonando");
     const tiempo = 480;
-    for(let i = 0; i < MELODIA.length; i++){
-      // En la última frase se le va acabando la cuerda
-      const lento = i >= 19 ? 1 + (i - 18)*.09 : 1;
-      if(i === 19) caja.classList.add("cansada");
+    while(posCaja < MELODIA.length && cuerda > 0){
+      const i = posCaja;
+      // Cuando le queda poquita cuerda, va más lento y la muñequita gira despacio
+      const lento = cuerda < .22 ? 1 + (.22 - cuerda)*4 : 1;
+      caja.classList.toggle("cansada", cuerda < .22);
       silSpans.forEach((sp, k) => { sp.classList.toggle("hecha", k < i); sp.classList.toggle("actual", k === i); });
       notaCajita(MELODIA[i] + 12);
       caja.classList.toggle("mano", i % 2 === 0);
       if(i % 2 === 0 && !reduce){ const r = caja.getBoundingClientRect(); notasMagicas(r.left + r.width*.5, r.top + r.height*.3, 1); }
+      posCaja++;
+      cuerda = Math.max(0, cuerda - POR_NOTA); pintarCuerda();
       await esperar(TIEMPOS[i]*tiempo*lento);
     }
-    silSpans.forEach(sp => { sp.classList.add("hecha"); sp.classList.remove("actual"); });
     caja.classList.remove("mano");
-    await esperar(700);
+    await esperar(500);
     caja.classList.remove("sonando", "cansada");
-    soltarM("piano"); sonandoCaja = false; yaSono = true;
-    $("#bravo").hidden = false;
-    const r = caja.getBoundingClientRect(); chispas(r.left + r.width/2, r.top + r.height*.4, 16);
+    soltarM("piano"); sonandoCaja = false;
+    if(posCaja >= MELODIA.length){
+      silSpans.forEach(sp => { sp.classList.add("hecha"); sp.classList.remove("actual"); });
+      cuerda = 0; pintarCuerda();
+      $("#bravo").hidden = false;
+      const r = caja.getBoundingClientRect(); chispas(r.left + r.width/2, r.top + r.height*.4, 16);
+    } else if(!girando) caja.classList.add("espera");
+    textoCaja();
   }
-  caja.addEventListener("click", darCuerda);
-  $("#otraVezPiano").addEventListener("click", darCuerda);
-  // Cuando ella llega hasta aquí, la cajita empieza a sonar sola
-  if("IntersectionObserver" in window){
-    const ioCaja = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting && !yaSono && !sonandoCaja){ ioCaja.disconnect(); setTimeout(darCuerda, 700); } }), {threshold:.55});
-    ioCaja.observe(caja);
-  }
+  caja.addEventListener("pointerdown", e => { try { caja.setPointerCapture(e.pointerId); } catch(err){} empezarCuerda(e); });
+  ["pointerup", "pointercancel", "lostpointercapture"].forEach(n => caja.addEventListener(n, soltarCuerda));
+  caja.addEventListener("contextmenu", e => e.preventDefault());
+  caja.addEventListener("keydown", e => { if((e.key === " " || e.key === "Enter") && !e.repeat){ e.preventDefault(); empezarCuerda(); } });
+  caja.addEventListener("keyup", e => { if(e.key === " " || e.key === "Enter") soltarCuerda(); });
+  $("#otraVezPiano").addEventListener("click", () => {
+    posCaja = 0; $("#bravo").hidden = true;
+    silSpans.forEach(sp => sp.classList.remove("hecha", "actual"));
+    caja.classList.add("espera"); textoCaja();
+    caja.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "center"});
+  });
 
   /* ---------- Pastel ---------- */
   const digitos = [...String(C.edad || "♥")].slice(0,3);
