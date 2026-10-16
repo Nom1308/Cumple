@@ -1,4 +1,9 @@
-Aquí va el video secreto del VHS, con el nombre: secreto.mp4
+Aquí van los videos del VHS:
 
-Sale en el canal 15 de la tele cuando Sara encuentra todos los corazoncitos escondidos en el cuarto.
-Mientras no esté, el canal 15 muestra el video de "videos/juntos.mp4".
+secreto.mp4
+  Sale en el canal 15 de la tele cuando Sara encuentra todos los corazoncitos escondidos en el cuarto.
+  Mientras no esté, el canal 15 muestra el video de "videos/juntos.mp4".
+
+poscreditos.mp4
+  La escena poscréditos: 5 segundos después del FIN de los créditos, la pantalla se va a negro y sale este video.
+  Mientras no esté, los créditos terminan sin escena.

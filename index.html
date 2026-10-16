@@ -215,7 +215,7 @@ const CONFIG = {
     "Gracias por tu alegría, por hacerme reír, por tus caritas en las fotos y por tenerme tanta paciencia.",
     "Que estos 19 años te traigan salud, paz, sueños cumplidos y muchísima felicidad. Yo quiero estar ahí para verlos cumplirse, a tu lado."
   ],
-  firma: "Te quiero muchísimo,\nBrandon",
+  firma: "Te amo muchísimo,\nBrandon",
   // La polaroid pegada con cinta en la esquina de la carta
   cartaFoto: { foto: "fotos/18-selfie-juntos.jpg", pie: "nosotros ♥" },
 
@@ -239,7 +239,10 @@ const CONFIG = {
     { musica: true, titulo: "Música" },
     { titulo: "Agradecimientos", texto: "A Dios, por tu vida. A tu familia, por cuidarte siempre." },
     { titulo: "", texto: "Ningún corazón resultó ileso durante esta producción ♥" }
-  ]
+  ],
+  // Escena poscréditos: 5 segundos después del FIN, la pantalla se va a negro y sale este video.
+  // Ponlo en la carpeta "vhs" con este nombre. Si no está, los créditos terminan sin escena.
+  escenaPosCreditos: "vhs/poscreditos.mp4"
 };
 /* ======================= FIN DE LO EDITABLE ======================= */
 </script>
@@ -968,7 +971,7 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .cr-bloque{margin:0 0 54px;max-width:30ch}
 .cr-bloque h4{margin:0 0 10px;font:600 12px/1.4 system-ui,sans-serif;letter-spacing:.38em;text-transform:uppercase;color:#b8abcf}
 .cr-bloque p{margin:0;font-size:clamp(20px,5vw,26px);line-height:1.45;font-family:var(--serif);color:#f6f0fa}
-.cr-foto{width:min(190px,48vw);margin:0 0 54px;padding:8px 8px 0;background:#f4eee4;box-shadow:0 12px 30px rgba(0,0,0,.6);filter:sepia(.18) saturate(.9) contrast(1.05)}
+.cr-foto{width:min(190px,48vw);margin:0 0 54px;padding:8px 8px 26px;background:#f4eee4;box-shadow:0 12px 30px rgba(0,0,0,.6);filter:sepia(.18) saturate(.9) contrast(1.05)}
 .cr-foto:nth-of-type(odd){transform:rotate(-4deg) translateX(-18%)} .cr-foto:nth-of-type(even){transform:rotate(3deg) translateX(18%)}
 .cr-foto img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
 .cr-foto figcaption{font:600 18px/1 var(--mano);color:#7a5a6a;padding:8px 0 10px}
@@ -978,6 +981,13 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 @keyframes parpadeoFin{50%{opacity:.25}}
 .cr-acciones{position:absolute;left:0;right:0;bottom:max(70px,calc(env(safe-area-inset-bottom) + 60px));z-index:7;display:flex;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity 1s}
 .cr-acciones.on{opacity:1;pointer-events:auto}
+/* Escena poscréditos: todo se va a negro y, tras la estática, sale el video */
+.cr-titulo,.cr-rollo,.cr-osd{transition:opacity 1.4s}
+.creditos.negro .cr-rollo,.creditos.negro .cr-titulo,.creditos.negro .cr-osd{opacity:0}
+.creditos.negro.pos .cr-osd{opacity:1;transition:none}
+.cr-video{position:absolute;inset:0;z-index:3;width:100%;height:100%;object-fit:contain;background:#000;opacity:0;transition:opacity .9s;filter:saturate(1.08) contrast(1.04)}
+.cr-video.on{opacity:1}
+.cr-toca{position:absolute;left:50%;top:50%;z-index:7;transform:translate(-50%,-50%)}
 .creditos.rebobina .cr-rollo{transition:transform 1.4s cubic-bezier(.6,0,.4,1)!important}
 .creditos.rebobina .cr-ruido{opacity:.9}
 footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60px;position:relative;z-index:1}
@@ -1310,6 +1320,8 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
 <div class="creditos" id="creditos" role="dialog" aria-label="Créditos" aria-hidden="true">
   <div class="cr-titulo" id="crTitulo"></div>
   <div class="cr-rollo" id="crRollo"></div>
+  <video class="cr-video" id="crVideo" playsinline preload="none"></video>
+  <button class="btn cr-toca" id="crToca" type="button" hidden>▶ Toca para ver</button>
   <span class="cr-ruido" aria-hidden="true"></span><span class="cr-lineas" aria-hidden="true"></span><span class="cr-tracking" aria-hidden="true"></span><span class="cr-vineta" aria-hidden="true"></span>
   <span class="cr-osd izq" id="crOsd">▶ PLAY</span>
   <span class="cr-osd der" id="crFecha"></span>
@@ -2933,8 +2945,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       const m = fotos[fi++]; if(!m) return;
       const fg = document.createElement("figure"), im = new Image();
       fg.className = "cr-foto"; im.alt = ""; im.src = miniDe(m.foto); im.onerror = () => { im.onerror = null; im.src = m.foto; };
-      fg.appendChild(im); fg.insertAdjacentHTML("beforeend", `<figcaption>${esc(m.pie || "")}</figcaption>`);
-      rollo.appendChild(fg);
+      fg.appendChild(im); rollo.appendChild(fg);
     };
     (C.creditos || []).forEach((c, i) => {
       if(c.vinilos){
@@ -2948,11 +2959,55 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       if(i % 2 === 1) ponerFoto();
     });
     ponerFoto();
-    rollo.insertAdjacentHTML("beforeend", `<div class="cr-fin"><b>Feliz cumpleaños, ${esc(C.nombre)}</b><span class="cr-palabra-fin">FIN</span></div>`);
+    rollo.insertAdjacentHTML("beforeend", `<div class="cr-fin"><b>Feliz cumpleaños, ${esc(APODO)}</b><span class="cr-palabra-fin">FIN</span></div>`);
+  }
+  // La escena poscréditos: se carga desde que empiezan los créditos; si el archivo no está, no hay escena
+  const crVideo = $("#crVideo");
+  let finPos = null;
+  function prepararPos(){
+    if(!C.escenaPosCreditos) return Promise.resolve(false);
+    return new Promise(r => {
+      if(crVideo.getAttribute("src") && crVideo.readyState >= 1) return r(true);
+      const ok = () => { quitar(); r(true); }, no = () => { quitar(); r(false); };
+      const quitar = () => { crVideo.removeEventListener("loadedmetadata", ok); crVideo.removeEventListener("error", no); };
+      crVideo.addEventListener("loadedmetadata", ok); crVideo.addEventListener("error", no);
+      crVideo.preload = "auto"; crVideo.src = C.escenaPosCreditos; crVideo.load();
+    });
+  }
+  async function escenaPosCreditos(sigue){
+    // Todo se va a negro, como si la cinta hubiera terminado…
+    cr.classList.add("negro");
+    await esperar(2600); if(!sigue()) return;
+    // …y de repente estática, PLAY, y la escena
+    retener("poscreditos");
+    cr.classList.remove("limpio"); cr.classList.add("pos"); estatica();
+    $("#crOsd").textContent = "▶ PLAY";
+    await esperar(900); if(!sigue()) return;
+    cr.classList.add("limpio");
+    try { crVideo.currentTime = 0; } catch(e){}
+    crVideo.classList.add("on");
+    const termina = new Promise(r => { finPos = r; crVideo.onended = r; });
+    crVideo.play().catch(() => {
+      // Si el celular no deja que suene solo, un toque lo arranca
+      const b = $("#crToca"); b.hidden = false;
+      b.onclick = () => { b.hidden = true; crVideo.play().catch(() => {}); };
+    });
+    await termina; finPos = null; if(!sigue()) return;
+    $("#crOsd").textContent = "■ STOP";
+    soltarM("poscreditos");
+  }
+  // Tocar el video lo pausa o lo sigue
+  crVideo.addEventListener("click", () => { if(!crVideo.classList.contains("on")) return; if(crVideo.paused) crVideo.play().catch(() => {}); else crVideo.pause(); });
+  function quitarPos(){
+    crVideo.pause(); crVideo.classList.remove("on"); crVideo.onended = null;
+    $("#crToca").hidden = true; cr.classList.remove("negro", "pos");
+    if(finPos){ finPos(); finPos = null; }
+    soltarM("poscreditos");
   }
   async function verCreditos(){
     const tk = ++crToken, sigue = () => tk === crToken;
-    armarCreditos();
+    armarCreditos(); quitarPos();
+    const hayPos = prepararPos();
     const t = $("#crTitulo");
     cr.classList.remove("limpio", "rebobina"); $("#crAcciones").classList.remove("on"); t.classList.remove("on");
     rollo.style.transition = "none"; rollo.style.transform = "none";
@@ -2973,20 +3028,26 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     const fin = rollo.querySelector(".cr-palabra-fin");
     const centro = fin.getBoundingClientRect().top - rollo.getBoundingClientRect().top + fin.offsetHeight/2;
     const total = centro + innerHeight/2, dur = reduce ? 2 : total/55;
-    rollo.style.transition = `transform ${dur.toFixed(1)}s linear`; void rollo.offsetWidth;
+    rollo.style.transition = `transform ${dur.toFixed(1)}s linear,opacity 1.4s`; void rollo.offsetWidth;
     rollo.style.transform = `translateY(${-total}px)`;
     await esperar(dur*1000 + 300); if(!sigue()) return;
     $("#crOsd").textContent = "■ STOP";
     confeti(140); corazones(innerWidth/2, innerHeight/2, 24);
+    // 5 segundos después del FIN… la escena poscréditos (si el video está)
+    if(await hayPos){
+      await esperar(5000); if(!sigue()) return;
+      await escenaPosCreditos(sigue); if(!sigue()) return;
+    }
     $("#crAcciones").classList.add("on");
   }
   function cerrarCreditos(){
-    crToken++;
+    crToken++; quitarPos();
     cr.classList.remove("on", "rebobina"); cr.setAttribute("aria-hidden", "true"); document.body.classList.remove("locked");
   }
   // Rebobinar: la cinta vuelve al principio… y la página también
   async function rebobinar(){
     const tk = ++crToken;
+    quitarPos();
     $("#crAcciones").classList.remove("on"); $("#crOsd").textContent = "◀◀ REW";
     cr.classList.add("rebobina"); estatica();
     rollo.style.transform = "none";
