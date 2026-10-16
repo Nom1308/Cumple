@@ -2527,8 +2527,9 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     if(canal !== 19){ cambiarCanal(1); return; }
     if(bloqueada()){
       const t = performance.now();
-      toques = t - ultToque < 1500 ? toques + 1 : 1; ultToque = t;
-      if(toques < 28){
+      // El modo prueba pide 70 toques seguidos y rápidos (menos de 1 segundo entre uno y otro)
+      toques = t - ultToque < 1000 ? toques + 1 : 1; ultToque = t;
+      if(toques < 70){
         if(!recien){
           tv.classList.remove("golpe"); void tv.offsetWidth; tv.classList.add("golpe");
           clearTimeout(tv.golpeT); tv.golpeT = setTimeout(() => tv.classList.remove("golpe"), 500);
