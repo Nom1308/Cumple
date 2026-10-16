@@ -187,8 +187,9 @@ const CONFIG = {
     { foto: "fotos/01-tu-y-yo.jpg",       pie: "Tú y yo" }
   ],
 
-  // Nuestra constelación: una estrella por palabra; al unirlas todas forman un corazón
-  constelacion: "Tus pecas son mi constelación favorita, y tú, mi cielo entero",
+  // El camino de estrellas: una estrella por palabra. Al final, la luz llega a la estrella más brillante
+  constelacion: "Siempre serás mi estrella más bonita",
+  constelacionFinal: "Tú eres mi estrella favorita, y hoy es tu día, mi linda estrella ✨",
 
   // Cada frase completa: "Gracias por tu vida, porque…"
   razones: [
@@ -727,32 +728,65 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .pola .marco img{object-position:50% 30%}
 /* Brillo que cruza la foto cuando termina de revelarse */
 .pola .marco::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.45) 48%,transparent 60%) -150% 0/250% 100% no-repeat;opacity:0}
-.pola.visto .marco::after{animation:brilloFoto 1.3s ease-out forwards;animation-delay:calc(var(--n,0) * 130ms + 2.6s)}
+.pola.puesta .marco::after{animation:brilloFoto 1.3s ease-out forwards;animation-delay:2.4s}
 @keyframes brilloFoto{0%{opacity:1;background-position:-150% 0}100%{opacity:1;background-position:250% 0}}
 @media (hover:hover){
-  .pola.visto{transition:transform .25s ease,box-shadow .3s ease}
-  .pola.visto:hover{transform:perspective(700px) rotateX(var(--ty,0deg)) rotateY(var(--tx,0deg)) translateY(-8px) scale(1.04);box-shadow:0 30px 54px rgba(0,0,0,.55),0 0 0 2px rgba(238,143,174,.35)}
+  .pola.puesta:not(.sale){transition:transform .25s ease,box-shadow .3s ease}
+  .pola.puesta:not(.sale):hover{transform:perspective(700px) rotateX(var(--ty,0deg)) rotateY(var(--tx,0deg)) translateY(-8px) scale(1.04);box-shadow:0 30px 54px rgba(0,0,0,.55),0 0 0 2px rgba(238,143,174,.35)}
 }
 /* Cinta adhesiva */
 .pola::before,.tarjeta-v::before{content:"";position:absolute;top:-11px;left:calc(50% + var(--cx,0px));z-index:2;width:78px;height:22px;transform:translateX(-50%) rotate(var(--cr,-3deg));
   background:repeating-linear-gradient(45deg,rgba(255,255,255,.2) 0 4px,transparent 4px 9px),var(--cinta,rgba(238,143,174,.6));box-shadow:0 1px 3px rgba(0,0,0,.18)}
-/* Cae sobre la mesa y se revela como una polaroid de verdad */
-.pola.visto{opacity:1;animation:posa .9s cubic-bezier(.2,.9,.3,1.15) backwards;animation-delay:calc(var(--n,0) * 130ms)}
-@keyframes posa{from{opacity:0;transform:translateY(-50px) rotate(calc(var(--rot) * -1.8)) scale(1.12)}to{opacity:1;transform:rotate(var(--rot))}}
-.pola .marco>img,.pola .marco>video{filter:sepia(.55) brightness(1.6) contrast(.5) saturate(.3) blur(2px);transition:filter 2.8s ease;transition-delay:calc(var(--n,0) * 130ms + .5s)}
-.pola.visto .marco>img,.pola.visto .marco>video{filter:none}
+/* Sale volando del álbum con brillo mágico, da un arco y se acomoda en su lugar; mientras, se revela */
+.pola.puesta{opacity:1}
+.pola.sale{animation:saleAlbum 1.05s cubic-bezier(.25,.8,.3,1.08) both}
+@keyframes saleAlbum{
+  0%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.1) rotate(-35deg);filter:brightness(2.6) drop-shadow(0 0 18px #f5c97a)}
+  15%{opacity:1}
+  55%{transform:translate(calc(var(--dx) * .35),calc(var(--dy) * .35 - 70px)) scale(.75) rotate(14deg);filter:brightness(1.5) drop-shadow(0 0 16px #f5c97a)}
+  100%{opacity:1;transform:rotate(var(--rot));filter:none}}
+.pola .marco>img,.pola .marco>video{filter:sepia(.55) brightness(1.6) contrast(.5) saturate(.3) blur(2px);transition:filter 2.8s ease .6s}
+.pola.puesta .marco>img,.pola.puesta .marco>video{filter:none}
+.mesa.cerrada{display:none}
+/* ---------- El álbum ---------- */
+.album-zona{display:grid;justify-items:center;gap:16px;margin:4px auto 34px}
+.album{position:relative;width:min(220px,42vw);aspect-ratio:4/5;border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform 1.1s cubic-bezier(.4,.1,.3,1)}
+.album:not(.abierto){animation:flotaAlbum 3.4s ease-in-out infinite}
+@keyframes flotaAlbum{50%{transform:translateY(-8px) rotate(-1.2deg)}}
+.album.abierto{transform:translateX(48%)}
+.album-paginas,.album-interior{position:absolute;top:3%;bottom:3%;left:3%;right:0;border-radius:2px 8px 8px 2px}
+.album-paginas{background:linear-gradient(90deg,transparent calc(100% - 7px),#e3d8c6 calc(100% - 7px)),repeating-linear-gradient(transparent 0 2px,rgba(0,0,0,.06) 2px 3px),#fbf6ec;box-shadow:0 22px 44px rgba(0,0,0,.5)}
+.album-interior{display:grid;place-content:center;text-align:center;padding:14px;font:600 clamp(18px,4.6vw,25px)/1.2 var(--mano);color:#c9567d;
+  background:radial-gradient(circle at 50% 45%,rgba(245,201,122,.22),transparent 65%);box-shadow:inset 10px 0 16px rgba(0,0,0,.1)}
+.album-tapa{position:absolute;inset:0;z-index:2;display:grid;place-content:center;justify-items:center;gap:8px;border-radius:4px 10px 10px 4px;transform-origin:left center;
+  transform:perspective(1300px) rotateY(0);backface-visibility:hidden;transition:transform 1.3s cubic-bezier(.5,.05,.3,1);
+  background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,.08) 9%,transparent 11%),radial-gradient(circle at 30% 22%,#e07399,#a8365f 58%,#7a2147);
+  box-shadow:inset 0 0 0 7px rgba(90,20,50,.5),inset 0 0 0 9px #e8c27a,inset 0 0 0 11px rgba(90,20,50,.4),0 22px 44px rgba(0,0,0,.55)}
+.album-titulo{font:italic 600 clamp(24px,6vw,32px)/1.08 var(--serif);text-align:center;padding:0 14px;
+  background:linear-gradient(180deg,#fff3c8,#f5c97a 55%,#c9913f);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(60,10,30,.6))}
+.album-corazon{font-size:24px;color:#f5c97a;text-shadow:0 0 12px rgba(245,201,122,.8);animation:laterAlbum 1.6s ease-in-out infinite}
+@keyframes laterAlbum{50%{transform:scale(1.25)}}
+.album.abierto .album-tapa{transform:perspective(1300px) rotateY(-180deg)}
+.album-reverso{position:absolute;top:3%;bottom:3%;right:97%;width:97%;border-radius:8px 2px 2px 8px;opacity:0;transition:opacity .25s .6s;
+  background:linear-gradient(270deg,rgba(0,0,0,.14),transparent 12%),#f3e9d8;box-shadow:0 22px 44px rgba(0,0,0,.45)}
+.album.abierto .album-reverso{opacity:1}
+.album-luz{position:absolute;left:50%;top:45%;z-index:3;width:12px;height:12px;margin:-6px;border-radius:50%;pointer-events:none;opacity:0;
+  background:radial-gradient(circle,#fff6d8,rgba(245,201,122,.6) 40%,transparent 70%)}
+.album.abierto .album-luz{animation:luzAlbum 1.8s ease-out .8s}
+@keyframes luzAlbum{0%{opacity:0;transform:scale(1)}25%{opacity:1}100%{opacity:0;transform:scale(36)}}
+.album-pista{font-family:var(--mano);font-size:26px;color:var(--vela);margin:0;animation:respira 2.4s ease-in-out infinite}
 .pie{display:block;font-family:var(--mano);font-size:clamp(18px,2.2vw,21px);line-height:1.15;padding:9px 4px 13px;min-height:52px}
 
 .visor{position:fixed;inset:0;z-index:85;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:20px;background:rgba(12,8,24,.94);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .visor.on{opacity:1;visibility:visible}
 .visor figure{margin:0;display:grid;justify-items:center;gap:16px;grid-column:2;min-width:0}
-.tarjeta-v{position:relative;width:fit-content;max-width:100%;background:linear-gradient(170deg,#fffdf8,#f4ecdf);padding:12px 12px 0;box-shadow:0 24px 70px rgba(0,0,0,.6);transform:rotate(-1deg)}
+.tarjeta-v{position:relative;width:fit-content;max-width:100%;background:linear-gradient(170deg,#fffdf8,#f4ecdf);padding:12px 12px 44px;box-shadow:0 24px 70px rgba(0,0,0,.6);transform:rotate(-1deg)}
 .tarjeta-v.entra{animation:visorEntra .55s cubic-bezier(.2,.9,.3,1.1)}
 @keyframes visorEntra{from{opacity:0;transform:translateY(26px) rotate(2.5deg) scale(.94)}to{opacity:1;transform:rotate(-1deg)}}
 .visor .marco{aspect-ratio:auto;background:none;overflow:visible}
 .visor .marco img,.visor .marco video{display:block;width:auto;height:auto;max-width:min(calc(100vw - 190px),900px);max-height:60vh;object-fit:contain;background:#000}
 .visor .ph{width:min(76vw,460px);aspect-ratio:1}
-#vpie{width:0;min-width:100%;margin:0;font-family:var(--mano);font-size:clamp(25px,4.5vw,32px);color:var(--tinta);text-align:center;line-height:1.2;padding:14px 8px 18px}
+#vpie{display:none}
 #vnum{font-size:14px;color:var(--suave)}
 .vbtn{background:rgba(255,255,255,.08);border:0;border-radius:50%;width:48px;height:48px;font-size:28px;line-height:1;color:var(--papel)}
 #vx{position:absolute;top:14px;right:14px;font-size:30px}
@@ -812,12 +846,25 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .c-estrella.unida .halo{opacity:.85}
 .c-linea{stroke:#f5c97a;stroke-width:.7;stroke-linecap:round;filter:drop-shadow(0 0 1.5px rgba(245,201,122,.9))}
 .c-linea.dibuja{animation:trazo .55s ease-out forwards}
-.cielo-const.completa .c-linea{animation:brillaLinea 2.2s ease-in-out infinite;stroke-dashoffset:0}
+.c-linea.cola{stroke:#ffe7b0;stroke-width:.9;stroke-dasharray:1.2 2.2}
+/* La lucecita que viaja de estrella en estrella */
+.c-cometa{opacity:0;transition:transform .8s cubic-bezier(.45,.05,.3,1),opacity .3s;filter:drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 4px #f5c97a) drop-shadow(0 0 8px #f5c97a)}
+.c-cometa.on{opacity:1}
+/* La estrella final: más grande, con rayos, brilla más que todas */
+.c-final .halo-f{opacity:.25;transform-box:fill-box;transform-origin:center;transform:scale(.5);transition:opacity 1s,transform 1.4s cubic-bezier(.3,1.5,.5,1)}
+.c-final .nucleo-f{fill:#fff6dd;opacity:.55}
+.c-final .rayos-giro{transform-box:fill-box;transform-origin:center}
+.c-final .rayos{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.2);transition:opacity .8s,transform 1.4s cubic-bezier(.3,1.6,.5,1)}
+.c-final:not(.brilla) .nucleo-f{animation:titilaC 2.4s ease-in-out infinite}
+.c-final.brilla .halo-f{opacity:1;transform:scale(1.9);animation:pulsoFinal 2.4s ease-in-out 1.4s infinite}
+.c-final.brilla .rayos{opacity:1;transform:scale(1)}
+.c-final.brilla .rayos-giro{animation:giraRayos 14s linear infinite}
+.c-final.brilla .nucleo-f{opacity:1;fill:#fff}
+@keyframes pulsoFinal{50%{transform:scale(2.3);opacity:.85}}
+@keyframes giraRayos{to{transform:rotate(360deg)}}
+.cielo-const.completa .c-estrella .halo{opacity:.4}
+.cielo-const.completa .c-linea{animation:brillaLinea 2.6s ease-in-out infinite}
 @keyframes brillaLinea{50%{stroke:#ffe9b8;filter:drop-shadow(0 0 3px rgba(255,220,150,1))}}
-#constRelleno{transition:opacity 2.4s ease}
-.cielo-const.completa #constRelleno{opacity:1}
-.cielo-const.completa svg{animation:latidoConst 1.6s ease-in-out 1.2s 2}
-@keyframes latidoConst{0%,100%{transform:scale(1)}20%{transform:scale(1.05)}40%{transform:scale(.99)}60%{transform:scale(1.03)}}
 .fugaz{position:absolute;top:18%;left:-30%;width:90px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#fff);transform:rotate(18deg);opacity:0;pointer-events:none}
 .cielo-const.completa .fugaz{animation:fugaz 1.4s ease-in 1.8s}
 @keyframes fugaz{0%{opacity:0;left:-30%;top:14%}15%{opacity:1}100%{opacity:0;left:120%;top:46%}}
@@ -825,7 +872,7 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .const-frase span{display:inline-block;animation:palabraEstrella .6s cubic-bezier(.2,.9,.3,1.3) both}
 @keyframes palabraEstrella{from{opacity:0;transform:translateY(10px) scale(.7);filter:blur(4px) drop-shadow(0 0 8px #f5c97a)}}
 @keyframes latido{0%,100%{transform:scale(1)}14%{transform:scale(1.1)}28%{transform:scale(.98)}42%{transform:scale(1.06)}}
-.corazon-final{font-style:italic;font-size:clamp(22px,3.4vw,28px);line-height:1.4;max-width:24ch;margin:4px auto 0;animation:aparece 1s ease}
+.corazon-final{font-style:italic;font-size:clamp(22px,3.4vw,28px);line-height:1.4;max-width:24ch;margin:4px auto 0;animation:aparece 1.2s ease;color:#fff3cf;text-shadow:0 0 18px rgba(245,201,122,.55)}
 
 /* ---------- Piano ---------- */
 .piano-zona{max-width:760px;margin:0 auto}
@@ -1228,6 +1275,16 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   <section id="momentos" class="centro">
     <h2>Momentos que guardo</h2>
     <p class="nota">Cada una es un pedacito de tiempo contigo que no cambiaría por nada. Toca cualquiera para verla en grande.</p>
+    <div class="album-zona" id="albumZona">
+      <button class="album" id="album" type="button" aria-label="Abrir el álbum de fotos">
+        <span class="album-reverso" aria-hidden="true"></span>
+        <span class="album-paginas" aria-hidden="true"></span>
+        <span class="album-interior" aria-hidden="true">Para ti,<br>con todo<br>mi amor ♥</span>
+        <span class="album-tapa" aria-hidden="true"><span class="album-titulo">Mi año<br>junto a ti</span><span class="album-corazon">♥</span></span>
+        <span class="album-luz" aria-hidden="true"></span>
+      </button>
+      <p class="album-pista" id="albumPista">Toca el álbum para abrirlo</p>
+    </div>
     <div class="mesa" id="mesa"></div>
   </section>
 
@@ -1257,23 +1314,27 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
 
   <section id="corazon" class="centro">
     <h2>Lo que siento por ti</h2>
-    <p class="nota">Une las estrellas: toca la que brilla.</p>
+    <p class="nota">Sigue el camino de estrellas: toca la que brilla.</p>
     <div class="constelacion-zona">
       <div class="cielo-const" id="cieloConst">
         <svg viewBox="0 0 100 92" id="constSvg" aria-hidden="true">
           <defs>
             <radialGradient id="constHalo"><stop offset="0" stop-color="#fff2c8" stop-opacity=".95"/><stop offset=".35" stop-color="#f5c97a" stop-opacity=".45"/><stop offset="1" stop-color="#f5c97a" stop-opacity="0"/></radialGradient>
-            <radialGradient id="constLuz" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#ffd9e6" stop-opacity=".55"/><stop offset=".6" stop-color="#ee8fae" stop-opacity=".18"/><stop offset="1" stop-color="#ee8fae" stop-opacity="0"/></radialGradient>
           </defs>
           <g id="constFondo"></g>
-          <path id="constRelleno" fill="url(#constLuz)" opacity="0"/>
           <g id="constLineas"></g>
           <g id="constEstrellas"></g>
+          <g class="c-final" id="constFinal">
+            <circle class="halo-f" r="14" fill="url(#constHalo)"/>
+            <g class="rayos-giro"><path class="rayos" d="M0 -13 L1.6 -1.6 L13 0 L1.6 1.6 L0 13 L-1.6 1.6 L-13 0 L-1.6 -1.6 Z M-6 -6 L0 -.9 L6 -6 L.9 0 L6 6 L0 .9 L-6 6 L-.9 0 Z" fill="#fff3cf"/></g>
+            <circle class="nucleo-f" r="2.4"/>
+          </g>
+          <g class="c-cometa" id="constCometa"><circle r="1.6" fill="#fff"/></g>
         </svg>
         <span class="fugaz" aria-hidden="true"></span>
       </div>
       <p class="const-frase" id="constFrase" aria-live="polite"></p>
-      <p class="corazon-final" id="corFinal" hidden>Infinito. Y aun así, se queda corto.</p>
+      <p class="corazon-final" id="corFinal" hidden></p>
     </div>
   </section>
 
@@ -2523,13 +2584,35 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     });
     return b;
   });
-  // Cada polaroid cae y se revela cuando llega a la pantalla
-  if("IntersectionObserver" in window){
-    const ioP = new IntersectionObserver(es => {
-      es.filter(e => e.isIntersecting).forEach((e, j) => { e.target.style.setProperty("--n", j); e.target.classList.add("visto"); ioP.unobserve(e.target); });
-    }, {threshold:.25});
-    polas.forEach(p => ioP.observe(p));
-  } else polas.forEach(p => p.classList.add("visto"));
+  // El álbum: cerrado hasta que lo toca; al abrirse, las fotos salen volando una a una hasta su lugar en la mesa
+  const album = $("#album");
+  let albumAbierto = false;
+  if(!momentos.length) $("#albumZona").hidden = true;
+  else if(reduce){ $("#albumZona").hidden = true; polas.forEach(p => p.classList.add("puesta")); }
+  else mesa.classList.add("cerrada");
+  album.addEventListener("click", () => {
+    if(albumAbierto) return; albumAbierto = true;
+    album.classList.add("abierto"); $("#albumPista").style.visibility = "hidden";
+    try { papel(); [72, 76, 79, 84].forEach((m, i) => setTimeout(() => sonarNota(m), 500 + i*120)); } catch(e){}
+    setTimeout(() => {
+      const a = album.getBoundingClientRect();
+      notasMagicas(a.left + a.width/2, a.top + a.height/2, 20);
+      mesa.classList.remove("cerrada");
+      polas.forEach((p, i) => setTimeout(() => {
+        const r = p.getBoundingClientRect(), al = album.getBoundingClientRect();
+        p.style.setProperty("--dx", (al.left + al.width*.5 - (r.left + r.width/2)).toFixed(0) + "px");
+        p.style.setProperty("--dy", (al.top + al.height*.45 - (r.top + r.height/2)).toFixed(0) + "px");
+        p.classList.add("sale", "puesta");
+        if(i % 3 === 0) notasMagicas(al.left + al.width/2, al.top + al.height*.4, 2);
+        p.addEventListener("animationend", e => {
+          if(e.animationName !== "saleAlbum") return;
+          p.classList.remove("sale");
+          const rr = p.getBoundingClientRect();
+          if(rr.bottom > 0 && rr.top < innerHeight) corazones(rr.left + rr.width/2, rr.top + rr.height/2, 4);
+        });
+      }, i*140));
+    }, 1250);
+  });
 
   const visor = $("#visor"); let vi = 0, focoPrevio = null;
   function pararVisorVideo(){ const v = $("#vimg video"); if(v){ v.pause(); } soltarM("visor-video"); }
@@ -2539,7 +2622,6 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     box.appendChild(medio(mo, {controles:true}));
     const v = box.querySelector("video");
     if(v && mo.video){ retener("visor-video"); v.play().catch(()=>{}); v.addEventListener("ended", () => soltarM("visor-video")); }
-    $("#vpie").textContent = mo.pie || "";
     $("#vnum").textContent = `${vi+1} de ${momentos.length}`;
     const card = $("#vcard");
     ["--cinta","--cr","--cx"].forEach(k => card.style.setProperty(k, polas[vi].style.getPropertyValue(k)));
@@ -2589,41 +2671,25 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   $("#frasco").addEventListener("click", sacarPapel);
   pintarFrasco(); contar();
 
-  /* ---------- Nuestra constelación ---------- */
-  // Estrellas en forma de corazón: cada toque une la siguiente y suma una palabra a la frase
-  const FRASE = String(C.constelacion || "Tus pecas son mi constelación favorita, y tú, mi cielo entero").split(" ").filter(Boolean);
+  /* ---------- El camino de estrellas ---------- */
+  // Cada toque lleva la lucecita a la siguiente estrella y suma una palabra; al final llega sola a la estrella más brillante
+  const FRASE = String(C.constelacion || "Siempre serás mi estrella más bonita").split(" ").filter(Boolean);
   const svgEl = (tag, at) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for(const k in at) e.setAttribute(k, at[k]); return e; };
-  const cieloC = $("#cieloConst");
-  // Las estrellas se reparten a la misma distancia a lo largo del borde del corazón, empezando arriba al centro
-  const PUNTOS = (() => {
-    const curva = [];
-    for(let i = 0; i <= 720; i++){
-      const t = i/720*Math.PI*2, x = 16*Math.pow(Math.sin(t), 3), y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
-      curva.push([50 + x*2.8, 42 - y*2.6]);
-    }
-    const acum = [0];
-    for(let i = 1; i < curva.length; i++) acum.push(acum[i-1] + Math.hypot(curva[i][0] - curva[i-1][0], curva[i][1] - curva[i-1][1]));
-    // Siempre hay estrella en la hendidura de arriba y en la punta de abajo; las demás se reparten a los lados
-    const total = acum[acum.length - 1], mitad = total/2, N = FRASE.length;
-    const der = Math.ceil(Math.max(0, N - 2)/2), izq = Math.max(0, N - 2 - der);
-    const metas = [0];
-    for(let i = 1; i <= der; i++) metas.push(i/(der + 1)*mitad);
-    if(N > 1) metas.push(mitad);
-    for(let i = 1; i <= izq; i++) metas.push(mitad + i/(izq + 1)*mitad);
-    let j = 0;
-    return metas.slice(0, N).map(meta => {
-      while(j < acum.length - 1 && acum[j] < meta) j++;
-      return [curva[j][0] + rnd(-.5, .5), curva[j][1] + rnd(-.5, .5)];
-    });
-  })();
+  const cieloC = $("#cieloConst"), cometa = $("#constCometa"), estrellaFinal = $("#constFinal");
+  // El camino sube serpenteando desde abajo a la izquierda hasta la estrella final, arriba a la derecha
+  const PUNTOS = FRASE.map((_, k) => {
+    const u = FRASE.length > 1 ? k/(FRASE.length - 1) : 0;
+    return [12 + u*58 + rnd(-1.5, 1.5), 78 - u*46 + Math.sin(u*Math.PI*2.4)*9 + rnd(-1.5, 1.5)];
+  });
+  const FINAL = [84, 17];
+  estrellaFinal.setAttribute("transform", `translate(${FINAL[0]} ${FINAL[1]})`);
   for(let i = 0; i < 46; i++){
     const c = svgEl("circle", {cx: rnd(0, 100).toFixed(1), cy: rnd(0, 92).toFixed(1), r: rnd(.15, .5).toFixed(2), class: "c-fondo"});
     c.style.setProperty("--d", rnd(2, 5).toFixed(1) + "s"); c.style.setProperty("--w", rnd(-5, 0).toFixed(1) + "s");
     $("#constFondo").appendChild(c);
   }
-  $("#constRelleno").setAttribute("d", "M" + PUNTOS.map(p => p.map(n => n.toFixed(1)).join(" ")).join(" L") + " Z");
-  const NOTAS_C = [67, 69, 72, 74, 76, 79, 81, 84, 86, 88, 91, 93];
-  let sigC = 0;
+  const NOTAS_C = [67, 69, 72, 74, 76, 79, 81, 84];
+  let sigC = 0, viajando = false;
   const elsC = PUNTOS.map(([x, y], k) => {
     const g = svgEl("g", {class: "c-estrella"});
     g.appendChild(svgEl("circle", {class: "halo", cx: x, cy: y, r: 4}));
@@ -2634,38 +2700,47 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     return g;
   });
   elsC[0].classList.add("siguiente");
-  function lineaC(a, b){
-    const [x1, y1] = PUNTOS[a], [x2, y2] = PUNTOS[b], largo = Math.hypot(x2 - x1, y2 - y1);
-    const l = svgEl("line", {class: "c-linea", x1, y1, x2, y2});
-    l.style.strokeDasharray = largo; l.style.strokeDashoffset = largo;
+  const moverCometa = ([x, y], al) => { cometa.style.transform = `translate(${x}px,${y}px)`; if(al) setTimeout(al, reduce ? 0 : 820); };
+  function lineaC([x1, y1], [x2, y2], extra){
+    const largo = Math.hypot(x2 - x1, y2 - y1);
+    const l = svgEl("line", {class: "c-linea" + (extra ? " " + extra : ""), x1, y1, x2, y2});
+    if(!extra){ l.style.strokeDasharray = largo; l.style.strokeDashoffset = largo; }
     $("#constLineas").appendChild(l);
     l.addEventListener("animationend", () => { l.style.strokeDashoffset = 0; }, {once: true});
-    if(reduce) l.style.strokeDashoffset = 0; else requestAnimationFrame(() => l.classList.add("dibuja"));
+    if(reduce) l.style.strokeDashoffset = 0; else if(!extra) requestAnimationFrame(() => l.classList.add("dibuja"));
   }
-  function tocarEstrella(k){
-    if(k !== sigC || sigC >= FRASE.length) return;
+  function encenderEstrella(k){
     const el = elsC[k];
     el.classList.remove("siguiente"); el.classList.add("unida");
-    if(k > 0) lineaC(k - 1, k);
     try { sonarNota(NOTAS_C[k % NOTAS_C.length]); } catch(e){}
     const w = document.createElement("span"); w.textContent = FRASE[k];
     const fr = $("#constFrase"); if(k > 0) fr.appendChild(document.createTextNode(" ")); fr.appendChild(w);
     const r = el.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, 3);
     sigC++;
-    if(sigC < FRASE.length){ elsC[sigC].classList.add("siguiente"); return; }
-    // La última estrella cierra el corazón y todo se ilumina
-    setTimeout(() => {
-      lineaC(FRASE.length - 1, 0);
-      setTimeout(() => {
-        // Las líneas quedan trazadas antes de que empiecen a brillar
-        document.querySelectorAll(".c-linea").forEach(l => { l.style.strokeDashoffset = 0; });
-        cieloC.classList.add("completa");
-        try { [72, 76, 79, 84, 88].forEach((m, i) => setTimeout(() => sonarNota(m), i*140)); } catch(e){}
-        const rc = cieloC.getBoundingClientRect();
-        corazones(rc.left + rc.width/2, rc.top + rc.height*.45, 40); confeti(110);
-        setTimeout(() => { $("#corFinal").hidden = false; }, 1600);
-      }, reduce ? 0 : 600);
-    }, reduce ? 0 : 350);
+    if(sigC < FRASE.length){ elsC[sigC].classList.add("siguiente"); viajando = false; return; }
+    setTimeout(llegarFinal, reduce ? 0 : 900);
+  }
+  function tocarEstrella(k){
+    if(k !== sigC || viajando || sigC >= FRASE.length) return;
+    viajando = true;
+    if(k === 0){ cometa.style.transition = "none"; moverCometa(PUNTOS[0]); void cometa.getBoundingClientRect(); cometa.style.transition = ""; cometa.classList.add("on"); encenderEstrella(0); return; }
+    lineaC(PUNTOS[k - 1], PUNTOS[k]);
+    moverCometa(PUNTOS[k], () => encenderEstrella(k));
+  }
+  // La luz sigue sola hasta la última estrella, que se enciende más que todas
+  function llegarFinal(){
+    lineaC(PUNTOS[PUNTOS.length - 1], FINAL, "cola");
+    moverCometa(FINAL, () => {
+      cometa.classList.remove("on");
+      estrellaFinal.classList.add("brilla"); cieloC.classList.add("completa");
+      document.querySelectorAll(".c-linea").forEach(l => { l.style.strokeDashoffset = 0; });
+      try { [72, 76, 79, 84, 88, 91].forEach((m, i) => setTimeout(() => sonarNota(m), i*130)); } catch(e){}
+      const r = estrellaFinal.getBoundingClientRect();
+      corazones(r.left + r.width/2, r.top + r.height/2, 26); notasMagicas(r.left + r.width/2, r.top + r.height/2, 14);
+      setTimeout(() => confeti(110), 500);
+      const fin = $("#corFinal"); fin.textContent = C.constelacionFinal || "Tú eres mi estrella favorita, y hoy es tu día, mi linda estrella ✨";
+      setTimeout(() => { fin.hidden = false; }, reduce ? 0 : 1300);
+    });
   }
 
   /* ---------- Piano ---------- */
