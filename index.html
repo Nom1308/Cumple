@@ -216,9 +216,30 @@ const CONFIG = {
     "Que estos 19 años te traigan salud, paz, sueños cumplidos y muchísima felicidad. Yo quiero estar ahí para verlos cumplirse, a tu lado."
   ],
   firma: "Te quiero muchísimo,\nBrandon",
+  // La polaroid pegada con cinta en la esquina de la carta
+  cartaFoto: { foto: "fotos/18-selfie-juntos.jpg", pie: "nosotros ♥" },
 
   medallaTexto: "Si la vida repartiera premios, yo ya tengo el mío.",
-  fotoFinal: "fotos/01-tu-y-yo.jpg"
+  fotoFinal: "fotos/01-tu-y-yo.jpg",
+
+  // Los faroles: cada toque en el cielo suelta uno con el siguiente deseo
+  deseos: ["salud", "paz", "sueños cumplidos", "muchísima felicidad", "risas sin fin", "un café conmigo",
+           "que Dios te cuide", "viajes juntos", "tu familia unida", "más libros", "muchas caritas en fotos", "que nunca dejes de brillar"],
+
+  // Los créditos del final, como en una película. Los nombres de los vinilos y la música se agregan solos.
+  creditos: [
+    { titulo: "Una producción de", texto: "Brandon" },
+    { titulo: "Protagonista", texto: "Sara, la más bonita" },
+    { titulo: "Detective principal", texto: "Sara (5 de 5 secretos)" },
+    { vinilos: true, titulo: "Con la participación especial de" },
+    { titulo: "Dirección de fotografía", texto: "Brandon, que te toma dos fotos más cada vez que dices que no" },
+    { titulo: "Efectos especiales", texto: "Tus pecas" },
+    { titulo: "Vestuario", texto: "Tus gafas, tu gorra y tu florecita en el pelo" },
+    { titulo: "Locaciones", texto: "Un café, una librería, un túnel rosa y un cuarto decorado pensando en ti" },
+    { musica: true, titulo: "Música" },
+    { titulo: "Agradecimientos", texto: "A Dios, por tu vida. A tu familia, por cuidarte siempre." },
+    { titulo: "", texto: "Ningún corazón resultó ileso durante esta producción ♥" }
+  ]
 };
 /* ======================= FIN DE LO EDITABLE ======================= */
 </script>
@@ -801,15 +822,70 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .carta-sello{border:1px dashed rgba(245,201,122,.45);border-radius:16px;padding:44px 24px;text-align:center;color:var(--suave)}
 .carta-sello svg{width:54px;height:auto;margin-bottom:10px;opacity:.9}
 .carta-sello p{margin:0}
+/* El sobre: sello de lacre que se rompe, solapa que se abre y la carta que sale */
+.sobre-carta{display:grid;justify-items:center;gap:18px;padding:30px 0 10px;animation:sobreLlega 1.1s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes sobreLlega{from{opacity:0;transform:translateY(-60px) rotate(-8deg) scale(.85)}}
+.sobre-btn{position:relative;width:min(360px,86vw);aspect-ratio:1.55;border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transform:rotate(-2deg)}
+.sobre-fondo,.sobre-frente,.sobre-solapa{position:absolute;inset:0;border-radius:6px}
+.sobre-fondo{background:linear-gradient(160deg,#e9d6b8,#d9c09b);box-shadow:0 26px 40px rgba(0,0,0,.5)}
+.sobre-hoja{position:absolute;z-index:1;left:7%;right:7%;top:8%;height:84%;border-radius:3px;background:repeating-linear-gradient(transparent 0 13px,rgba(59,43,79,.09) 13px 14px),var(--papel);box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .9s cubic-bezier(.3,.7,.3,1)}
+.sobre-frente{z-index:2;background:var(--ruido) 0 0/260px 260px,linear-gradient(170deg,#f8ecd9,#ecdabd);
+  clip-path:polygon(0 0,50% 54%,100% 0,100% 100%,0 100%);box-shadow:inset 0 -10px 20px rgba(120,80,30,.15)}
+.sobre-para{position:absolute;z-index:2;left:0;right:0;bottom:12%;text-align:center;font:600 clamp(26px,7vw,34px)/1 var(--mano);color:#9a5a6e;pointer-events:none}
+.sobre-solapa{z-index:3;transform-origin:50% 0;transform:perspective(700px) rotateX(0);transition:transform .7s cubic-bezier(.4,.1,.3,1),z-index 0s .35s}
+.sobre-solapa::before{content:"";position:absolute;inset:0;clip-path:polygon(0 0,100% 0,50% 58%);background:var(--ruido) 0 0/260px 260px,linear-gradient(#f6e9d3,#e6d1b0);transition:filter .7s}
+.lacre{position:absolute;left:50%;top:58%;z-index:4;width:68px;height:68px;margin:-38px 0 0 -34px;pointer-events:none}
+.lacre i{position:absolute;inset:0;border-radius:47% 53% 50% 50% / 52% 48% 52% 48%;
+  background:radial-gradient(circle at 38% 32%,#ff7aa6,#d43a6e 45%,#a51f4f 80%);box-shadow:0 3px 6px rgba(0,0,0,.4),inset 0 -3px 5px rgba(80,0,30,.4),0 0 0 3px rgba(212,58,110,.55);transition:transform .7s cubic-bezier(.3,.6,.4,1),opacity .7s}
+.lacre i::after{content:"S";position:absolute;inset:0;display:grid;place-items:center;font:italic 600 34px/1 var(--serif);color:#9c1c48;text-shadow:0 1px 0 rgba(255,170,200,.6),0 -1px 0 rgba(90,0,30,.5)}
+.lacre i:first-child{clip-path:polygon(0 0,54% 0,44% 38%,58% 62%,46% 100%,0 100%)}
+.lacre i:last-child{clip-path:polygon(54% 0,100% 0,100% 100%,46% 100%,58% 62%,44% 38%)}
+.sobre-btn:not(.rompe) .lacre{animation:lateLacre 1.8s ease-in-out infinite}
+@keyframes lateLacre{50%{transform:scale(1.07);filter:drop-shadow(0 0 12px rgba(255,120,170,.7))}}
+.sobre-btn.rompe .lacre i:first-child{transform:translate(-46px,70px) rotate(-50deg);opacity:0}
+.sobre-btn.rompe .lacre i:last-child{transform:translate(42px,80px) rotate(40deg);opacity:0}
+.sobre-btn.abre .sobre-solapa{transform:perspective(700px) rotateX(180deg);z-index:0}
+.sobre-btn.abre .sobre-solapa::before{filter:brightness(.88)}
+.sobre-btn.saca .sobre-hoja{transform:translateY(-62%)}
+.sobre-carta.fuera{animation:sobreSale .6s ease-in forwards}
+@keyframes sobreSale{to{opacity:0;transform:translateY(40px) scale(.94)}}
+.sobre-pista{font-family:var(--mano);font-size:26px;color:var(--vela);margin:0;animation:respira 2.4s ease-in-out infinite}
+/* La carta: papel con dobleces, polaroid pegada y una florecita prensada */
 .carta{position:relative;background-color:var(--papel);color:var(--tinta);font-family:var(--mano);font-size:clamp(23px,3.7vw,28px);line-height:40px;padding:50px clamp(22px,6vw,58px) 56px;
-  background-image:repeating-linear-gradient(180deg,transparent 0 39px,rgba(59,43,79,.09) 39px 40px);background-position:0 43px;box-shadow:0 30px 70px rgba(0,0,0,.55);
-  transform:rotate(-.6deg);transform-origin:top;animation:despliega 1s cubic-bezier(.2,.8,.2,1)}
-@keyframes despliega{from{opacity:0;transform:rotate(-.6deg) scaleY(.55)}to{opacity:1;transform:rotate(-.6deg) scaleY(1)}}
+  background-image:linear-gradient(180deg,transparent 33%,rgba(120,90,50,.07) 33.2%,rgba(255,255,255,.5) 33.5%,transparent 34%,transparent 66%,rgba(120,90,50,.07) 66.2%,rgba(255,255,255,.5) 66.5%,transparent 67%),
+    radial-gradient(130% 90% at 50% 40%,transparent 62%,rgba(150,110,60,.13)),repeating-linear-gradient(180deg,transparent 0 39px,rgba(59,43,79,.09) 39px 40px);
+  background-position:0 0,0 0,0 43px;box-shadow:0 30px 70px rgba(0,0,0,.55);
+  transform:rotate(-.6deg);transform-origin:top;animation:despliega 1.5s cubic-bezier(.3,.7,.3,1)}
+/* Se despliega en sus tres dobleces, como una carta de verdad */
+@keyframes despliega{
+  0%{opacity:0;transform:rotate(-.6deg) perspective(900px) rotateX(-70deg) scaleY(.33);filter:brightness(.7)}
+  30%{opacity:1;transform:rotate(-.6deg) perspective(900px) rotateX(-35deg) scaleY(.36);filter:brightness(.85)}
+  60%{transform:rotate(-.6deg) perspective(900px) rotateX(-20deg) scaleY(.68);filter:brightness(.92)}
+  100%{opacity:1;transform:rotate(-.6deg) scaleY(1);filter:none}}
 .carta p{margin:0 0 40px}
 .carta .saludo{font-size:1.25em;font-weight:600}
-.firma{text-align:right;white-space:pre-line;font-weight:600;opacity:0;transition:opacity 1.2s}
-.firma.on{opacity:1}
-.saltar{position:absolute;right:18px;top:12px;font-family:var(--serif);font-size:13px;color:rgba(59,43,79,.55);background:none;border:0;padding:4px}
+.carta-polaroid{position:absolute;top:-46px;right:-10px;width:clamp(92px,22vw,128px);padding:7px 7px 0;background:#fff;box-shadow:0 8px 16px rgba(0,0,0,.35);transform:rotate(7deg);z-index:2;opacity:0;animation:pega .8s cubic-bezier(.3,1.4,.5,1) 1.4s forwards}
+.carta-polaroid img{display:block;width:100%;aspect-ratio:1;object-fit:cover;filter:sepia(.15) saturate(.95)}
+.carta-polaroid span{display:block;font:600 16px/1 var(--mano);text-align:center;padding:6px 0 8px;color:#c9567d}
+.carta-polaroid::before{content:"";position:absolute;top:-10px;left:50%;width:58px;height:20px;margin-left:-29px;background:rgba(238,143,174,.55);transform:rotate(-4deg);box-shadow:0 1px 2px rgba(0,0,0,.1)}
+@keyframes pega{from{opacity:0;transform:rotate(18deg) scale(1.3) translateY(-20px)}to{opacity:1;transform:rotate(7deg)}}
+.carta-flor{position:absolute;left:clamp(10px,4vw,34px);bottom:26px;width:clamp(54px,12vw,78px);opacity:0;transform:rotate(-18deg);pointer-events:none;transition:opacity 1.6s}
+.carta-flor.on{opacity:.88}
+/* Escrita a mano: cada palabra aparece como tinta fresca, con una pluma que la va siguiendo */
+.escrita{display:inline-block;clip-path:inset(-20% 100% -20% 0);color:#4a2f6e}
+.escrita.tinta{animation:tinta var(--dur,.3s) linear forwards}
+@keyframes tinta{to{clip-path:inset(-20% -4% -20% 0);color:var(--tinta)}}
+.escrita.ya{clip-path:none;color:var(--tinta)}
+.pluma{position:absolute;left:0;top:0;width:34px;height:34px;z-index:3;pointer-events:none;opacity:0;transition:transform .14s linear,opacity .4s;transform-origin:0 100%}
+.pluma.on{opacity:1}
+.firma{text-align:right;white-space:pre-line;font-weight:600}
+.firma .nombre-firma{display:inline-block;font-size:1.5em;line-height:1.1;clip-path:inset(-30% 100% -30% 0)}
+.firma .nombre-firma.tinta{animation:tinta 1.8s cubic-bezier(.4,.1,.6,1) forwards}
+.firma .corazon-firma{display:inline-block;width:34px;height:30px;vertical-align:-4px;margin-left:6px}
+.firma .corazon-firma path{fill:none;stroke:#c9567d;stroke-width:3;stroke-linecap:round;stroke-dasharray:120;stroke-dashoffset:120}
+.firma .corazon-firma.dibuja path{animation:trazo 1s ease-out forwards}
+@keyframes trazo{to{stroke-dashoffset:0}}
+.saltar{position:absolute;left:18px;top:12px;font-family:var(--serif);font-size:13px;color:rgba(59,43,79,.55);background:none;border:0;padding:4px}
 .una-mas{text-align:center;margin-top:64px}
 .una-mas p{font-family:var(--mano);font-size:34px;color:var(--vela);margin:0 0 18px}
 
@@ -838,6 +914,72 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .foto-final p{font-family:var(--mano);font-size:26px;margin:0;padding:12px 0 16px;line-height:1.2}
 .ultimo{font-family:var(--mano);font-size:clamp(40px,8vw,58px);color:var(--vela);margin:56px 0 0;line-height:1.1;opacity:0}
 #final.cae .ultimo{animation:aparece 1s ease 3.4s forwards}
+.final-sigue{margin:44px 0 0;opacity:0}
+#final.cae .final-sigue{animation:aparece 1s ease 4.6s forwards}
+
+/* ---------- Faroles de deseos ---------- */
+#faroles{position:relative;max-width:none;min-height:100svh;padding:70px 20px 40px;overflow:hidden;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  background:radial-gradient(ellipse 120% 60% at 50% 100%,rgba(245,160,90,.18),transparent 60%),linear-gradient(#070512,#140c2a 55%,#2a1838)}
+#faroles::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.8;
+  background:radial-gradient(1.5px 1.5px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 28% 42%,#fff,transparent),radial-gradient(1.5px 1.5px at 44% 12%,#fff,transparent),
+    radial-gradient(1px 1px at 63% 30%,#fff,transparent),radial-gradient(1.5px 1.5px at 81% 16%,#fff,transparent),radial-gradient(1px 1px at 91% 48%,#fff,transparent),
+    radial-gradient(1px 1px at 8% 60%,#fff,transparent),radial-gradient(1.5px 1.5px at 36% 70%,#fff,transparent),radial-gradient(1px 1px at 72% 62%,#fff,transparent);
+  animation:titilan 4s ease-in-out infinite}
+@keyframes titilan{50%{opacity:.45}}
+.faroles-titulo{position:relative;z-index:2;font-family:var(--mano);font-size:clamp(36px,8vw,52px);color:var(--vela);margin:0;line-height:1.1;text-shadow:0 0 24px rgba(245,180,100,.5)}
+.faroles-sub{position:relative;z-index:2;color:var(--suave);margin:8px 0 0;font-size:16px}
+.faroles-cuenta{position:relative;z-index:2;font-family:var(--mano);font-size:24px;color:#ffd9a0;margin:6px 0 0;min-height:1.2em}
+.farol{position:absolute;z-index:1;width:48px;height:64px;margin:-32px 0 0 -24px;pointer-events:none;animation:sube var(--t,11s) cubic-bezier(.3,.1,.6,1) forwards}
+.farol-cuerpo{position:absolute;inset:0;border-radius:44% 44% 30% 30% / 40% 40% 24% 24%;
+  background:radial-gradient(ellipse at 50% 72%,#fff3c4,#ffb347 34%,#e8692d 74%,#a83a1c);box-shadow:0 0 26px 8px rgba(255,160,70,.55),0 0 60px 20px rgba(255,140,60,.25);animation:llamita 1.3s ease-in-out infinite alternate}
+.farol-cuerpo::after{content:"";position:absolute;left:30%;right:30%;bottom:-5px;height:7px;border-radius:2px;background:#5a2a14}
+.farol-deseo{position:absolute;left:50%;top:100%;margin-top:10px;transform:translateX(-50%);white-space:nowrap;font:600 21px/1 var(--mano);color:#ffe2b0;text-shadow:0 0 10px rgba(255,170,80,.8);animation:deseoSe var(--t,11s) ease forwards}
+@keyframes sube{
+  0%{transform:translate(0,0) scale(.6);opacity:0}
+  8%{opacity:1;transform:translate(0,-30px) scale(1)}
+  35%{transform:translate(var(--s1,18px),-32vh) scale(.92)}
+  65%{transform:translate(var(--s2,-14px),-62vh) scale(.7)}
+  100%{transform:translate(var(--s3,10px),-100vh) scale(.4);opacity:0}}
+@keyframes llamita{to{filter:brightness(1.18);box-shadow:0 0 34px 12px rgba(255,170,80,.6),0 0 70px 26px rgba(255,140,60,.28)}}
+@keyframes deseoSe{0%,10%{opacity:0}18%,55%{opacity:1}80%,100%{opacity:0}}
+.faroles-acciones{position:absolute;left:0;right:0;bottom:max(34px,env(safe-area-inset-bottom));z-index:3;display:grid;justify-items:center;gap:10px;cursor:default}
+.faroles-acciones .btn{opacity:0;transform:translateY(10px);transition:opacity .8s,transform .8s;pointer-events:none}
+.faroles-acciones .btn.on{opacity:1;transform:none;pointer-events:auto}
+
+/* ---------- Créditos estilo VHS ---------- */
+.creditos{position:fixed;inset:0;z-index:90;background:#050407;color:#f3ecf7;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .8s,visibility .8s}
+.creditos.on{opacity:1;visibility:visible}
+.cr-ruido{position:absolute;inset:-50%;pointer-events:none;z-index:4;background:var(--ruido-vhs) 0 0/180px 180px;opacity:.5;animation:ruidoVhs .2s steps(3) infinite}
+@keyframes ruidoVhs{33%{transform:translate(-37px,21px)}66%{transform:translate(18px,-44px)}}
+.creditos.limpio .cr-ruido{opacity:.12;transition:opacity 1s}
+.cr-lineas{position:absolute;inset:0;z-index:5;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px)}
+.cr-tracking{position:absolute;left:0;right:0;top:-10%;height:6%;z-index:5;pointer-events:none;background:linear-gradient(transparent,rgba(255,255,255,.1) 40%,rgba(255,255,255,.04) 60%,transparent);animation:tracking 8s linear infinite}
+.cr-vineta{position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(closest-side,transparent 70%,rgba(0,0,0,.7))}
+.cr-osd{position:absolute;z-index:6;font:clamp(22px,5vw,30px)/1 "VT323",ui-monospace,monospace;color:#f2f2f2;text-shadow:2px 0 0 rgba(255,40,80,.55),-2px 0 0 rgba(40,160,255,.55);letter-spacing:.06em;pointer-events:none}
+.cr-osd.izq{top:max(18px,env(safe-area-inset-top));left:20px}
+.cr-osd.der{bottom:max(18px,env(safe-area-inset-bottom));right:20px;text-align:right}
+.cr-cerrar{position:absolute;top:max(12px,env(safe-area-inset-top));right:12px;z-index:7;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.4);color:#fff;font-size:22px;line-height:1}
+.cr-titulo{position:absolute;inset:0;z-index:3;display:grid;place-content:center;text-align:center;padding:20px;opacity:0;transition:opacity 1.2s}
+.cr-titulo.on{opacity:1}
+.cr-titulo small{display:block;font:600 13px/1 system-ui,sans-serif;letter-spacing:.5em;color:#b8abcf;margin-bottom:14px;text-indent:.5em}
+.cr-titulo b{display:block;font:italic 600 clamp(40px,11vw,76px)/1 var(--serif);color:var(--vela);text-shadow:0 0 30px rgba(245,201,122,.4),2px 0 0 rgba(255,40,80,.35),-2px 0 0 rgba(40,160,255,.35)}
+.cr-titulo span{display:block;font:clamp(18px,4.4vw,24px)/1.3 var(--serif);color:#e7dcf2;margin-top:14px;font-style:italic}
+.cr-rollo{position:absolute;left:0;right:0;top:100%;z-index:3;display:grid;justify-items:center;gap:0;padding:0 20px;text-align:center;will-change:transform}
+.cr-bloque{margin:0 0 54px;max-width:30ch}
+.cr-bloque h4{margin:0 0 10px;font:600 12px/1.4 system-ui,sans-serif;letter-spacing:.38em;text-transform:uppercase;color:#b8abcf}
+.cr-bloque p{margin:0;font-size:clamp(20px,5vw,26px);line-height:1.45;font-family:var(--serif);color:#f6f0fa}
+.cr-foto{width:min(190px,48vw);margin:0 0 54px;padding:8px 8px 0;background:#f4eee4;box-shadow:0 12px 30px rgba(0,0,0,.6);filter:sepia(.18) saturate(.9) contrast(1.05)}
+.cr-foto:nth-of-type(odd){transform:rotate(-4deg) translateX(-18%)} .cr-foto:nth-of-type(even){transform:rotate(3deg) translateX(18%)}
+.cr-foto img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+.cr-foto figcaption{font:600 18px/1 var(--mano);color:#7a5a6a;padding:8px 0 10px}
+.cr-fin{display:grid;justify-items:center;gap:18px;padding:30vh 0 0}
+.cr-fin b{font:italic 600 clamp(38px,10vw,64px)/1.1 var(--serif);color:var(--vela)}
+.cr-fin .cr-palabra-fin{font:clamp(54px,14vw,90px)/1 "VT323",ui-monospace,monospace;color:#fff;letter-spacing:.2em;text-shadow:2px 0 0 rgba(255,40,80,.6),-2px 0 0 rgba(40,160,255,.6);animation:parpadeoFin 1.1s steps(1) infinite}
+@keyframes parpadeoFin{50%{opacity:.25}}
+.cr-acciones{position:absolute;left:0;right:0;bottom:max(70px,calc(env(safe-area-inset-bottom) + 60px));z-index:7;display:flex;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity 1s}
+.cr-acciones.on{opacity:1;pointer-events:auto}
+.creditos.rebobina .cr-rollo{transition:transform 1.4s cubic-bezier(.6,0,.4,1)!important}
+.creditos.rebobina .cr-ruido{opacity:.9}
 footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60px;position:relative;z-index:1}
 
 /* ---------- Música ---------- */
@@ -1115,11 +1257,29 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       <svg viewBox="0 0 64 44" aria-hidden="true"><rect x="2" y="2" width="60" height="40" rx="4" fill="none" stroke="#f5c97a" stroke-width="2.5"/><path d="M3 4 L32 25 L61 4" fill="none" stroke="#f5c97a" stroke-width="2.5"/></svg>
       <p>Tu carta se abre cuando apagues las velas.</p>
     </div>
+    <div class="sobre-carta" id="sobreCarta" hidden>
+      <button class="sobre-btn" id="sobreBtn" type="button" aria-label="Abrir la carta">
+        <span class="sobre-fondo" aria-hidden="true"></span>
+        <span class="sobre-hoja" aria-hidden="true"></span>
+        <span class="sobre-frente" aria-hidden="true"></span>
+        <span class="sobre-para" id="sobrePara" aria-hidden="true"></span>
+        <span class="sobre-solapa" aria-hidden="true"></span>
+        <span class="lacre" aria-hidden="true"><i></i><i></i></span>
+      </button>
+      <p class="sobre-pista">Toca el sello para abrirla</p>
+    </div>
     <article class="carta" id="cartaEl" hidden>
       <button class="saltar" id="saltar" type="button">Leer de una vez</button>
+      <figure class="carta-polaroid" id="cartaPolaroid" hidden></figure>
       <p class="saludo" id="cartaSaludo"></p>
       <div id="cartaTexto"></div>
       <p class="firma" id="cartaFirma"></p>
+      <svg class="carta-flor" id="cartaFlor" viewBox="0 0 80 120" aria-hidden="true">
+        <path d="M40 56 C38 80 44 98 36 118" stroke="#7d9a6a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M39 86 C28 80 22 84 18 90 C26 92 33 91 39 86Z M40 74 C50 66 58 68 62 74 C54 77 47 77 40 74Z" fill="#9db68a" opacity=".85"/>
+        <g transform="translate(40 40)" opacity=".9"><g fill="#f2a7bf"><ellipse rx="8" ry="15" transform="rotate(0) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(72) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(144) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(216) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(288) translate(0 -13)"/></g><circle r="6" fill="#f5c97a"/></g>
+      </svg>
+      <svg class="pluma" id="pluma" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 31 L7 21 L25 3 C28 1 32 4 30 8 L12 27 Z" fill="#3b2b4f"/><path d="M7 21 L12 27" stroke="#f5c97a" stroke-width="2"/><path d="M3 31 L6 24" stroke="#c9a25a" stroke-width="1.5"/></svg>
     </article>
     <div class="una-mas" id="unaMas" hidden>
       <p>Una última cosa…</p>
@@ -1135,9 +1295,27 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     <p class="final-txt" id="finalTxt"></p>
     <figure class="foto-final" id="fotoFinal"></figure>
     <p class="ultimo" id="ultimo"></p>
+    <div class="final-sigue"><button class="btn" id="btnFaroles" type="button">Pide tus deseos 🏮</button></div>
+  </section>
+
+  <section id="faroles" hidden aria-label="Faroles de deseos">
+    <p class="faroles-titulo">Suelta tus deseos</p>
+    <p class="faroles-sub">Toca el cielo para soltar un farol</p>
+    <p class="faroles-cuenta" id="farolesCuenta"></p>
+    <div class="faroles-acciones"><button class="btn" id="btnCreditos" type="button">Ver los créditos ▶</button></div>
   </section>
 </main>
 <footer id="pieFinal"></footer>
+
+<div class="creditos" id="creditos" role="dialog" aria-label="Créditos" aria-hidden="true">
+  <div class="cr-titulo" id="crTitulo"></div>
+  <div class="cr-rollo" id="crRollo"></div>
+  <span class="cr-ruido" aria-hidden="true"></span><span class="cr-lineas" aria-hidden="true"></span><span class="cr-tracking" aria-hidden="true"></span><span class="cr-vineta" aria-hidden="true"></span>
+  <span class="cr-osd izq" id="crOsd">▶ PLAY</span>
+  <span class="cr-osd der" id="crFecha"></span>
+  <button class="cr-cerrar" id="crCerrar" type="button" aria-label="Cerrar los créditos">×</button>
+  <div class="cr-acciones" id="crAcciones"><button class="btn" id="crRebobinar" type="button">◀◀ Rebobinar</button><button class="btn sec" id="crSalir" type="button">Cerrar</button></div>
+</div>
 
 <div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Foto en grande" aria-hidden="true">
   <button class="vbtn" id="vx" type="button" aria-label="Cerrar">×</button>
@@ -1250,6 +1428,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   raiz.setProperty("--grano",   svgURL(ruidoSVG(400, 200, ".008 .28", 3, "0 0 0 0 .18 0 0 0 0 .09 0 0 0 0 .04 0 0 0 .55 0")));
   raiz.setProperty("--grano-v", svgURL(ruidoSVG(300, 420, ".3 .007", 3, "0 0 0 0 .16 0 0 0 0 .08 0 0 0 0 .03 0 0 0 .5 0")));
   raiz.setProperty("--ruido",   svgURL(ruidoSVG(260, 260, ".85", 2, "0 0 0 0 1 0 0 0 0 .95 0 0 0 0 .9 0 0 0 .07 0")));
+  raiz.setProperty("--ruido-vhs", svgURL(ruidoSVG(180, 180, ".9", 2, "0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1.6 0 0 0 -.55")));
   raiz.setProperty("--damasco", svgURL(`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="168" viewBox="0 0 120 168"><g fill="#ffd9ea" fill-opacity=".075"><path d="M60 22c9 13 21 22 21 40s-12 28-21 40c-9-12-21-22-21-40s12-27 21-40z"/><path d="M0 106c7 9 15 15 15 28s-8 21-15 30c-7-9-15-17-15-30s8-19 15-28zM120 106c7 9 15 15 15 28s-8 21-15 30c-7-9-15-17-15-30s8-19 15-28z"/></g><g fill="none" stroke="#ffd9ea" stroke-opacity=".07" stroke-width="2"><path d="M60 102c-5 16-18 24-31 24M60 102c5 16 18 24 31 24M60 22c-5-10-14-15-24-15M60 22c5-10 14-15 24-15"/><circle cx="60" cy="62" r="7"/></g></svg>`));
 
   // Motas de polvo flotando en la luz
@@ -2580,28 +2759,107 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   /* ---------- Carta ---------- */
   let cartaAbierta = false, saltar = false;
   $("#saltar").addEventListener("click", () => { saltar = true; });
-  function escribir(p, t){
+  // Sonidos de papel: el lacre que cruje, la hoja que se mueve y el lápiz sobre el papel
+  function ruidito(dur, frec, q, vol, tipo, curva){
+    try {
+      const a = audioCtx(), b = a.createBuffer(1, Math.max(1, Math.floor(a.sampleRate*dur)), a.sampleRate), d = b.getChannelData(0);
+      for(let i = 0; i < d.length; i++) d[i] = (Math.random()*2 - 1)*Math.pow(1 - i/d.length, curva || 2)*(curva === .5 ? .6 + .4*Math.sin(i/d.length*Math.PI*6) : 1);
+      const n = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+      f.type = tipo || "bandpass"; f.frequency.value = frec; f.Q.value = q || 1; g.gain.value = vol;
+      n.buffer = b; n.connect(f).connect(g).connect(master); n.start();
+    } catch(e){}
+  }
+  const crujeLacre = () => { ruidito(.09, 2600, .8, 1.1, "highpass", 3); setTimeout(() => ruidito(.06, 900, 1, .7, "bandpass", 3), 40); };
+  const papel = () => ruidito(.55, 1700, .5, .32, "bandpass", .5);
+  const lapiz = n => ruidito(Math.min(.35, .05 + n*.022), 3800, 2.5, .05, "bandpass", 1);
+
+  // Escrita a mano: cada palabra aparece como tinta fresca y la pluma la va siguiendo
+  function moverPluma(s, dur){
+    const pl = $("#pluma"), y = s.offsetTop + s.offsetHeight*.82 - 31;
+    pl.style.transition = "none"; pl.style.transform = `translate(${s.offsetLeft - 3}px,${y}px)`; void pl.offsetWidth;
+    pl.style.transition = `transform ${dur}s linear,opacity .4s`; pl.style.transform = `translate(${s.offsetLeft + s.offsetWidth - 3}px,${y}px)`;
+  }
+  // Si la escritura llega al borde de la pantalla, la página baja con ella
+  function seguirEscritura(s){
+    const r = s.getBoundingClientRect();
+    if(r.bottom > innerHeight - 70 && r.top > 0) scrollBy({top: Math.min(160, r.bottom - innerHeight*.6), behavior: reduce ? "auto" : "smooth"});
+  }
+  function escribirMano(p, t){
     return new Promise(res => {
-      if(reduce || saltar){ p.textContent = t; return res(); }
-      let i = 0;
-      (function pasoE(){
-        if(saltar){ p.textContent = t; return res(); }
-        i++; p.textContent = t.slice(0, i);
-        if(i < t.length) setTimeout(pasoE, /[.,;:]/.test(t[i-1]) ? 200 : 26); else res();
+      const pals = String(t).split(" ").filter(Boolean);
+      const spans = pals.map((w, k) => {
+        const s = document.createElement("span"); s.className = "escrita"; s.textContent = w; p.appendChild(s);
+        if(k < pals.length - 1) p.appendChild(document.createTextNode(" "));
+        return s;
+      });
+      const todas = () => { spans.forEach(s => s.classList.add("ya")); res(); };
+      if(reduce || saltar) return todas();
+      $("#pluma").classList.add("on");
+      let k = 0;
+      (function paso(){
+        if(saltar) return todas();
+        if(k >= spans.length) return res();
+        const s = spans[k++], dur = Math.max(.12, s.textContent.length*.045);
+        s.style.setProperty("--dur", dur + "s"); s.classList.add("tinta");
+        moverPluma(s, dur); lapiz(s.textContent.length);
+        if(k % 6 === 1) seguirEscritura(s);
+        setTimeout(paso, dur*1000 + (/[.,;:…!?]$/.test(s.textContent) ? 280 : 45));
       })();
     });
+  }
+  async function firmar(){
+    const f = $("#cartaFirma"), lineas = String(C.firma || "").split("\n"), nombre = lineas.pop() || "";
+    f.innerHTML = "";
+    if(lineas.length){ const l = document.createElement("span"); f.appendChild(l); await escribirMano(l, lineas.join(" ")); f.appendChild(document.createElement("br")); }
+    const n = document.createElement("span"); n.className = "nombre-firma"; n.textContent = nombre; f.appendChild(n);
+    f.insertAdjacentHTML("beforeend", `<svg class="corazon-firma" viewBox="0 0 34 30" aria-hidden="true"><path d="M17 27 C5 19 2 12 6 7 C10 3 15 5 17 9 C19 5 24 3 28 7 C32 12 29 19 17 27Z"/></svg>`);
+    const cor = f.querySelector(".corazon-firma");
+    if(reduce || saltar){ n.style.clipPath = "none"; cor.classList.add("dibuja"); }
+    else {
+      seguirEscritura(n);
+      n.classList.add("tinta"); moverPluma(n, 1.8); lapiz(14); setTimeout(() => lapiz(10), 900);
+      await esperar(1850);
+      cor.classList.add("dibuja"); await esperar(1000);
+    }
+    $("#pluma").classList.remove("on");
+    $("#cartaFlor").classList.add("on");
   }
   async function abrirCarta(){
     if(cartaAbierta) return; cartaAbierta = true;
     $("#cartaSello").hidden = true;
-    const el = $("#cartaEl"); el.hidden = false;
-    $("#cartaSaludo").textContent = C.saludo || "";
+    // Primero llega el sobre con su sello de lacre
+    const sc = $("#sobreCarta"), so = $("#sobreBtn");
+    $("#sobrePara").textContent = `Para ${C.nombre} ♥`;
+    sc.hidden = false;
+    sc.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "center"});
+    await new Promise(r => so.addEventListener("click", r, {once: true}));
+    so.disabled = true; sc.querySelector(".sobre-pista").style.visibility = "hidden";
+    so.classList.add("rompe"); crujeLacre();
+    const rl = so.querySelector(".lacre").getBoundingClientRect(); corazones(rl.left + rl.width/2, rl.top + rl.height/2, 16);
+    await esperar(reduce ? 0 : 480);
+    so.classList.add("abre"); papel();
+    await esperar(reduce ? 0 : 750);
+    so.classList.add("saca");
+    await esperar(reduce ? 0 : 950);
+    sc.classList.add("fuera");
+    await esperar(reduce ? 0 : 550);
+    sc.hidden = true;
+    // La carta se despliega y se escribe a mano
+    const el = $("#cartaEl"); el.hidden = false; papel();
+    const cf = C.cartaFoto;
+    if(cf && cf.foto){
+      const pol = $("#cartaPolaroid"), im = new Image();
+      im.alt = ""; im.src = miniDe(cf.foto); im.onerror = () => { im.onerror = null; im.src = cf.foto; };
+      pol.appendChild(im); pol.insertAdjacentHTML("beforeend", `<span>${esc(cf.pie || "")}</span>`); pol.hidden = false;
+    }
     el.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "start"});
-    await esperar(reduce ? 0 : 1100);
+    await esperar(reduce ? 0 : 1600);
+    await escribirMano($("#cartaSaludo"), C.saludo || "");
+    await esperar(saltar || reduce ? 0 : 450);
     const box = $("#cartaTexto");
-    for(const par of (C.carta || [])){ const p = document.createElement("p"); box.appendChild(p); await escribir(p, par); await esperar(saltar || reduce ? 0 : 380); }
+    for(const par of (C.carta || [])){ const p = document.createElement("p"); box.appendChild(p); await escribirMano(p, par); await esperar(saltar || reduce ? 0 : 420); }
     $("#saltar").hidden = true;
-    $("#cartaFirma").textContent = C.firma || ""; $("#cartaFirma").classList.add("on");
+    await firmar();
     await esperar(900);
     $("#unaMas").hidden = false;
   }
@@ -2626,6 +2884,121 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     notasMagicas(r.left + r.width/2, r.top + r.height/2, 30);
     confeti(160);
   });
+
+  /* ---------- Faroles de deseos ---------- */
+  const DESEOS = (C.deseos || []).filter(Boolean), cielo = $("#faroles");
+  let nFaroles = 0;
+  function soltarFarol(x, y, deseo, escala){
+    const el = document.createElement("span"), t = rnd(10, 14);
+    el.className = "farol"; el.style.left = x + "px"; el.style.top = y + "px";
+    el.style.setProperty("--t", t.toFixed(1) + "s");
+    ["--s1", "--s2", "--s3"].forEach(v => el.style.setProperty(v, rnd(-45, 45).toFixed(0) + "px"));
+    if(escala) el.style.scale = escala;
+    el.innerHTML = `<span class="farol-cuerpo"></span>${deseo ? `<span class="farol-deseo">${esc(deseo)}</span>` : ""}`;
+    cielo.appendChild(el);
+    setTimeout(() => el.remove(), t*1000 + 300);
+  }
+  $("#btnFaroles").addEventListener("click", () => {
+    cielo.hidden = false;
+    cielo.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "start"});
+    // Unos faroles lejanos ya van subiendo, para que se entienda qué hacer
+    for(let i = 0; i < 5; i++) setTimeout(() => soltarFarol(rnd(.1, .9)*cielo.clientWidth, cielo.clientHeight*rnd(.75, .95), "", rnd(.4, .6)), 700 + i*1100);
+  });
+  cielo.addEventListener("click", e => {
+    if(e.target.closest("button")) return;
+    const r = cielo.getBoundingClientRect();
+    soltarFarol(e.clientX - r.left, e.clientY - r.top, DESEOS.length ? DESEOS[nFaroles % DESEOS.length] : "");
+    try { sonarNota([72, 74, 76, 79, 81, 84][nFaroles % 6]); } catch(err){}
+    nFaroles++;
+    $("#farolesCuenta").textContent = `${nFaroles} ${nFaroles === 1 ? "deseo" : "deseos"} al cielo ✨`;
+    if(nFaroles >= 3) $("#btnCreditos").classList.add("on");
+  });
+
+  /* ---------- Créditos estilo VHS ---------- */
+  const cr = $("#creditos"), rollo = $("#crRollo");
+  let crToken = 0;
+  const MESES_VHS = ["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
+  function armarCreditos(){
+    rollo.innerHTML = "";
+    const cap1 = s => s.charAt(0).toUpperCase() + s.slice(1);
+    const bloque = (titulo, lineas) => {
+      const d = document.createElement("div"); d.className = "cr-bloque";
+      d.innerHTML = (titulo ? `<h4>${esc(titulo)}</h4>` : "") + lineas.map(l => `<p>${esc(l)}</p>`).join("");
+      rollo.appendChild(d);
+    };
+    // Entre los créditos pasan algunas fotos, como polaroids
+    const fotos = (C.momentos || []).filter(m => m.foto).filter((m, i) => i % 4 === 0).slice(0, 7);
+    let fi = 0;
+    const ponerFoto = () => {
+      const m = fotos[fi++]; if(!m) return;
+      const fg = document.createElement("figure"), im = new Image();
+      fg.className = "cr-foto"; im.alt = ""; im.src = miniDe(m.foto); im.onerror = () => { im.onerror = null; im.src = m.foto; };
+      fg.appendChild(im); fg.insertAdjacentHTML("beforeend", `<figcaption>${esc(m.pie || "")}</figcaption>`);
+      rollo.appendChild(fg);
+    };
+    (C.creditos || []).forEach((c, i) => {
+      if(c.vinilos){
+        const conAudio = VINILOS.filter((v, j) => estadoVin[j].ok);
+        const n = (conAudio.length ? conAudio : VINILOS).map(v => cap1(v.de));
+        if(n.length) bloque(c.titulo, n);
+      } else if(c.musica){
+        const n = (C.musicaEspera || []).map(m => m.nombre).filter(Boolean);
+        if(n.length) bloque(c.titulo, n);
+      } else bloque(c.titulo, [c.texto || ""]);
+      if(i % 2 === 1) ponerFoto();
+    });
+    ponerFoto();
+    rollo.insertAdjacentHTML("beforeend", `<div class="cr-fin"><b>Feliz cumpleaños, ${esc(C.nombre)}</b><span class="cr-palabra-fin">FIN</span></div>`);
+  }
+  async function verCreditos(){
+    const tk = ++crToken, sigue = () => tk === crToken;
+    armarCreditos();
+    const t = $("#crTitulo");
+    cr.classList.remove("limpio", "rebobina"); $("#crAcciones").classList.remove("on"); t.classList.remove("on");
+    rollo.style.transition = "none"; rollo.style.transform = "none";
+    const d = cumple || new Date();
+    $("#crOsd").textContent = "▶ PLAY";
+    $("#crFecha").innerHTML = `12:00 AM<br>${MESES_VHS[d.getMonth()]} ${dos(d.getDate())} ${d.getFullYear()}`;
+    cr.classList.add("on"); cr.setAttribute("aria-hidden", "false"); document.body.classList.add("locked");
+    estatica();
+    await esperar(1300); if(!sigue()) return;
+    cr.classList.add("limpio");
+    t.innerHTML = `<small>SARAVISIÓN</small><b>presenta</b>`; t.classList.add("on");
+    await esperar(2800); if(!sigue()) return;
+    t.classList.remove("on"); await esperar(1300); if(!sigue()) return;
+    t.innerHTML = `<small>UNA PELÍCULA SOBRE</small><b>${esc(C.nombre)}</b><span>${esc(C.edad || "")} años siendo la más increíble</span>`; t.classList.add("on");
+    await esperar(3600); if(!sigue()) return;
+    t.classList.remove("on"); await esperar(1200); if(!sigue()) return;
+    // Los créditos suben hasta que "FIN" queda en el centro
+    const fin = rollo.querySelector(".cr-palabra-fin");
+    const centro = fin.getBoundingClientRect().top - rollo.getBoundingClientRect().top + fin.offsetHeight/2;
+    const total = centro + innerHeight/2, dur = reduce ? 2 : total/55;
+    rollo.style.transition = `transform ${dur.toFixed(1)}s linear`; void rollo.offsetWidth;
+    rollo.style.transform = `translateY(${-total}px)`;
+    await esperar(dur*1000 + 300); if(!sigue()) return;
+    $("#crOsd").textContent = "■ STOP";
+    confeti(140); corazones(innerWidth/2, innerHeight/2, 24);
+    $("#crAcciones").classList.add("on");
+  }
+  function cerrarCreditos(){
+    crToken++;
+    cr.classList.remove("on", "rebobina"); cr.setAttribute("aria-hidden", "true"); document.body.classList.remove("locked");
+  }
+  // Rebobinar: la cinta vuelve al principio… y la página también
+  async function rebobinar(){
+    const tk = ++crToken;
+    $("#crAcciones").classList.remove("on"); $("#crOsd").textContent = "◀◀ REW";
+    cr.classList.add("rebobina"); estatica();
+    rollo.style.transform = "none";
+    await esperar(1600); if(tk !== crToken) return;
+    cerrarCreditos();
+    scrollTo({top: 0, behavior: reduce ? "auto" : "smooth"});
+  }
+  $("#btnCreditos").addEventListener("click", e => { e.stopPropagation(); verCreditos(); });
+  $("#crCerrar").addEventListener("click", cerrarCreditos);
+  $("#crSalir").addEventListener("click", cerrarCreditos);
+  $("#crRebobinar").addEventListener("click", rebobinar);
+  document.addEventListener("keydown", e => { if(e.key === "Escape" && cr.classList.contains("on")) cerrarCreditos(); });
 
   $("#pieFinal").textContent = `Hecho a mano por ${C.de}, para ${C.nombre}.`;
 
