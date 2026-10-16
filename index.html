@@ -988,21 +988,42 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .carta{position:relative;background-color:var(--papel);color:var(--tinta);font-family:var(--mano);font-size:clamp(23px,3.7vw,28px);line-height:40px;padding:50px clamp(22px,6vw,58px) 56px;
   background-image:linear-gradient(180deg,transparent 33%,rgba(120,90,50,.07) 33.2%,rgba(255,255,255,.5) 33.5%,transparent 34%,transparent 66%,rgba(120,90,50,.07) 66.2%,rgba(255,255,255,.5) 66.5%,transparent 67%),
     radial-gradient(130% 90% at 50% 40%,transparent 62%,rgba(150,110,60,.13)),repeating-linear-gradient(180deg,transparent 0 39px,rgba(59,43,79,.09) 39px 40px);
-  background-position:0 0,0 0,0 43px;box-shadow:0 30px 70px rgba(0,0,0,.55);
-  transform:rotate(-.6deg);transform-origin:top;animation:despliega 2s cubic-bezier(.3,.7,.3,1)}
+  background-position:0 0,0 0,0 43px;box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.carta-marco{position:relative;transform:rotate(-.6deg);transform-origin:50% 0}
+.carta-marco.llega{animation:cartaLlega .7s ease both}
+@keyframes cartaLlega{from{opacity:0}}
 /* Ya abierta, una luz cálida recorre el papel */
 .carta::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 30%,rgba(255,236,190,.55) 46%,transparent 62%) -160% 0/260% 100% no-repeat;opacity:0;mix-blend-mode:soft-light}
 .carta.abierta::after{animation:luzCarta 2.2s ease-out forwards}
 @keyframes luzCarta{0%{opacity:1;background-position:-160% 0}100%{opacity:1;background-position:260% 0}}
-/* Se despliega en sus tres dobleces, como una carta de verdad */
-@keyframes despliega{
-  0%{opacity:0;transform:rotate(-.6deg) perspective(900px) rotateX(-70deg) scaleY(.33);filter:brightness(.7)}
-  30%{opacity:1;transform:rotate(-.6deg) perspective(900px) rotateX(-35deg) scaleY(.36);filter:brightness(.85)}
-  60%{transform:rotate(-.6deg) perspective(900px) rotateX(-20deg) scaleY(.68);filter:brightness(.92)}
-  100%{opacity:1;transform:rotate(-.6deg) scaleY(1);filter:none}}
+/* Doblada en tres: primero solo se ve el tercio del medio; los pliegues se abren girando sobre su doblez */
+.carta.plegada{clip-path:inset(33.33% 0 33.33% 0)}
+.carta.medio{clip-path:inset(0 0 33.33% 0)}
+.pliegue{position:absolute;left:0;top:0;margin:0;pointer-events:none;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:none}
+.pliegue.sup{z-index:4;clip-path:inset(0 0 66.67% 0);transform-origin:50% 33.33%}
+.pliegue.inf{z-index:3;clip-path:inset(66.67% 0 0 0);transform-origin:50% 66.67%}
+.pliegue.dorso{background:linear-gradient(180deg,rgba(120,90,50,.08),transparent 40%),var(--papel)}
+.dorso-texto{position:absolute;left:0;right:0;top:0;height:33.33%;display:grid;place-items:center;transform:rotate(180deg);font:600 clamp(34px,9vw,52px)/1 var(--mano);color:#9a5a6e}
+.pliegue.sup.frente{transform:perspective(1600px) rotateX(-180deg)}
+.pliegue.sup.dorso{transform:perspective(1600px) rotateX(-180deg) rotateY(180deg)}
+.pliegue.inf.frente{transform:perspective(1600px) rotateX(180deg)}
+.pliegue.inf.dorso{transform:perspective(1600px) rotateX(180deg) rotateY(180deg)}
+.pliegue.abre{animation:var(--anim) 1.05s cubic-bezier(.45,.05,.3,1) forwards}
+.pliegue.sup.frente{--anim:abreSupF} .pliegue.sup.dorso{--anim:abreSupD} .pliegue.inf.frente{--anim:abreInfF} .pliegue.inf.dorso{--anim:abreInfD}
+@keyframes abreSupF{to{transform:perspective(1600px) rotateX(0)}}
+@keyframes abreSupD{to{transform:perspective(1600px) rotateX(0) rotateY(180deg)}}
+@keyframes abreInfF{to{transform:perspective(1600px) rotateX(0)}}
+@keyframes abreInfD{to{transform:perspective(1600px) rotateX(0) rotateY(180deg)}}
+/* Sombra del pliegue mientras gira */
+.pliegue::before{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:rgba(60,35,10,.4);opacity:0}
+.pliegue.frente.abre::before{animation:sombraF 1.05s ease forwards}
+.pliegue.dorso.abre::before{animation:sombraD 1.05s ease forwards}
+@keyframes sombraF{0%,40%{opacity:.7}100%{opacity:0}}
+@keyframes sombraD{0%{opacity:0}60%,100%{opacity:.7}}
 .carta p{margin:0 0 40px}
 .carta .saludo{font-size:1.25em;font-weight:600}
-.carta-polaroid{position:absolute;top:-46px;right:-10px;width:clamp(92px,22vw,128px);padding:7px 7px 24px;background:#fff;box-shadow:0 8px 16px rgba(0,0,0,.35);transform:rotate(7deg);z-index:2;opacity:0;animation:pega .8s cubic-bezier(.3,1.4,.5,1) 1.4s forwards}
+.carta-polaroid{position:absolute;top:-46px;right:-10px;width:clamp(92px,22vw,128px);padding:7px 7px 24px;background:#fff;box-shadow:0 8px 16px rgba(0,0,0,.35);transform:rotate(7deg);z-index:2;opacity:0}
+.carta.abierta .carta-polaroid{animation:pega .8s cubic-bezier(.3,1.4,.5,1) .5s forwards}
 .carta-polaroid img{display:block;width:100%;aspect-ratio:1;object-fit:cover;filter:sepia(.15) saturate(.95)}
 .carta-polaroid::before{content:"";position:absolute;top:-10px;left:50%;width:58px;height:20px;margin-left:-29px;background:rgba(238,143,174,.55);transform:rotate(-4deg);box-shadow:0 1px 2px rgba(0,0,0,.1)}
 @keyframes pega{from{opacity:0;transform:rotate(18deg) scale(1.3) translateY(-20px)}to{opacity:1;transform:rotate(7deg)}}
@@ -1420,6 +1441,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       </button>
       <p class="sobre-pista">Toca el sello para abrirla</p>
     </div>
+    <div class="carta-marco" id="cartaMarco">
     <article class="carta" id="cartaEl" hidden>
       <figure class="carta-polaroid" id="cartaPolaroid" hidden></figure>
       <p class="saludo" id="cartaSaludo"></p>
@@ -1431,6 +1453,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
         <g transform="translate(40 40)" opacity=".9"><g fill="#f2a7bf"><ellipse rx="8" ry="15" transform="rotate(0) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(72) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(144) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(216) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(288) translate(0 -13)"/></g><circle r="6" fill="#f5c97a"/></g>
       </svg>
     </article>
+    </div>
     <div class="una-mas" id="unaMas" hidden>
       <p>Una última cosa…</p>
       <button class="btn" id="btnMedalla" type="button">Ábrela</button>
@@ -3047,6 +3070,53 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       pol.innerHTML = ""; pol.appendChild(im); pol.hidden = false;
     }
   }
+  // Doblada en tres, se ve completa y pequeña; abre el pliegue de arriba, luego el de abajo, y crece hasta leerse
+  async function desdoblar(el){
+    const marco = $("#cartaMarco"), h = el.offsetHeight, vh = innerHeight;
+    if(reduce){ el.scrollIntoView({block: "start"}); return; }
+    // La cámara: la carta doblada se ve grande y se va alejando a medida que se abre, siempre centrada
+    const encuadrar = (s, centro, suave) => {
+      marco.style.transition = suave ? "transform 1.05s cubic-bezier(.45,.05,.3,1)" : "none";
+      marco.style.transform = `rotate(-.6deg) scale(${Math.min(1, s).toFixed(3)})`;
+      const top = scrollY + marco.getBoundingClientRect().top;
+      scrollTo({top: top + centro*Math.min(1, s) - vh/2, behavior: suave ? "smooth" : "auto"});
+    };
+    // (sin el ajuste automático del navegador, para que nada corra la carta mientras se abre)
+    document.documentElement.style.overflowAnchor = "none";
+    el.classList.add("plegada");
+    encuadrar(.5*vh/(h/3), h/2, false);
+    const pliegue = (parte, cara) => {
+      const c = cara === "frente" ? el.cloneNode(true) : document.createElement("div");
+      if(cara === "frente"){
+        c.removeAttribute("id"); c.querySelectorAll("[id]").forEach(n => n.removeAttribute("id"));
+        c.querySelectorAll(".carta-polaroid,.carta-flor").forEach(n => n.remove()); c.hidden = false;
+      } else if(parte === "sup") c.innerHTML = `<span class="dorso-texto">Para ${esc(C.nombre)} ♥</span>`;
+      c.className = (cara === "frente" ? "carta " : "") + `pliegue ${parte} ${cara}`;
+      c.style.width = el.offsetWidth + "px"; c.style.height = h + "px";
+      marco.appendChild(c); return c;
+    };
+    const sup = [pliegue("sup", "frente"), pliegue("sup", "dorso")], inf = [pliegue("inf", "frente"), pliegue("inf", "dorso")];
+    marco.classList.remove("llega"); void marco.offsetWidth; marco.classList.add("llega");
+    await esperar(200); encuadrar(.5*vh/(h/3), h/2, false);
+    await esperar(800);
+    // El pliegue de arriba se levanta…
+    papel(); sup.forEach(p => p.classList.add("abre")); encuadrar(.6*vh/(2*h/3), h/3, true);
+    await esperar(520); el.classList.replace("plegada", "medio");
+    await esperar(560); sup.forEach(p => p.remove());
+    await esperar(250);
+    // …y luego baja el de abajo
+    papel(); inf.forEach(p => p.classList.add("abre")); encuadrar(.74*vh/h, h/2, true);
+    await esperar(520); el.classList.remove("medio");
+    await esperar(560); inf.forEach(p => p.remove());
+    try { [72, 76, 79].forEach((m, i) => setTimeout(() => sonarNota(m), i*120)); } catch(e){}
+    await esperar(400);
+    // Ya abierta, crece hasta el tamaño para leerla
+    marco.style.transition = "transform 1.4s cubic-bezier(.3,.7,.2,1)"; marco.style.transform = "";
+    const arriba = scrollY + marco.getBoundingClientRect().top - 50;
+    scrollTo({top: arriba, behavior: "smooth"});
+    await esperar(1400);
+    marco.style.transition = ""; document.documentElement.style.overflowAnchor = "";
+  }
   async function abrirCarta(){
     if(cartaAbierta) return; cartaAbierta = true;
     $("#cartaSello").hidden = true;
@@ -3069,9 +3139,8 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     await esperar(reduce ? 0 : 550);
     sc.hidden = true;
     // La carta se desdobla ya escrita, pliegue por pliegue
-    const el = $("#cartaEl"); el.hidden = false; papel(); setTimeout(papel, 700);
-    el.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "start"});
-    await esperar(reduce ? 0 : 2000);
+    const el = $("#cartaEl"); el.hidden = false;
+    await desdoblar(el);
     el.classList.add("abierta");
     $("#cartaFirma .corazon-firma").classList.add("dibuja");
     await esperar(reduce ? 0 : 900);
