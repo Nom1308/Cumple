@@ -446,8 +446,11 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 @keyframes asoma{from{opacity:0;transform:translateY(7px)}}
 /* La portada vuela desde la caja hasta su lugar */
 .vuelo-portada{position:fixed;z-index:9999;pointer-events:none;border-radius:4px;box-shadow:0 22px 44px rgba(0,0,0,.55);animation:vuela .85s cubic-bezier(.3,.7,.3,1) both}
+.caja-fantasma{position:fixed;z-index:9998;pointer-events:none;margin:0;text-align:center;animation:desvanece .45s ease-out forwards}
+@keyframes desvanece{to{opacity:0;transform:translateY(14px)}}
+.vin-sonando.aparece .vin-info{animation:asoma .5s ease-out .2s backwards}
 @keyframes vuela{
-  from{transform:perspective(900px) translate(var(--dx),var(--dy)) scale(var(--sx),var(--sy)) rotateY(80deg);filter:brightness(.75)}
+  from{transform:perspective(900px) translate(var(--dx),var(--dy)) scale(var(--sx),var(--sy)) rotateY(0deg);filter:brightness(.9)}
   62%{transform:perspective(900px) translate(calc(var(--dx)*.35),calc(var(--dy)*.35 - 50px)) scale(1.18) rotateY(-14deg);filter:brightness(1.08)}
   to{transform:perspective(900px) translate(0,0) scale(1) rotateY(0);filter:none}}
 .vuelo-portada svg{display:block;width:100%;height:100%;border-radius:4px}
@@ -457,7 +460,6 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .lomo.nuevo::after{content:"";position:absolute;top:-4px;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:#ff86ad;box-shadow:0 0 7px #ff86ad}
 .lomo.falta{opacity:.5}
 .lomo.proximo{background:rgba(195,181,240,.12);box-shadow:inset 0 0 0 2px rgba(185,166,220,.6);color:#cbbde6;filter:none;animation:respira 2.6s ease-in-out infinite}
-.lomo.sacando{--y:-125%;opacity:0;transition:transform .45s cubic-bezier(.5,0,.8,.4),opacity .45s ease-in}
 .lomo:focus-visible{outline:2px solid #f5c97a;outline-offset:2px}
 .estante-nombre{font-family:var(--mano);font-size:28px;line-height:1.1;margin:14px 0 2px;color:#c9567d;min-height:1.1em}
 .estante-para{font-size:14px;color:#6a5a7a;margin:0 0 12px;min-height:1.4em}
@@ -1537,7 +1539,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     if(panelVin.classList.contains("on") && $("#vinSonando").hidden) pintarListaVin();
   }
   // La caja de discos: se ven los lomos y el elegido se asoma un poco
-  let tarjetasRoc = [], iRoc = -1, sacando = false, entraT = 0;
+  let tarjetasRoc = [], iRoc = -1, entraT = 0, altoT = 0;
   function clac(){
     try {
       const a = audioCtx(), b = a.createBuffer(1, Math.floor(a.sampleRate*.05), a.sampleRate), d = b.getChannelData(0);
@@ -1574,10 +1576,22 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   // El disco elegido sube y sale de la caja; la portada vuela a su lugar y suena en el tocadiscos
   function sacarVinilo(k){
     const t = tarjetasRoc[k];
-    if(!t || t.j < 0 || sacando) return;
+    if(!t || t.j < 0) return;
     if(reduce || !estadoVin[t.j].ok){ ponerVinilo(t.j); return; }
-    sacando = true; t.el.classList.add("sacando");
-    setTimeout(() => { sacando = false; ponerVinilo(t.j, t.el.getBoundingClientRect()); }, 260);
+    ponerVinilo(t.j, t.el.getBoundingClientRect());
+  }
+  // Una copia de la caja se queda encima y se desvanece, para que el cambio no sea de golpe
+  function desvanecerCaja(){
+    const l = $("#vinLista"), r = l.getBoundingClientRect(), cs = getComputedStyle(l);
+    if(!r.width) return;
+    const g = l.cloneNode(true);
+    g.removeAttribute("id"); g.querySelectorAll("[id]").forEach(n => n.removeAttribute("id"));
+    const sel = g.querySelector(".lomo.sel"); if(sel) sel.style.visibility = "hidden";
+    g.querySelectorAll(".entrando").forEach(n => n.classList.remove("entrando"));
+    g.className = "caja-fantasma";
+    Object.assign(g.style, {left: r.left + "px", top: r.top + "px", width: r.width + "px", color: cs.color, fontFamily: cs.fontFamily});
+    document.body.appendChild(g);
+    g.addEventListener("animationend", () => g.remove()); setTimeout(() => g.remove(), 700);
   }
   function volarPortada(v, desde, listo){
     const tapa = $("#vinTapa"), svg = tapa.querySelector("svg"), r = svg && svg.getBoundingClientRect();
@@ -1640,7 +1654,6 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   };
   listaVin.addEventListener("pointerdown", e => { rocX = e.clientX; });
   listaVin.addEventListener("pointermove", e => {
-    if(sacando) return;
     const arrastra = rocX !== null && Math.abs(e.clientX - rocX) > 8;
     if(e.pointerType !== "mouse" && !arrastra) return;
     if(arrastra) rocDeslizo = Date.now();
@@ -1679,9 +1692,21 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     $("#vinTapa").innerHTML = portadaVinilo(v); $("#vinTapa").style.setProperty("--lc", v.color || "#f4a6bd");
     $("#vinDe").textContent = `De ${v.de}`; $("#vinPara").textContent = `para ${C.nombre} ♥`;
     $("#vinPausa").textContent = "Pausa"; $("#vinBarra").style.width = "0%";
+    const hoja = $(".vinilos-hoja"), alto0 = hoja.offsetHeight;
+    if(desde && !reduce && !$("#vinLista").hidden) desvanecerCaja();
     $("#vinLista").hidden = true; const s = $("#vinSonando"); s.hidden = false; s.classList.remove("afuera");
     const salir = () => requestAnimationFrame(() => requestAnimationFrame(() => s.classList.add("afuera")));
-    if(desde && !reduce) volarPortada(v, desde, salir); else salir();
+    if(desde && !reduce){
+      // La portada vuela a donde quedará al final; mientras, la hoja cambia de alto con suavidad
+      volarPortada(v, desde, salir);
+      const alto1 = hoja.offsetHeight;
+      s.classList.remove("aparece"); void s.offsetWidth; s.classList.add("aparece");
+      if(alto0 !== alto1){
+        hoja.style.height = alto0 + "px"; void hoja.offsetHeight;
+        hoja.style.transition = "height .5s cubic-bezier(.3,.7,.3,1)"; hoja.style.height = alto1 + "px";
+        clearTimeout(altoT); altoT = setTimeout(() => { hoja.style.height = hoja.style.transition = ""; }, 560);
+      }
+    } else salir();
     const r = tocadiscos.getBoundingClientRect(); corazones(r.left + r.width*.45, r.top + r.height*.2, 14);
     const paso = () => { if(vozActual !== j) return; const d = e.a.duration; $("#vinBarra").style.width = (d ? e.a.currentTime/d*100 : 0).toFixed(1) + "%"; rafVoz = requestAnimationFrame(paso); };
     cancelAnimationFrame(rafVoz); rafVoz = requestAnimationFrame(paso);
