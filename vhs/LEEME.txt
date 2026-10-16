@@ -1,0 +1,4 @@
+Aquí va el video secreto del VHS, con el nombre: secreto.mp4
+
+Sale en el canal 15 de la tele cuando Sara encuentra todos los corazoncitos escondidos en el cuarto.
+Mientras no esté, el canal 15 muestra el video de "videos/juntos.mp4".

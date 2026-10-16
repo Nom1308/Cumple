@@ -47,8 +47,9 @@ const CONFIG = {
     { x: 232, y: 1466, texto: "Decoré este cuarto pensando en ti en cada detalle." },
     { x: 962, y: 1462, texto: "El domingo tengo algo para ti… 🎁" }
   ],
-  // El premio por encontrar todos los secretos. Pon el video en la carpeta "videos" con este nombre.
-  videoSecreto: "videos/secreto.mp4",
+  // El premio por encontrar todos los secretos: aparece una cinta en el VHS de abajo de la tele y el video
+  // sale en el canal 15. Pon el video en la carpeta "vhs" con este nombre.
+  videoSecreto: "vhs/secreto.mp4",
 
   // Los regalos del cuarto se abren desde esta fecha, y adentro hay vales.
   regalos: {
@@ -254,7 +255,7 @@ button{font:inherit;cursor:pointer;color:inherit}
 /* ---------- Portada: la tele vieja ---------- */
 #portada{position:fixed;inset:0;z-index:50;background:#1b1330;transition:opacity 1s ease,visibility 1s;overflow:hidden}
 #portada.fuera{opacity:0;visibility:hidden}
-.tv{position:absolute;left:290px;bottom:414px;width:420px;z-index:4}
+.tv{position:absolute;left:290px;bottom:460px;width:420px;z-index:4}
 .antena-base{position:absolute;bottom:100%;left:50%;width:58px;height:20px;margin:0 0 -2px -29px;border-radius:29px 29px 4px 4px;
   background:radial-gradient(circle at 40% 30%,#6b4a32,#2b1a10 70%);box-shadow:inset 0 -3px 0 #c9a25a,0 2px 4px rgba(0,0,0,.4)}
 .antena{position:absolute;bottom:100%;left:50%;width:4px;height:96px;margin:0 0 6px -2px;border-radius:2px;transform-origin:50% 100%;
@@ -308,6 +309,15 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .tv-foco{position:absolute;left:4.5%;right:3%;top:4%;bottom:10%;pointer-events:none}
 .barras-prueba{position:absolute;inset:0;background:linear-gradient(90deg,#c0c0c0 0 14.3%,#c0c000 14.3% 28.6%,#00c0c0 28.6% 42.9%,#00c000 42.9% 57.1%,#c000c0 57.1% 71.4%,#c00000 71.4% 85.7%,#0000c0 85.7%);filter:saturate(.7) brightness(.85)}
 .barras-prueba::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;background:linear-gradient(90deg,#0000c0 0 14.3%,#111 14.3% 28.6%,#c000c0 28.6% 42.9%,#111 42.9% 57.1%,#00c0c0 57.1% 71.4%,#111 71.4% 85.7%,#c0c0c0 85.7%)}
+/* Canal 15: la cinta VHS se ve dentro de la tele */
+.canal video{display:none;width:100%;height:100%;object-fit:cover;background:#000;filter:saturate(1.1) contrast(1.05)}
+.tv.en-vhs .canal video{display:block}
+.tv.en-vhs .canal img,.tv.en-vhs .canal .barras-prueba{display:none}
+.tv.en-vhs .canal::before{content:"";position:absolute;left:0;right:0;top:-12%;height:7%;z-index:1;pointer-events:none;background:linear-gradient(transparent,rgba(255,255,255,.16) 40%,rgba(255,255,255,.05) 60%,transparent);animation:tracking 7s linear infinite}
+@keyframes tracking{0%,62%{top:-12%}100%{top:110%}}
+.tv.en-canal.en-vhs .osd.reloj{opacity:1;animation:osdPlay 3.5s forwards}
+.tv.en-canal.en-vhs.vhs-pausa .osd.reloj{animation:none;opacity:1}
+@keyframes osdPlay{0%,78%{opacity:1}100%{opacity:0}}
 .tv.cambiando #ruido{opacity:1!important;transition:none}
 .tv.cambiando .canal,.tv.cambiando .escena-tv{opacity:0}
 .tv.cambiando .pantalla{animation:saltoCanal .3s steps(3)}
@@ -567,13 +577,42 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .secreto.recien{animation:revelaSecreto 1s cubic-bezier(.2,.9,.3,1.4),brillaSecreto 2.4s ease-in-out 1s infinite}
 @keyframes revelaSecreto{0%{opacity:0;transform:scale(.2)}50%{opacity:1;transform:scale(2.2);text-shadow:0 0 30px #fff,0 0 50px #f5c97a}100%{transform:scale(1)}}
 @keyframes brillaSecreto{50%{transform:scale(1.15);text-shadow:0 0 16px rgba(245,201,122,1),0 0 32px rgba(238,143,174,.9)}}
-/* Video secreto */
-.video-secreto{position:absolute;inset:0;z-index:9;display:grid;place-items:center;padding:56px 16px 24px;background:rgba(8,5,16,.93);opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
-.video-secreto.on{opacity:1;visibility:visible}
-.vs-marco{background:linear-gradient(170deg,#fffdf8,#f4ecdf);padding:12px 12px 0;box-shadow:0 24px 70px rgba(0,0,0,.6);transform:rotate(-1deg);max-width:100%}
-.vs-marco video{display:block;max-width:min(calc(100vw - 56px),860px);max-height:66vh;background:#000}
-.vs-pie{margin:0;padding:12px 6px 16px;text-align:center;font-family:var(--mano);font-size:26px;line-height:1.1;color:#c9567d}
-.vs-cerrar{position:absolute;top:12px;right:12px;font-size:30px}
+/* Reproductor VHS bajo la tele: vacío (12:00 parpadeando) hasta encontrar todos los secretos */
+.vhs{position:absolute;left:330px;top:1040px;width:340px;height:46px;z-index:4;border:0;padding:0;cursor:pointer;border-radius:5px 5px 3px 3px;-webkit-tap-highlight-color:transparent;
+  background:linear-gradient(rgba(255,255,255,.14),transparent 30%,rgba(0,0,0,.28)),linear-gradient(90deg,#222226,#3b3b41 50%,#222226);
+  box-shadow:0 6px 10px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 0 rgba(0,0,0,.4);transition:box-shadow 1s,filter .3s}
+.vhs-ranura{position:absolute;left:18px;top:9px;width:150px;height:20px;border-radius:2px;background:#0b0b0d;box-shadow:inset 0 2px 4px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.12);perspective:120px}
+.vhs-tapa{position:absolute;inset:2px;border-radius:1px;background:linear-gradient(#303036,#1a1a1d);transform-origin:50% 0;transition:transform .35s ease}
+.vhs.abriendo .vhs-tapa{transform:rotateX(-75deg)}
+.vhs-pantalla{position:absolute;left:178px;top:10px;width:80px;height:18px;border-radius:2px;background:#06100c;box-shadow:inset 0 0 6px rgba(0,0,0,.9);
+  font:18px/18px "VT323",ui-monospace,monospace;color:#5dffb0;text-shadow:0 0 6px rgba(93,255,176,.8);text-align:center;letter-spacing:.06em;white-space:nowrap}
+.vhs:not(.lista) .vhs-pantalla{animation:doceEnPunto 1s steps(1) infinite}
+@keyframes doceEnPunto{50%{opacity:.12}}
+.vhs-botones{position:absolute;right:14px;top:13px;display:flex;gap:5px}
+.vhs-botones i{width:11px;height:8px;border-radius:2px;background:linear-gradient(#5a5a61,#2a2a2e);box-shadow:0 1px 0 rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.2)}
+.vhs-marca{position:absolute;left:19px;bottom:4px;font:600 7px/1 system-ui,sans-serif;letter-spacing:.3em;color:rgba(255,255,255,.4)}
+.vhs-led{position:absolute;right:16px;bottom:6px;width:5px;height:5px;border-radius:50%;background:#3a0d0d;transition:background .4s,box-shadow .4s}
+.vhs.lista{box-shadow:0 6px 10px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 0 rgba(0,0,0,.4),0 0 22px rgba(255,205,130,.3)}
+.vhs.lista .vhs-led{background:#ff4a4a;box-shadow:0 0 7px #ff4a4a}
+@media (hover:hover){ .vhs:hover{filter:brightness(1.18)} }
+/* La cinta: aparece brillando frente a la tele y entra en la ranura */
+.casete{position:absolute;left:338px;top:880px;width:170px;height:100px;z-index:8;border-radius:6px;opacity:0;pointer-events:none;
+  background:linear-gradient(rgba(255,255,255,.1),transparent 25%),linear-gradient(#2c2c31,#141416);box-shadow:inset 0 0 0 2px #404047,0 12px 26px rgba(0,0,0,.6)}
+.casete-etiqueta{position:absolute;left:10px;right:10px;top:8px;height:38px;border-radius:2px;display:grid;place-content:center;text-align:center;
+  background:repeating-linear-gradient(transparent 0 11px,rgba(201,86,125,.18) 11px 12px),#fbf6e8;font:600 21px/1 var(--mano);color:#c9567d}
+.casete-etiqueta small{display:block;font:600 11px/1.2 var(--mano);color:#7a6a8a;letter-spacing:.04em}
+.casete-ventana{position:absolute;left:36px;right:36px;bottom:12px;height:32px;border-radius:5px;background:#0c0c0e;box-shadow:inset 0 0 0 2px #2a2a2e;display:flex;justify-content:space-between;align-items:center;padding:0 8px}
+.casete-ventana i{width:24px;height:24px;border-radius:50%;background:repeating-conic-gradient(#eee 0 10deg,#777 10deg 60deg);box-shadow:0 0 0 4px #5a3a22,0 0 0 6px #2a1a10}
+.casete.llega{animation:caseteLlega 3.2s cubic-bezier(.35,.1,.3,1) forwards}
+.casete.llega .casete-ventana i{animation:giraCarrete 1s linear infinite}
+@keyframes giraCarrete{to{transform:rotate(-360deg)}}
+@keyframes caseteLlega{
+  0%{opacity:0;transform:translateY(-70px) scale(.35) rotate(-14deg);filter:brightness(2.2) drop-shadow(0 0 34px #ffd98a)}
+  30%{opacity:1;transform:translateY(0) scale(1.12) rotate(4deg);filter:brightness(1.25) drop-shadow(0 0 26px #ffd98a)}
+  45%{transform:translateY(-10px) scale(1.05) rotate(-2deg)}
+  58%{transform:translateY(-4px) scale(1) rotate(0);filter:brightness(1.1) drop-shadow(0 0 16px #ffd98a)}
+  84%{opacity:1;transform:translateY(127px) scale(.88);filter:none}
+  100%{opacity:0;transform:translateY(129px) scale(.88,.1);filter:none}}
 /* Medianoche en vivo */
 .cuenta-grande{position:absolute;inset:0;z-index:7;display:grid;place-items:center;pointer-events:none}
 .cuenta-grande span{display:block;font:italic 700 min(52vw,320px)/1 var(--serif);padding:0 .1em;color:transparent;
@@ -882,6 +921,13 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       <button class="cajon d" id="cajonD" type="button" aria-label="Abrir el cajón de la derecha"><span class="interior" aria-hidden="true"></span></button>
       <span class="pata i" aria-hidden="true"></span><span class="pata d" aria-hidden="true"></span>
     </div>
+    <button class="vhs" id="vhs" type="button" aria-label="Reproductor VHS">
+      <span class="vhs-ranura" aria-hidden="true"><span class="vhs-tapa"></span></span>
+      <span class="vhs-pantalla" id="vhsPantalla" aria-hidden="true">12:00</span>
+      <span class="vhs-botones" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="vhs-marca" aria-hidden="true">VIDEO · VHS</span>
+      <span class="vhs-led" aria-hidden="true"></span>
+    </button>
     <div class="tv" id="tv">
       <span class="antena-base" aria-hidden="true"></span><span class="antena izq" aria-hidden="true"></span><span class="antena der" aria-hidden="true"></span>
       <div class="tv-cuerpo">
@@ -895,7 +941,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
               <span class="sello">♥</span>
             </span>
           </span>
-          <span class="canal" aria-hidden="true"><img id="canalImg" alt=""><span class="barras-prueba" id="canalBarras"></span></span>
+          <span class="canal" aria-hidden="true"><img id="canalImg" alt=""><span class="barras-prueba" id="canalBarras"></span><video id="canalVideo" playsinline preload="none"></video></span>
           <canvas id="ruido" aria-hidden="true"></canvas>
           <span class="lineas" aria-hidden="true"></span><span class="barra-roll" aria-hidden="true"></span><span class="vidrio" aria-hidden="true"></span>
           <span class="osd ch" id="osdCh">CH 19</span>
@@ -907,12 +953,9 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       </div>
       <span class="patas" aria-hidden="true"></span>
     </div>
+    <span class="casete" id="casete" aria-hidden="true"><span class="casete-etiqueta">Para Sara ♥<small>no borrar · CH 15</small></span><span class="casete-ventana"><i></i><i></i></span></span>
    </div>
    <div class="motas" id="motas" aria-hidden="true"></div>
-   <div class="video-secreto" id="videoSecreto" role="dialog" aria-label="Video secreto">
-     <div class="vs-marco"><video id="vsVideo" playsinline controls preload="none"></video><p class="vs-pie">Para la detective más increíble ♥</p></div>
-     <button class="vbtn vs-cerrar" id="vsCerrar" type="button" aria-label="Cerrar">×</button>
-   </div>
    <div class="cuenta-grande" id="cuentaGrande" aria-live="assertive"></div>
    <div class="destello-cuarto" id="destelloCuarto" aria-hidden="true"></div>
    <div class="aviso-cuarto" id="avisoCuarto">
@@ -1348,10 +1391,11 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     enfocar(el, .3, .2, .33, 2.4);
     const completos = hallados.size === SECRETOS.length, todos = nuevo && completos;
     $("#detTitulo").textContent = todos ? "¡Eres la más increíble detective!" : `Secreto ${hallados.size} de ${SECRETOS.length}`;
-    if(todos) $("#detTexto").innerHTML = `${esc(SECRETOS[i].texto)}<br><br>Encontraste los ${SECRETOS.length} secretos, y por eso tienes un premio:`;
+    if(todos) $("#detTexto").innerHTML = `${esc(SECRETOS[i].texto)}<br><br>Encontraste los ${SECRETOS.length} secretos… y algo se desbloqueó debajo de la tele 📼`;
     else $("#detTexto").textContent = SECRETOS[i].texto;
     $("#detFoto").hidden = true; $("#detFoto").innerHTML = "";
     $("#detVideo").hidden = !(completos && C.videoSecreto);
+    $("#detVideo").textContent = vhsVisto ? "Ir al canal 15 ▶" : "Ver qué se desbloqueó 📼";
     const r = el.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, nuevo ? 22 : 8);
     if(todos){ setTimeout(() => confeti(200), 700); setTimeout(() => notasMagicas(innerWidth/2, innerHeight*.5, 24), 1100); }
     clearTimeout(detT); detT = setTimeout(() => detalle.classList.add("on"), reduce ? 0 : 650);
@@ -1383,26 +1427,100 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     clearTimeout(detT); detT = setTimeout(() => detalle.classList.add("on"), reduce ? 0 : 750);
   }
 
-  // Video secreto: el premio por encontrar todos los secretos
-  const vsCaja = $("#videoSecreto"), vsVideo = $("#vsVideo");
-  let musicaAntesVideo = false;
-  vsVideo.addEventListener("error", () => { if(!vsVideo.dataset.respaldo){ vsVideo.dataset.respaldo = "1"; vsVideo.src = "videos/juntos.mp4"; vsVideo.play().catch(() => {}); } });
-  function abrirVideoSecreto(){
-    pararVoz(true); musicaAntesVideo = esperaSonando; quitarEspera();
-    if(!vsVideo.getAttribute("src")) vsVideo.src = C.videoSecreto;
-    vsCaja.classList.add("on");
-    try { vsVideo.currentTime = 0; } catch(e){}
-    vsVideo.play().catch(() => {});
-    confeti(80);
+  // El VHS de abajo de la tele: vacío hasta encontrar todos los secretos. Entonces llega una cinta
+  // que se mete sola en la ranura, y el video secreto sale en el canal 15 de la tele.
+  const vhs = $("#vhs"), casete = $("#casete"), vhsVideo = $("#canalVideo");
+  const CANAL_VHS = {num: 15, vhs: true, texto: "Solo para detectives"};
+  const vhsListo = () => !!C.videoSecreto && SECRETOS.length > 0 && hallados.size === SECRETOS.length;
+  let vhsVisto = !!leer("vhs-visto", false), animandoVhs = false, musicaAntesVhs = false;
+  const vhsAbierto = () => vhsListo() && vhsVisto;
+  function pintarVhs(){
+    vhs.classList.toggle("lista", vhsAbierto());
+    $("#vhsPantalla").textContent = vhsAbierto() ? "▶ CH15" : "12:00";
   }
-  function cerrarVideoSecreto(){
-    vsVideo.pause(); vsCaja.classList.remove("on");
-    if(musicaAntesVideo){ musicaAntesVideo = false; esperaPausada = false; ponerEspera(); }
+  pintarVhs();
+  vhsVideo.addEventListener("error", () => { if(vhsVideo.dataset.respaldo || !vhsVideo.getAttribute("src")) return; vhsVideo.dataset.respaldo = "1"; vhsVideo.src = "videos/juntos.mp4"; if(canal === 15) reproducirVhs(); });
+  vhsVideo.addEventListener("playing", () => {
+    if(!tv.classList.contains("en-vhs")) return;
+    tv.classList.remove("vhs-pausa"); $("#osdReloj").textContent = "▶ PLAY";
+  });
+  vhsVideo.addEventListener("ended", () => {
+    tv.classList.add("vhs-pausa"); $("#osdReloj").textContent = "FIN ♥";
+    const r = pantalla.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, 30);
+  });
+  function reproducirVhs(){
+    if(!vhsVideo.getAttribute("src")) vhsVideo.src = C.videoSecreto;
+    pararVoz(true);
+    if(esperaSonando){ musicaAntesVhs = true; quitarEspera(); }
+    tv.classList.remove("vhs-pausa"); $("#osdReloj").textContent = "▶ PLAY";
+    // Si el navegador no deja que suene solo, queda en pausa esperando un toque
+    // (si falla porque falta el archivo, entra el video de respaldo y no cuenta como bloqueo)
+    vhsVideo.play().catch(err => {
+      if(!err || err.name !== "NotAllowedError") return;
+      tv.classList.add("vhs-pausa"); $("#osdReloj").textContent = "▶ TOCA AQUÍ";
+    });
   }
-  $("#detVideo").addEventListener("click", e => { e.stopPropagation(); abrirVideoSecreto(); });
-  $("#vsCerrar").addEventListener("click", e => { e.stopPropagation(); cerrarVideoSecreto(); });
-  vsCaja.addEventListener("click", e => { e.stopPropagation(); if(e.target === vsCaja) cerrarVideoSecreto(); });
-  vsVideo.addEventListener("ended", () => { corazones(innerWidth/2, innerHeight*.45, 30); });
+  function pausarVhs(){
+    vhsVideo.pause(); tv.classList.add("vhs-pausa"); $("#osdReloj").textContent = "❚❚ PAUSA";
+  }
+  // Al salir del canal 15 la cinta se detiene y vuelve la música de espera
+  function sacarVhs(){
+    if(!vhsVideo.paused) vhsVideo.pause();
+    tv.classList.remove("en-vhs", "vhs-pausa");
+    if(musicaAntesVhs){ musicaAntesVhs = false; esperaPausada = false; ponerEspera(); }
+  }
+  function pantallaCompletaVhs(){
+    const v = vhsVideo;
+    v.controls = true;
+    try { (v.requestFullscreen || v.webkitRequestFullscreen || v.webkitEnterFullscreen).call(v); } catch(e){}
+  }
+  ["fullscreenchange", "webkitfullscreenchange", "webkitendfullscreen"].forEach(n => (n === "webkitendfullscreen" ? vhsVideo : document).addEventListener(n, () => {
+    if(!document.fullscreenElement && !document.webkitFullscreenElement) vhsVideo.controls = false;
+  }));
+  function verCanalVhs(){
+    detalle.classList.remove("on"); tdEnfocado = false; cuarto.classList.remove("td");
+    abrirTele();
+    giro += 32; $("#perillaCanal").style.setProperty("--giro", giro + "deg");
+    ponerCanal(CANAL_VHS);
+  }
+  function desbloquearVhs(){
+    vhsVisto = true; guardar("vhs-visto", true);
+    detalle.classList.remove("on"); $("#avisoNuevo").classList.remove("on");
+    enfocado = vhs; cuarto.classList.add("enfocado");
+    if(reduce){ pintarVhs(); verCanalVhs(); return; }
+    animandoVhs = true;
+    enfocar(vhs, .75, .12, .66, 2.4);
+    setTimeout(() => {
+      casete.classList.remove("llega"); void casete.offsetWidth; casete.classList.add("llega");
+      try { [72, 76, 79, 84, 88].forEach((m, k) => setTimeout(() => sonarNota(m), k*120)); } catch(e){}
+      const r = casete.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, 18);
+    }, 700);
+    setTimeout(() => vhs.classList.add("abriendo"), 700 + 1950);
+    setTimeout(() => {
+      casete.classList.remove("llega"); vhs.classList.remove("abriendo");
+      pintarVhs(); clac(); confeti(120);
+      const r = vhs.getBoundingClientRect(); corazones(r.left + r.width/2, r.top, 16);
+    }, 700 + 3200);
+    setTimeout(() => { animandoVhs = false; verCanalVhs(); }, 700 + 4300);
+  }
+  vhs.addEventListener("click", e => {
+    e.stopPropagation();
+    if(final || animandoVhs) return;
+    if(enfocado){ cerrarCosa(); return; }
+    if(vhsListo()){ if(vhsVisto) verCanalVhs(); else desbloquearVhs(); return; }
+    enfocado = vhs; cuarto.classList.add("enfocado"); $("#avisoNuevo").classList.remove("on");
+    enfocar(vhs, .8, .2, .3, 3);
+    $("#detTitulo").textContent = "Un VHS sin cinta";
+    $("#detTexto").textContent = `Está vacío y parpadea 12:00, como todos los VHS del mundo. Dicen que la cinta aparece cuando encuentras todos los corazoncitos escondidos en el cuarto… llevas ${hallados.size} de ${SECRETOS.length}.`;
+    $("#detFoto").hidden = true; $("#detFoto").innerHTML = ""; $("#detVideo").hidden = true;
+    clearTimeout(detT); detT = setTimeout(() => detalle.classList.add("on"), reduce ? 0 : 650);
+  });
+  $("#detVideo").addEventListener("click", e => {
+    e.stopPropagation();
+    if(enfocado === tv){ pantallaCompletaVhs(); return; }
+    if(!vhsListo()) return;
+    if(vhsVisto) verCanalVhs(); else desbloquearVhs();
+  });
 
   // Los regalos se abren desde su fecha (o en modo prueba)
   const R = C.regalos || {};
@@ -1894,7 +2012,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     clearTimeout(detT); detT = setTimeout(() => detalle.classList.add("on"), reduce ? 0 : 750);
   }
   function cerrarCosa(){
-    if(!enfocado || final) return;
+    if(!enfocado || final || animandoVhs) return;
     if(enfocado === tv){ tv.classList.remove("enfocada"); if(canal !== 19){ giro = 0; $("#perillaCanal").style.setProperty("--giro", "0deg"); ponerCanal({num: 19}, true); } }
     enfocado = null; tdEnfocado = false; cuarto.classList.remove("td"); clearTimeout(detT); pararVoz();
     elsCajones.forEach(c => c.classList.remove("abierto")); $("#detVideo").hidden = true;
@@ -1908,7 +2026,11 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   const CANALES = (C.canales || []).filter(c => c && c.foto).map((c, i) => ({...c, num: +c.canal || i + 1, ok: false}));
   CANALES.forEach(c => { const im = new Image(); im.onload = () => { c.ok = true; }; im.src = c.foto; });
   const PRUEBA = {num: 3, prueba: true, texto: "Sin señal"};
-  const listaCanales = () => { const fotos = CANALES.filter(c => c.ok).sort((a, b) => a.num - b.num); return [{num: 19}, ...(fotos.length ? fotos : [PRUEBA])]; };
+  // El canal 15 (la cinta del VHS) solo aparece cuando ya se desbloqueó
+  const listaCanales = () => {
+    const fotos = CANALES.filter(c => c.ok && c.num !== CANAL_VHS.num).concat(vhsAbierto() ? [CANAL_VHS] : []).sort((a, b) => a.num - b.num);
+    return [{num: 19}, ...(fotos.length ? fotos : [PRUEBA])];
+  };
   let giro = 0;
   function estatica(){
     try {
@@ -1924,10 +2046,14 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       $("#detTexto").textContent = bloqueada()
         ? `Este canal se transmite el ${cumple.getDate()} de ${MESES[cumple.getMonth()]}. Mientras tanto, gira la perilla de arriba ↻ para ver los otros canales.`
         : "¡Ya hay señal! Toca la pantalla para empezar ♥";
+    } else if(c.vhs){
+      $("#detTitulo").textContent = `Canal 15 · ${c.texto}`;
+      $("#detTexto").textContent = "Una cinta grabada solo para ti, para la detective más increíble. Toca la pantalla para pausarla.";
     } else {
       $("#detTitulo").textContent = c.prueba ? `Canal ${canal}` : `Canal ${canal} · ${c.texto || ""}`;
       $("#detTexto").textContent = c.prueba ? "Este canal todavía no tiene señal… Gira la perilla para volver al 19." : c.nota || "Gira la perilla para seguir el recorrido por tus años ↻";
     }
+    $("#detVideo").hidden = !c.vhs; if(c.vhs) $("#detVideo").textContent = "Ver en grande ⛶";
     $("#detFoto").hidden = true; $("#detFoto").innerHTML = "";
   }
   function ponerCanal(c, silencio){
@@ -1937,7 +2063,12 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     ponerCanal.t = setTimeout(() => {
       tv.classList.remove("cambiando");
       tv.classList.toggle("en-canal", canal !== 19);
-      if(canal !== 19){
+      if(!c.vhs) sacarVhs();
+      if(c.vhs){
+        tv.classList.add("en-vhs");
+        $("#osdCh").textContent = `CH ${dos(canal)}`;
+        reproducirVhs();
+      } else if(canal !== 19){
         $("#canalImg").hidden = !!c.prueba; $("#canalBarras").hidden = !c.prueba;
         if(!c.prueba) $("#canalImg").src = c.foto;
         $("#osdCh").textContent = `CH ${dos(canal)}`;
@@ -1984,6 +2115,8 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     if(!bloqueada() && canal === 19){ abierto = true; clearInterval(relojT); encender(); return; }
     const recien = enfocado !== tv;
     if(recien) abrirTele();
+    // En el canal 15, tocar la pantalla pausa o sigue la cinta
+    if(canal === CANAL_VHS.num && tv.classList.contains("en-vhs")){ if(!recien){ if(vhsVideo.paused) reproducirVhs(); else pausarVhs(); } return; }
     if(canal !== 19){ cambiarCanal(1); return; }
     if(bloqueada()){
       const t = performance.now();
