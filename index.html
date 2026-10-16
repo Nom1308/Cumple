@@ -914,7 +914,7 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .letra-c .s.hecha{color:var(--texto)}
 .letra-c .s.actual{color:var(--vela);text-shadow:0 0 14px rgba(245,201,122,.6)}
 /* La cajita musical: madera, terciopelo, espejo y una muñequita que gira */
-.cajita{display:block;margin:6px auto 0;width:min(340px,86vw);border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 26px 34px rgba(0,0,0,.55));
+.cajita{display:block;margin:6px auto 0;width:min(380px,92vw);border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 26px 34px rgba(0,0,0,.55));
   touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 /* Mientras no tiene cuerda, la llave brilla pidiendo que la giren */
 .cajita.espera #llave{animation:llamaLlave 1.4s ease-in-out infinite}
@@ -925,7 +925,12 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .cuerda-medidor span{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#c9913f,#f5c97a,#fff0c0);box-shadow:0 0 10px rgba(245,201,122,.7);transition:width .15s linear}
 .cajita svg{display:block;width:100%;height:auto;overflow:visible}
 @media (hover:hover){ .cajita:not(.sonando):hover{filter:drop-shadow(0 26px 34px rgba(0,0,0,.55)) brightness(1.08)} }
-#figura{transform-box:fill-box;transform-origin:50% 100%}
+#figura,.reflejo{transform-box:fill-box;transform-origin:50% 100%}
+.cajita.sonando .reflejo{animation:giraFigura 4.6s linear infinite}
+.cajita.cansada .reflejo{animation-duration:9s}
+.cj-destello{transform-box:fill-box;transform-origin:center;animation:destellaOro 2.8s ease-in-out infinite;opacity:0}
+.cj-destello.d2{animation-delay:.7s} .cj-destello.d3{animation-delay:1.4s} .cj-destello.d4{animation-delay:2.1s}
+@keyframes destellaOro{0%,100%{opacity:0;transform:scale(.3) rotate(0)}40%{opacity:1;transform:scale(1.2) rotate(45deg)}70%{opacity:0;transform:scale(.4) rotate(90deg)}}
 .cajita.sonando #figura{animation:giraFigura 4.6s linear infinite}
 .cajita.cansada #figura{animation-duration:9s}
 @keyframes giraFigura{0%{transform:scaleX(1)}25%{transform:scaleX(.06)}50%{transform:scaleX(-1)}75%{transform:scaleX(-.06)}100%{transform:scaleX(1)}}
@@ -1442,54 +1447,115 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     <div class="piano-zona">
       <p class="letra-c" id="letraC" aria-live="off"></p>
       <button class="cajita" id="cajita" type="button" aria-label="Darle cuerda a la cajita musical">
-        <svg viewBox="0 0 300 290" aria-hidden="true">
+        <svg viewBox="0 0 330 310" aria-hidden="true">
           <defs>
-            <linearGradient id="cjMadera" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5634"/><stop offset=".55" stop-color="#6b3f22"/><stop offset="1" stop-color="#4a2814"/></linearGradient>
-            <linearGradient id="cjOro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0c0"/><stop offset=".45" stop-color="#e3b765"/><stop offset="1" stop-color="#9c7130"/></linearGradient>
-            <linearGradient id="cjEspejo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3eefa"/><stop offset=".5" stop-color="#b9b0cf"/><stop offset="1" stop-color="#e6e0f2"/></linearGradient>
-            <radialGradient id="cjVelvet" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#d9607f"/><stop offset="1" stop-color="#8f2a47"/></radialGradient>
+            <linearGradient id="cjFrente" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a5f36"/><stop offset=".5" stop-color="#7a4424"/><stop offset="1" stop-color="#4f2a14"/></linearGradient>
+            <linearGradient id="cjLado" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5e331a"/><stop offset="1" stop-color="#3a1d0c"/></linearGradient>
+            <linearGradient id="cjTapa" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8f5530"/><stop offset="1" stop-color="#4f2a14"/></linearGradient>
+            <linearGradient id="cjBarniz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,230,200,.28)"/><stop offset=".25" stop-color="rgba(255,230,200,0)"/></linearGradient>
+            <linearGradient id="cjOro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c8"/><stop offset=".35" stop-color="#f0c879"/><stop offset=".7" stop-color="#b8853a"/><stop offset="1" stop-color="#e8c27a"/></linearGradient>
+            <linearGradient id="cjOroH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8853a"/><stop offset=".5" stop-color="#fff0c0"/><stop offset="1" stop-color="#b8853a"/></linearGradient>
+            <radialGradient id="cjVelvet" cx="50%" cy="35%" r="75%"><stop offset="0" stop-color="#d6567a"/><stop offset=".7" stop-color="#9b2c4c"/><stop offset="1" stop-color="#6e1a33"/></radialGradient>
+            <linearGradient id="cjEspejo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbf8ff"/><stop offset=".35" stop-color="#d9d1ea"/><stop offset=".6" stop-color="#a99cc4"/><stop offset="1" stop-color="#e9e3f5"/></linearGradient>
+            <linearGradient id="cjLaca" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3340"/><stop offset=".3" stop-color="#121016"/><stop offset="1" stop-color="#050406"/></linearGradient>
+            <radialGradient id="cjPiel" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fde3cf"/><stop offset="1" stop-color="#eab896"/></radialGradient>
+            <linearGradient id="cjVestido" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc8da"/><stop offset=".6" stop-color="#f28fb0"/><stop offset="1" stop-color="#d9658c"/></linearGradient>
+            <radialGradient id="cjSombra" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="rgba(0,0,0,.55)"/><stop offset="1" stop-color="rgba(0,0,0,0)"/></radialGradient>
+            <clipPath id="cjClipEspejo"><ellipse cx="186" cy="120" rx="60" ry="38"/></clipPath>
           </defs>
-          <!-- La tapa abierta, con su espejo -->
-          <path d="M52 150 L248 150 L238 34 L62 34 Z" fill="url(#cjMadera)" stroke="#3a200f" stroke-width="1.5"/>
-          <path d="M64 144 L236 144 L228 44 L72 44 Z" fill="url(#cjVelvet)"/>
-          <ellipse cx="150" cy="92" rx="56" ry="34" fill="url(#cjEspejo)" stroke="url(#cjOro)" stroke-width="4"/>
-          <path class="cj-brillo" d="M112 78 Q126 64 146 62" stroke="rgba(255,255,255,.85)" stroke-width="4" fill="none" stroke-linecap="round"/>
-          <rect x="70" y="146" width="14" height="6" rx="2" fill="url(#cjOro)"/><rect x="216" y="146" width="14" height="6" rx="2" fill="url(#cjOro)"/>
-          <!-- La caja -->
-          <path d="M40 170 L260 170 L250 152 L50 152 Z" fill="url(#cjVelvet)" stroke="#3a200f" stroke-width="1"/>
-          <rect x="40" y="168" width="220" height="86" rx="6" fill="url(#cjMadera)" stroke="#3a200f" stroke-width="1.5"/>
-          <rect x="46" y="176" width="208" height="2.5" rx="1" fill="url(#cjOro)"/>
-          <rect x="46" y="244" width="208" height="2.5" rx="1" fill="url(#cjOro)"/>
-          <rect x="108" y="196" width="84" height="26" rx="4" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
-          <text id="cajitaNombre" x="150" y="214" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-style="italic" font-weight="600" font-size="14" fill="#4a2f12"></text>
-          <circle cx="54" cy="258" r="7" fill="url(#cjOro)"/><circle cx="246" cy="258" r="7" fill="url(#cjOro)"/>
-          <!-- La plataforma que gira -->
-          <ellipse cx="150" cy="152" rx="52" ry="10" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
-          <ellipse cx="150" cy="150" rx="44" ry="7" fill="#c9974a"/>
-          <ellipse cx="150" cy="149" rx="30" ry="4" fill="rgba(0,0,0,.25)"/>
-          <!-- La muñequita tocando su pianito de cola -->
-          <g id="figura"><g transform="translate(149 150) scale(1.6) translate(-148 -150)">
-            <path d="M139 126 L176 126 Q186 126 186 134 L186 141 L139 141 Z" fill="#14101a"/>
-            <path d="M139 126 L176 106" stroke="#14101a" stroke-width="2.4" stroke-linecap="round"/>
-            <rect x="135" y="128" width="8" height="3" fill="#fffaf0"/>
-            <rect x="141" y="141" width="2.5" height="8" fill="#14101a"/><rect x="181" y="141" width="2.5" height="8" fill="#14101a"/>
-            <rect x="113" y="134" width="14" height="3" rx="1" fill="url(#cjOro)"/><rect x="119" y="137" width="2.5" height="12" fill="#9c7130"/>
-            <path d="M110 138 L131 138 L127 120 L116 120 Z" fill="#ee8fae"/>
-            <rect x="117" y="108" width="9" height="13" rx="3.5" fill="#f7aec4"/>
-            <ellipse cx="121" cy="101" rx="7.2" ry="7.6" fill="#3b2416"/>
-            <circle cx="123.5" cy="102.5" r="5.2" fill="#f2c9a8"/>
-            <path d="M115 99 Q120 92 128 97" stroke="#3b2416" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <circle cx="114.5" cy="98" r="3" fill="#3b2416"/>
-            <path class="brazo" d="M124 112 L136 126" stroke="#f2c9a8" stroke-width="2.6" stroke-linecap="round"/>
-          </g></g>
-          <!-- La llave de mariposa para darle cuerda -->
-          <rect x="258" y="207" width="14" height="6" rx="2" fill="url(#cjOro)"/>
-          <g id="llave">
-            <ellipse cx="281" cy="199" rx="6.5" ry="10" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
-            <ellipse cx="281" cy="221" rx="6.5" ry="10" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
-            <circle cx="281" cy="199" r="2.5" fill="#6b3f22"/><circle cx="281" cy="221" r="2.5" fill="#6b3f22"/>
-            <circle cx="281" cy="210" r="4" fill="url(#cjOro)"/>
+          <ellipse cx="168" cy="292" rx="150" ry="13" fill="url(#cjSombra)"/>
+          <!-- La tapa abierta: madera por fuera, terciopelo por dentro y un espejo con marco de perlas -->
+          <path d="M290 186 L300 180 L308 54 L298 58 Z" fill="#3a1d0c"/>
+          <path d="M72 186 L290 186 L298 58 L80 58 Z" fill="url(#cjTapa)" stroke="#2e1608" stroke-width="1.2"/>
+          <path d="M84 178 L280 178 L286 68 L90 68 Z" fill="url(#cjVelvet)"/>
+          <path d="M84 178 L280 178 L286 68 L90 68 Z" fill="none" stroke="url(#cjOroH)" stroke-width="1.6"/>
+          <ellipse cx="186" cy="120" rx="60" ry="38" fill="url(#cjEspejo)"/>
+          <g clip-path="url(#cjClipEspejo)">
+            <path d="M126 140 L170 82 L184 82 L140 140 Z M150 150 L200 84 L208 84 L158 150 Z" fill="rgba(255,255,255,.45)"/>
+            <g class="reflejo"><g transform="translate(192 132) scale(-.58 .58) translate(-176 -150)" opacity=".28"><use href="#figuraArte"/></g></g>
           </g>
+          <ellipse cx="186" cy="120" rx="64" ry="42" fill="none" stroke="url(#cjOro)" stroke-width="7"/>
+          <ellipse cx="186" cy="120" rx="60.5" ry="38.5" fill="none" stroke="#7a5420" stroke-width="1"/>
+          <circle cx="255.0" cy="120.0" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="252.2" cy="133.0" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="244.0" cy="144.9" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="231.2" cy="154.8" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="214.7" cy="161.8" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="195.8" cy="165.5" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="176.2" cy="165.5" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="157.3" cy="161.8" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="140.8" cy="154.8" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="128.0" cy="144.9" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="119.8" cy="133.0" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="117.0" cy="120.0" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="119.8" cy="107.0" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="128.0" cy="95.1" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="140.8" cy="85.2" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="157.3" cy="78.2" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="176.2" cy="74.5" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="195.8" cy="74.5" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="214.7" cy="78.2" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="231.2" cy="85.2" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="244.0" cy="95.1" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/><circle cx="252.2" cy="107.0" r="2.1" fill="#fff6e0" stroke="#c9a25a" stroke-width=".6"/>
+          <path class="cj-brillo" d="M140 102 Q156 86 180 83" stroke="rgba(255,255,255,.9)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <!-- Bisagras -->
+          <rect x="100" y="182" width="16" height="7" rx="2" fill="url(#cjOro)"/><rect x="250" y="182" width="16" height="7" rx="2" fill="url(#cjOro)"/>
+          <!-- La caja: costado, frente barnizado con vetas, y la boca con terciopelo -->
+          <path d="M262 202 L292 186 L292 262 L262 280 Z" fill="url(#cjLado)" stroke="#2e1608" stroke-width="1.2"/>
+          <path d="M44 202 L262 202 L292 186 L74 186 Z" fill="#a8683c" stroke="#2e1608" stroke-width="1.2"/>
+          <path d="M54 199 L256 199 L282 189 L80 189 Z" fill="url(#cjVelvet)"/>
+          <path d="M54 199 L256 199" stroke="rgba(0,0,0,.35)" stroke-width="2"/>
+          <path d="M44 202 L262 202 L262 274 Q262 280 256 280 L50 280 Q44 280 44 274 Z" fill="url(#cjFrente)" stroke="#2e1608" stroke-width="1.2"/>
+          <path d="M48 208 C110 204 170 213 260 206" stroke="rgba(40,18,6,.22)" stroke-width="0.8" fill="none"/><path d="M48 215 C110 214 170 216 260 214" stroke="rgba(40,18,6,.22)" stroke-width="1.2000000000000002" fill="none"/><path d="M48 222 C110 224 170 227 260 222" stroke="rgba(40,18,6,.22)" stroke-width="1.6" fill="none"/><path d="M48 229 C110 225 170 230 260 227" stroke="rgba(40,18,6,.22)" stroke-width="0.8" fill="none"/><path d="M48 236 C110 235 170 241 260 235" stroke="rgba(40,18,6,.22)" stroke-width="1.2000000000000002" fill="none"/><path d="M48 243 C110 245 170 244 260 243" stroke="rgba(40,18,6,.22)" stroke-width="1.6" fill="none"/><path d="M48 250 C110 246 170 255 260 248" stroke="rgba(40,18,6,.22)" stroke-width="0.8" fill="none"/><path d="M48 257 C110 256 170 258 260 256" stroke="rgba(40,18,6,.22)" stroke-width="1.2000000000000002" fill="none"/><path d="M48 264 C110 266 170 269 260 264" stroke="rgba(40,18,6,.22)" stroke-width="1.6" fill="none"/><path d="M48 271 C110 267 170 272 260 269" stroke="rgba(40,18,6,.22)" stroke-width="0.8" fill="none"/>
+          <path d="M44 202 L262 202 L262 274 Q262 280 256 280 L50 280 Q44 280 44 274 Z" fill="url(#cjBarniz)"/>
+          <rect x="44" y="200" width="218" height="4" fill="url(#cjOroH)"/>
+          <rect x="50" y="270" width="206" height="2.5" rx="1" fill="url(#cjOroH)"/>
+          <!-- Esquineros dorados -->
+          <path d="M44 204 L60 204 L60 208 L48 208 L48 220 L44 220 Z M262 204 L246 204 L246 208 L258 208 L258 220 L262 220 Z M44 280 L44 264 L48 264 L48 276 L60 276 L60 280 Z M262 280 L262 264 L258 264 L258 276 L246 276 L246 280 Z" fill="url(#cjOro)"/>
+          <!-- Placa grabada con filigranas a los lados -->
+          <path d="M120 244 C108 236 98 246 104 252 C108 256 114 252 111 248 M120 236 C104 222 88 232 92 244 M186 244 C198 236 208 246 202 252 C198 256 192 252 195 248 M186 236 C202 222 218 232 214 244" stroke="url(#cjOro)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <rect x="116" y="226" width="74" height="28" rx="5" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
+          <rect x="119" y="229" width="68" height="22" rx="3.5" fill="none" stroke="rgba(120,80,20,.55)" stroke-width=".8"/>
+          <text id="cajitaNombre" x="153" y="245" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-style="italic" font-weight="600" font-size="13" fill="#4a2f12"></text>
+          <!-- Cerradura -->
+          <path d="M153 207 a5 5 0 1 1 .1 0 Z" fill="url(#cjOro)"/><path d="M152 212 L154 212 L155 219 L151 219 Z" fill="url(#cjOro)"/>
+          <!-- Patitas de bollo -->
+          <ellipse cx="60" cy="284" rx="11" ry="6.5" fill="url(#cjOro)"/><ellipse cx="246" cy="284" rx="11" ry="6.5" fill="url(#cjOro)"/><ellipse cx="284" cy="266" rx="8" ry="5" fill="url(#cjOro)"/>
+          <!-- La plataforma giratoria -->
+          <ellipse cx="168" cy="196" rx="54" ry="11" fill="#8a6024"/>
+          <ellipse cx="168" cy="193" rx="52" ry="10" fill="url(#cjOro)"/>
+          <ellipse cx="168" cy="192" rx="42" ry="7.5" fill="none" stroke="rgba(120,80,20,.5)" stroke-width="1"/>
+          <ellipse cx="168" cy="192" rx="30" ry="5" fill="none" stroke="rgba(120,80,20,.4)" stroke-width="1"/>
+          <!-- La muñequita en su piano de cola -->
+          <g id="figura"><g id="figuraArte">
+            <ellipse cx="176" cy="191" rx="44" ry="4.5" fill="rgba(60,30,10,.35)"/>
+            <!-- Piano de cola laqueado -->
+            <path d="M178 186 L178 192 M223 186 L223 192 M200 184 L200 190" stroke="#0a080c" stroke-width="2.4"/>
+            <circle cx="178" cy="192.5" r="1.4" fill="url(#cjOro)"/><circle cx="223" cy="192.5" r="1.4" fill="url(#cjOro)"/>
+            <path d="M197 188 L203 188" stroke="url(#cjOro)" stroke-width="1.6"/>
+            <path d="M172 164 L214 164 C228 164 234 172 234 180 L234 186 L172 186 Z" fill="url(#cjLaca)"/>
+            <path d="M175 166 L212 166" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+            <path d="M172 163 L222 140 L225 143 L176 165 Z" fill="url(#cjLaca)"/>
+            <path d="M174 162 L220 141" stroke="rgba(255,255,255,.4)" stroke-width=".9"/>
+            <path d="M208 162 L214 146" stroke="url(#cjOro)" stroke-width="1"/>
+            <rect x="174" y="154" width="7" height="8" rx="1" fill="#1a161e" transform="rotate(-12 177 158)"/>
+            <rect x="162" y="165" width="12" height="6" rx="1" fill="#fffaf0"/>
+            <path d="M164 165 v3.5 M166.5 165 v3.5 M169.5 165 v3.5 M172 165 v3.5" stroke="#111" stroke-width="1.1"/>
+            <!-- Banquito de terciopelo -->
+            <path d="M136 176 L136 192 M152 176 L152 192" stroke="url(#cjOro)" stroke-width="1.8"/>
+            <ellipse cx="144" cy="175" rx="11" ry="4" fill="#b3405c"/><ellipse cx="144" cy="174" rx="9" ry="2.5" fill="#d6567a"/>
+            <!-- Vestido de gala con capas de tul -->
+            <path d="M138 150 Q122 168 124 178 Q144 186 166 178 Q162 162 150 150 Z" fill="url(#cjVestido)"/>
+            <path d="M136 156 Q126 170 128 177 Q144 182 160 176" fill="rgba(255,255,255,.35)"/>
+            <path d="M126 178 Q145 185 165 178" stroke="rgba(255,255,255,.7)" stroke-width="1.2" fill="none"/>
+            <path d="M138 131 Q144 127 150 131 L151 151 L137 151 Z" fill="#e7769b"/>
+            <path d="M140 140 Q144 143 148 140" stroke="rgba(255,255,255,.5)" stroke-width="1" fill="none"/>
+            <circle cx="138" cy="133" r="4.2" fill="#f7aec4"/><circle cx="150" cy="133" r="4.2" fill="#f7aec4"/>
+            <path class="brazo" d="M150 135 Q156 148 166 163" stroke="url(#cjPiel)" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+            <!-- La cabecita: moño, mejillas y ojitos cerrados sonriendo -->
+            <rect x="142" y="124" width="4" height="5" fill="#eab896"/>
+            <circle cx="144" cy="117" r="9.5" fill="#3b2416"/>
+            <circle cx="135" cy="111" r="6" fill="#3b2416"/>
+            <circle cx="146" cy="118.5" r="7.6" fill="url(#cjPiel)"/>
+            <path d="M138 114 Q142 106 152 112" stroke="#3b2416" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <circle cx="150" cy="122" r="2" fill="rgba(240,120,150,.55)"/>
+            <path d="M147 117.5 q2 1.6 4 0" stroke="#5a3424" stroke-width="1" fill="none" stroke-linecap="round"/>
+            <path d="M149 123.5 q1.5 1 3 -.2" stroke="#c9566d" stroke-width=".9" fill="none" stroke-linecap="round"/>
+            <circle cx="133.5" cy="106.5" r="2.6" fill="#ee8fae"/><circle cx="133.5" cy="106.5" r="1.1" fill="#fff3c8"/>
+          </g></g>
+          <!-- La llave de mariposa -->
+          <rect x="290" y="224" width="16" height="5" rx="2" fill="url(#cjOro)"/>
+          <g id="llave">
+            <path d="M314 226 C300 214 302 196 312 196 C322 196 326 214 314 226 Z" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
+            <path d="M314 226 C300 238 302 256 312 256 C322 256 326 238 314 226 Z" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
+            <path d="M312 202 C308 206 308 214 312 218 M312 250 C308 246 308 238 312 234" stroke="rgba(120,80,20,.6)" stroke-width="1.2" fill="none"/>
+            <circle cx="313" cy="226" r="4.5" fill="#fff6e0" stroke="#c9a25a" stroke-width="1"/>
+          </g>
+          <!-- Destellos sobre el dorado -->
+          <path class="cj-destello d1" d="M128 82 l1.5 4 4 1.5 -4 1.5 -1.5 4 -1.5 -4 -4 -1.5 4 -1.5 Z" fill="#fff"/>
+          <path class="cj-destello d2" d="M226 192 l1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2 -3 -3 -1.2 3 -1.2 Z" fill="#fff"/>
+          <path class="cj-destello d3" d="M186 228 l1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2 -3 -3 -1.2 3 -1.2 Z" fill="#fff"/>
+          <path class="cj-destello d4" d="M318 200 l1 2.6 2.6 1 -2.6 1 -1 2.6 -1 -2.6 -2.6 -1 2.6 -1 Z" fill="#fff"/>
         </svg>
       </button>
       <div class="cuerda-medidor" aria-hidden="true"><span id="cuerdaNivel"></span></div>
