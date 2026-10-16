@@ -913,38 +913,23 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .letra-c .s{color:rgba(239,231,247,.38);transition:color .25s}
 .letra-c .s.hecha{color:var(--texto)}
 .letra-c .s.actual{color:var(--vela);text-shadow:0 0 14px rgba(245,201,122,.6)}
-/* Piano de concierto: negro laqueado, borde dorado y terciopelo sobre las teclas */
-.piano{position:relative;padding:14px 12px 14px;border-radius:18px 18px 12px 12px;
-  background:linear-gradient(175deg,rgba(255,255,255,.14),transparent 18%,transparent 70%,rgba(255,255,255,.05)),linear-gradient(#1d1722,#0a070d);
-  box-shadow:0 34px 70px rgba(0,0,0,.6),inset 0 0 0 1.5px rgba(232,194,122,.55),inset 0 0 0 4px #0a070d,inset 0 0 0 5px rgba(232,194,122,.25),inset 0 2px 0 rgba(255,255,255,.12)}
-.piano-marca{position:absolute;left:50%;top:-14px;z-index:3;transform:translateX(-50%);padding:5px 18px;border-radius:3px;white-space:nowrap;
-  background:linear-gradient(#f6e2a8,#d0aa60 50%,#a8823f);color:#4a2f12;font:italic 600 14px/1 var(--serif);letter-spacing:.08em;box-shadow:0 3px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,245,215,.7)}
-/* El escenario donde caen las notas */
-.carriles{position:relative;height:clamp(120px,24vw,170px);margin:8px 0 0;border-radius:10px 10px 0 0;overflow:hidden;
-  background:repeating-linear-gradient(90deg,transparent 0 calc(100%/12 - 1px),rgba(255,255,255,.05) calc(100%/12 - 1px) calc(100%/12)),
-    radial-gradient(ellipse at 50% 120%,rgba(238,143,174,.22),transparent 60%),linear-gradient(#08060c,#140d1f)}
-.barra-nota{position:absolute;bottom:0;height:22px;border-radius:7px;transition:bottom .45s cubic-bezier(.3,.8,.3,1.1),opacity .45s,transform .45s;
-  background:linear-gradient(#ffd8e5,#ee8fae 60%,#c9567d);box-shadow:0 0 12px rgba(238,143,174,.7),inset 0 1px 0 rgba(255,255,255,.6)}
-.barra-nota.lejos{background:linear-gradient(#e8deff,#b9a6e8 60%,#8f73c9);box-shadow:0 0 8px rgba(185,166,232,.5),inset 0 1px 0 rgba(255,255,255,.5)}
-.barra-nota.lista{background:linear-gradient(#fff4cf,#f5c97a 60%,#d99a3e);box-shadow:0 0 18px rgba(245,201,122,.95),0 0 36px rgba(245,201,122,.5),inset 0 1px 0 #fff;animation:esperaNota 1s ease-in-out infinite}
-@keyframes esperaNota{50%{transform:scaleY(1.18);box-shadow:0 0 26px rgba(245,201,122,1),0 0 48px rgba(245,201,122,.7),inset 0 1px 0 #fff}}
-.barra-nota.estalla{animation:estallaNota .45s ease-out forwards}
-@keyframes estallaNota{to{transform:scale(1.8,2.4);opacity:0;filter:brightness(2)}}
-.barra-nota span{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);font:600 clamp(9px,2vw,12px)/1 system-ui,sans-serif;color:rgba(60,20,30,.75);text-align:center}
-.rayo{position:absolute;bottom:0;height:100%;pointer-events:none;background:linear-gradient(to top,rgba(255,236,190,.9),rgba(245,201,122,.35) 40%,transparent);animation:rayo .7s ease-out forwards;transform-origin:bottom}
-@keyframes rayo{from{opacity:1;transform:scaleY(.2)}to{opacity:0;transform:scaleY(1)}}
-.fieltro{display:block;height:7px;background:linear-gradient(#a3283f,#6e1527);box-shadow:inset 0 1px 0 rgba(255,150,170,.35),0 2px 3px rgba(0,0,0,.6)}
-.teclas{position:relative;display:flex;height:clamp(140px,28vw,200px)}
-.blanca{position:relative;flex:1;margin:0 1px;border:0;border-radius:0 0 7px 7px;padding:0 0 10px;display:flex;align-items:flex-end;justify-content:center;
-  background:linear-gradient(#fffdf8 0%,#f3eadf 100%);box-shadow:inset 0 -6px 0 #ded2c2,0 2px 3px rgba(0,0,0,.3);font-size:clamp(9px,2vw,12px);color:#8e7f98;font-family:system-ui,sans-serif;
-  transition:background .1s,transform .08s;touch-action:none}
-.negra{position:absolute;top:0;z-index:2;height:60%;border:0;border-radius:0 0 5px 5px;padding:0;background:linear-gradient(#3b3340,#08060a);box-shadow:inset 0 -4px 0 #000,inset 0 1px 0 rgba(255,255,255,.18),0 3px 4px rgba(0,0,0,.5);touch-action:none}
-.blanca.on{transform:translateY(2px);background:linear-gradient(#f9e6c4,#f1d39a);box-shadow:inset 0 -3px 0 #d8b778,0 0 18px rgba(245,201,122,.6)}
-.negra.on{background:linear-gradient(#5a4570,#2a1d3a)}
-.blanca.guia{background:linear-gradient(#fff6dc,#f8d991);box-shadow:inset 0 -6px 0 #e4b863,0 0 22px rgba(245,201,122,.7);animation:guia 1.1s ease-in-out infinite}
-@keyframes guia{50%{box-shadow:inset 0 -6px 0 #e4b863,0 0 34px rgba(245,201,122,.95)}}
-.blanca.ola{animation:olaTecla .7s ease}
-@keyframes olaTecla{40%{background:linear-gradient(#fff4cf,#f5c97a);box-shadow:inset 0 -3px 0 #d8b778,0 0 26px rgba(245,201,122,.95);transform:translateY(2px)}}
+/* La cajita musical: madera, terciopelo, espejo y una muñequita que gira */
+.cajita{display:block;margin:6px auto 0;width:min(340px,86vw);border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 26px 34px rgba(0,0,0,.55))}
+.cajita svg{display:block;width:100%;height:auto;overflow:visible}
+@media (hover:hover){ .cajita:not(.sonando):hover{filter:drop-shadow(0 26px 34px rgba(0,0,0,.55)) brightness(1.08)} }
+#figura{transform-box:fill-box;transform-origin:50% 100%}
+.cajita.sonando #figura{animation:giraFigura 4.6s linear infinite}
+.cajita.cansada #figura{animation-duration:9s}
+@keyframes giraFigura{0%{transform:scaleX(1)}25%{transform:scaleX(.06)}50%{transform:scaleX(-1)}75%{transform:scaleX(-.06)}100%{transform:scaleX(1)}}
+.brazo{transform-box:fill-box;transform-origin:0 0;transition:transform .12s}
+.cajita.mano .brazo{transform:rotate(16deg)}
+#llave{transform-box:fill-box;transform-origin:50% 50%}
+.cajita.sonando #llave{animation:giraLlave 1.8s linear infinite}
+.cajita.cansada #llave{animation-duration:3.6s}
+.cajita.cuerda #llave{animation:giraLlave .33s linear infinite}
+@keyframes giraLlave{0%{transform:scaleX(1)}25%{transform:scaleX(.1)}50%{transform:scaleX(-1)}75%{transform:scaleX(-.1)}100%{transform:scaleX(1)}}
+.cj-brillo{animation:brilloEspejo 4s ease-in-out infinite}
+@keyframes brilloEspejo{50%{opacity:.45}}
 .letra-c .s{display:inline-block;transition:color .25s,transform .25s}
 .letra-c .s.actual{transform:scale(1.25) translateY(-2px)}
 .estado-p{color:var(--suave);margin:18px 0 0;min-height:1.6em}
@@ -1445,16 +1430,66 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
 
   <section id="piano" class="centro">
     <h2>Una canción para ti</h2>
-    <p class="nota">Esta vez la tocas tú: sigue las teclas que se iluminan.</p>
+    <p class="nota">Una cajita musical que toca solo para ti. Si se le acaba la cuerda, dale otra vez.</p>
     <div class="piano-zona">
       <p class="letra-c" id="letraC" aria-live="off"></p>
-      <div class="piano"><span class="piano-marca" id="pianoMarca"></span><div class="carriles" id="carriles" aria-hidden="true"></div><span class="fieltro" aria-hidden="true"></span><div class="teclas" id="teclas"></div></div>
+      <button class="cajita" id="cajita" type="button" aria-label="Darle cuerda a la cajita musical">
+        <svg viewBox="0 0 300 290" aria-hidden="true">
+          <defs>
+            <linearGradient id="cjMadera" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5634"/><stop offset=".55" stop-color="#6b3f22"/><stop offset="1" stop-color="#4a2814"/></linearGradient>
+            <linearGradient id="cjOro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0c0"/><stop offset=".45" stop-color="#e3b765"/><stop offset="1" stop-color="#9c7130"/></linearGradient>
+            <linearGradient id="cjEspejo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3eefa"/><stop offset=".5" stop-color="#b9b0cf"/><stop offset="1" stop-color="#e6e0f2"/></linearGradient>
+            <radialGradient id="cjVelvet" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#d9607f"/><stop offset="1" stop-color="#8f2a47"/></radialGradient>
+          </defs>
+          <!-- La tapa abierta, con su espejo -->
+          <path d="M52 150 L248 150 L238 34 L62 34 Z" fill="url(#cjMadera)" stroke="#3a200f" stroke-width="1.5"/>
+          <path d="M64 144 L236 144 L228 44 L72 44 Z" fill="url(#cjVelvet)"/>
+          <ellipse cx="150" cy="92" rx="56" ry="34" fill="url(#cjEspejo)" stroke="url(#cjOro)" stroke-width="4"/>
+          <path class="cj-brillo" d="M112 78 Q126 64 146 62" stroke="rgba(255,255,255,.85)" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <rect x="70" y="146" width="14" height="6" rx="2" fill="url(#cjOro)"/><rect x="216" y="146" width="14" height="6" rx="2" fill="url(#cjOro)"/>
+          <!-- La caja -->
+          <path d="M40 170 L260 170 L250 152 L50 152 Z" fill="url(#cjVelvet)" stroke="#3a200f" stroke-width="1"/>
+          <rect x="40" y="168" width="220" height="86" rx="6" fill="url(#cjMadera)" stroke="#3a200f" stroke-width="1.5"/>
+          <rect x="46" y="176" width="208" height="2.5" rx="1" fill="url(#cjOro)"/>
+          <rect x="46" y="244" width="208" height="2.5" rx="1" fill="url(#cjOro)"/>
+          <rect x="108" y="196" width="84" height="26" rx="4" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
+          <text id="cajitaNombre" x="150" y="214" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-style="italic" font-weight="600" font-size="14" fill="#4a2f12"></text>
+          <circle cx="54" cy="258" r="7" fill="url(#cjOro)"/><circle cx="246" cy="258" r="7" fill="url(#cjOro)"/>
+          <!-- La plataforma que gira -->
+          <ellipse cx="150" cy="152" rx="52" ry="10" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
+          <ellipse cx="150" cy="150" rx="44" ry="7" fill="#c9974a"/>
+          <ellipse cx="150" cy="149" rx="30" ry="4" fill="rgba(0,0,0,.25)"/>
+          <!-- La muñequita tocando su pianito de cola -->
+          <g id="figura"><g transform="translate(149 150) scale(1.6) translate(-148 -150)">
+            <path d="M139 126 L176 126 Q186 126 186 134 L186 141 L139 141 Z" fill="#14101a"/>
+            <path d="M139 126 L176 106" stroke="#14101a" stroke-width="2.4" stroke-linecap="round"/>
+            <rect x="135" y="128" width="8" height="3" fill="#fffaf0"/>
+            <rect x="141" y="141" width="2.5" height="8" fill="#14101a"/><rect x="181" y="141" width="2.5" height="8" fill="#14101a"/>
+            <rect x="113" y="134" width="14" height="3" rx="1" fill="url(#cjOro)"/><rect x="119" y="137" width="2.5" height="12" fill="#9c7130"/>
+            <path d="M110 138 L131 138 L127 120 L116 120 Z" fill="#ee8fae"/>
+            <rect x="117" y="108" width="9" height="13" rx="3.5" fill="#f7aec4"/>
+            <ellipse cx="121" cy="101" rx="7.2" ry="7.6" fill="#3b2416"/>
+            <circle cx="123.5" cy="102.5" r="5.2" fill="#f2c9a8"/>
+            <path d="M115 99 Q120 92 128 97" stroke="#3b2416" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="114.5" cy="98" r="3" fill="#3b2416"/>
+            <path class="brazo" d="M124 112 L136 126" stroke="#f2c9a8" stroke-width="2.6" stroke-linecap="round"/>
+          </g></g>
+          <!-- La llave de mariposa para darle cuerda -->
+          <rect x="258" y="207" width="14" height="6" rx="2" fill="url(#cjOro)"/>
+          <g id="llave">
+            <ellipse cx="281" cy="199" rx="6.5" ry="10" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
+            <ellipse cx="281" cy="221" rx="6.5" ry="10" fill="url(#cjOro)" stroke="#8a6024" stroke-width="1"/>
+            <circle cx="281" cy="199" r="2.5" fill="#6b3f22"/><circle cx="281" cy="221" r="2.5" fill="#6b3f22"/>
+            <circle cx="281" cy="210" r="4" fill="url(#cjOro)"/>
+          </g>
+        </svg>
+      </button>
       <p class="estado-p" id="estadoP"></p>
       <div id="bravo" hidden>
         <p class="bravo">¡Qué bonito sonó!</p>
         <div class="acciones" style="margin-top:14px">
           <a class="btn" href="#pastel">Ahora pide un deseo</a>
-          <button class="btn sec" id="otraVezPiano" type="button">Tocarla otra vez</button>
+          <button class="btn sec" id="otraVezPiano" type="button">Darle cuerda otra vez ↻</button>
         </div>
       </div>
     </div>
@@ -2898,11 +2933,10 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       o.connect(gg).connect(g); o.start(t); o.stop(t + 2.7);
     });
   }
-  const NOMBRES = {60:"Do",62:"Re",64:"Mi",65:"Fa",67:"Sol",69:"La",71:"Si",72:"Do",74:"Re",76:"Mi",77:"Fa",79:"Sol"};
-  const BLANCAS = [60,62,64,65,67,69,71,72,74,76,77,79];
-  const NEGRAS = [[61,0],[63,1],[66,3],[68,4],[70,5],[73,7],[75,8],[78,10]];
+  /* ---------- La cajita musical ---------- */
+  // Cumpleaños feliz, con su ritmo (en tiempos) y una sílaba por nota
   const MELODIA = [67,67,69,67,72,71, 67,67,69,67,74,72, 67,67,79,76,72,71,69, 77,77,76,72,74,72];
-  // Letra: líneas → palabras → sílabas (una sílaba por nota, 6 + 6 + 7 + 6)
+  const TIEMPOS = [.75,.25,1,1,1,2, .75,.25,1,1,1,2, .75,.25,1,1,1,1,2, .75,.25,1,1,1,3];
   const nomSil = String(C.nombreSilabas || C.nombre).split("-").filter(Boolean);
   const linea3 = nomSil.length === 3 ? [["cum","ple","a","ños"], nomSil]
                : nomSil.length === 2 ? [["cum","ple","a","ños"], ["a"], nomSil]
@@ -2916,88 +2950,58 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   const letraC = $("#letraC");
   letraC.innerHTML = LETRA.map(linea => linea.map(pal => pal.map(s => `<span class="s">${esc(s)}</span>`).join("")).join(" ")).join("<br>");
   const silSpans = [...letraC.querySelectorAll(".s")];
-  const teclas = $("#teclas"), mapaTeclas = new Map();
-  BLANCAS.forEach(m => {
-    const b = document.createElement("button"); b.type = "button"; b.className = "blanca"; b.textContent = NOMBRES[m]; b.setAttribute("aria-label", NOMBRES[m]);
-    teclas.appendChild(b); mapaTeclas.set(m, b);
-  });
-  NEGRAS.forEach(([m, idx]) => {
-    const b = document.createElement("button"); b.type = "button"; b.className = "negra"; b.setAttribute("aria-label", "Tecla negra");
-    const ancho = 100/BLANCAS.length; b.style.left = `calc(${(idx+1)*ancho}% - ${ancho*0.31}%)`; b.style.width = `${ancho*0.62}%`;
-    teclas.appendChild(b); mapaTeclas.set(m, b);
-  });
-  let paso = 0, guiado = true, tocandoPiano = false, soltarPianoT = 0;
-  $("#pianoMarca").textContent = `${C.nombre} · ${C.edad || ""}`;
-  // La lluvia de notas: las próximas notas bajan como barras de luz hacia su tecla
-  const carriles = $("#carriles"), barras = new Map(), ANCHO_T = 100/BLANCAS.length, VER = 5;
-  const carrilDe = m => BLANCAS.indexOf(m);
-  function pintarBarras(){
-    const alto = carriles.clientHeight || 150, salto = (alto - 22)/(VER - 1);
-    barras.forEach((b, i) => { if(i < paso || !guiado){ barras.delete(i); b.classList.add("estalla"); setTimeout(() => b.remove(), 460); } });
-    if(!guiado) return;
-    for(let i = paso; i < Math.min(MELODIA.length, paso + VER); i++){
-      let b = barras.get(i);
-      if(!b){
-        b = document.createElement("span"); b.className = "barra-nota";
-        const c = carrilDe(MELODIA[i]);
-        b.style.left = `calc(${c*ANCHO_T}% + 3px)`; b.style.width = `calc(${ANCHO_T}% - 6px)`;
-        b.innerHTML = `<span>${NOMBRES[MELODIA[i]]}</span>`;
-        b.style.bottom = (alto + 10) + "px"; b.style.opacity = 0;
-        carriles.appendChild(b); barras.set(i, b); void b.offsetWidth;
-      }
-      const k = i - paso;
-      b.style.bottom = (k*salto) + "px"; b.style.opacity = k === 0 ? 1 : (1 - k*.16).toFixed(2);
-      b.classList.toggle("lista", k === 0); b.classList.toggle("lejos", k > 1);
+  $("#cajitaNombre").textContent = `${C.nombre} · ${C.edad || ""}`;
+  // Sonido de caja musical: una lengüeta de metal que suena brillante y se apaga despacio
+  function notaCajita(m){
+    try {
+      const a = audioCtx(), t = a.currentTime, f = freq(m);
+      const g = a.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.34, t + .004); g.gain.exponentialRampToValueAtTime(.0005, t + 1.8);
+      g.connect(master);
+      [[1, 1, "sine", 1.8], [2, .14, "triangle", .9], [2.76, .16, "sine", .5], [5.4, .06, "sine", .25]].forEach(([h, amp, tipo, dec]) => {
+        const o = a.createOscillator(); o.type = tipo; o.frequency.value = f*h;
+        const gg = a.createGain(); gg.gain.setValueAtTime(amp, t); gg.gain.exponentialRampToValueAtTime(.0001, t + dec);
+        o.connect(gg).connect(g); o.start(t); o.stop(t + 1.9);
+      });
+    } catch(e){}
+  }
+  const caja = $("#cajita");
+  let sonandoCaja = false, yaSono = false;
+  $("#estadoP").textContent = "Toca la cajita para darle cuerda ↻";
+  async function darCuerda(){
+    if(sonandoCaja) return; sonandoCaja = true;
+    $("#bravo").hidden = true; $("#estadoP").textContent = "";
+    // Clic-clic-clic: se le da cuerda
+    caja.classList.add("cuerda");
+    for(let i = 0; i < 7; i++){ clac(); await esperar(reduce ? 0 : 120); }
+    caja.classList.remove("cuerda");
+    retener("piano");
+    caja.classList.add("sonando");
+    const tiempo = 480;
+    for(let i = 0; i < MELODIA.length; i++){
+      // En la última frase se le va acabando la cuerda
+      const lento = i >= 19 ? 1 + (i - 18)*.09 : 1;
+      if(i === 19) caja.classList.add("cansada");
+      silSpans.forEach((sp, k) => { sp.classList.toggle("hecha", k < i); sp.classList.toggle("actual", k === i); });
+      notaCajita(MELODIA[i] + 12);
+      caja.classList.toggle("mano", i % 2 === 0);
+      if(i % 2 === 0 && !reduce){ const r = caja.getBoundingClientRect(); notasMagicas(r.left + r.width*.5, r.top + r.height*.3, 1); }
+      await esperar(TIEMPOS[i]*tiempo*lento);
     }
-  }
-  function rayoEn(m){
-    const c = carrilDe(m); if(c < 0) return;
-    const r = document.createElement("span"); r.className = "rayo";
-    r.style.left = `${c*ANCHO_T}%`; r.style.width = `${ANCHO_T}%`;
-    carriles.appendChild(r); setTimeout(() => r.remove(), 720);
-  }
-  function marcarGuia(){
-    pintarBarras();
-    mapaTeclas.forEach(b => b.classList.remove("guia"));
-    silSpans.forEach((s, i) => { s.classList.toggle("hecha", i < paso); s.classList.toggle("actual", guiado && i === paso); });
-    if(guiado && paso < MELODIA.length){ mapaTeclas.get(MELODIA[paso]).classList.add("guia"); $("#estadoP").textContent = paso === 0 ? "Empieza por la tecla que brilla." : `Nota ${paso} de ${MELODIA.length}`; }
-  }
-  function tocar(m, b){
-    sonarNota(m);
-    b.classList.add("on"); setTimeout(() => b.classList.remove("on"), 160);
-    const r = b.getBoundingClientRect(); echarPolvo(r.left + r.width/2, r.top, 6);
-    rayoEn(m);
-    const rc = carriles.getBoundingClientRect(), cm = carrilDe(m);
-    if(cm >= 0 && !reduce) notasMagicas(rc.left + (cm + .5)*rc.width/BLANCAS.length, rc.top + rc.height*.7, 1);
-    if(!tocandoPiano){ tocandoPiano = true; retener("piano"); }
-    clearTimeout(soltarPianoT); soltarPianoT = setTimeout(() => { tocandoPiano = false; soltarM("piano"); }, guiado ? 9000 : 6000);
-    if(guiado && m === MELODIA[paso]){
-      const lista = barras.get(paso);
-      if(lista){ const rb = lista.getBoundingClientRect(); chispas(rb.left + rb.width/2, rb.top, 5); }
-      paso++; marcarGuia();
-      if(paso === MELODIA.length) completado();
-    }
-  }
-  mapaTeclas.forEach((b, m) => b.addEventListener("pointerdown", e => { e.preventDefault(); tocar(m, b); }));
-  mapaTeclas.forEach((b, m) => b.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); tocar(m, b); } }));
-  async function completado(){
-    guiado = false; marcarGuia(); $("#estadoP").textContent = "";
-    await esperar(500);
-    // Una ola dorada recorre las teclas y suben rayos de luz por todo el escenario
-    BLANCAS.forEach((m, i) => setTimeout(() => { const b = mapaTeclas.get(m); b.classList.remove("ola"); void b.offsetWidth; b.classList.add("ola"); rayoEn(m); }, i*70));
-    for(const m of [60,64,67,72,76,79]){ sonarNota(m); await esperar(110); }
-    await esperar(300);
-    try { [60, 64, 67, 72].forEach(m => sonarNota(m)); } catch(e){}
-    confeti(120);
-    const r = teclas.getBoundingClientRect();
-    notasMagicas(r.left + r.width/2, r.top, 46);
+    silSpans.forEach(sp => { sp.classList.add("hecha"); sp.classList.remove("actual"); });
+    caja.classList.remove("mano");
+    await esperar(700);
+    caja.classList.remove("sonando", "cansada");
+    soltarM("piano"); sonandoCaja = false; yaSono = true;
     $("#bravo").hidden = false;
-    $("#estadoP").textContent = "Ahora toca lo que quieras.";
-    clearTimeout(soltarPianoT); soltarPianoT = setTimeout(() => { tocandoPiano = false; soltarM("piano"); }, 4000);
+    const r = caja.getBoundingClientRect(); chispas(r.left + r.width/2, r.top + r.height*.4, 16);
   }
-  $("#otraVezPiano").addEventListener("click", () => { paso = 0; guiado = true; $("#bravo").hidden = true; marcarGuia(); });
-  addEventListener("resize", () => { if(guiado) pintarBarras(); });
-  marcarGuia();
+  caja.addEventListener("click", darCuerda);
+  $("#otraVezPiano").addEventListener("click", darCuerda);
+  // Cuando ella llega hasta aquí, la cajita empieza a sonar sola
+  if("IntersectionObserver" in window){
+    const ioCaja = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting && !yaSono && !sonandoCaja){ ioCaja.disconnect(); setTimeout(darCuerda, 700); } }), {threshold:.55});
+    ioCaja.observe(caja);
+  }
 
   /* ---------- Pastel ---------- */
   const digitos = [...String(C.edad || "♥")].slice(0,3);
