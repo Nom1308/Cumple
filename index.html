@@ -187,6 +187,9 @@ const CONFIG = {
     { foto: "fotos/01-tu-y-yo.jpg",       pie: "Tú y yo" }
   ],
 
+  // Nuestra constelación: una estrella por palabra; al unirlas todas forman un corazón
+  constelacion: "Tus pecas son mi constelación favorita, y tú, mi cielo entero",
+
   // Cada frase completa: "Gracias por tu vida, porque…"
   razones: [
     "eres la persona más inteligente que conozco, y nunca lo usas para hacer sentir menos a nadie.",
@@ -267,6 +270,13 @@ section{padding:110px 20px;max-width:1080px;margin:0 auto}
 h2{font-weight:400;font-style:italic;font-size:clamp(34px,6vw,54px);line-height:1.1;letter-spacing:-.01em;margin:0 0 14px}
 .nota{color:var(--suave);font-size:17px;margin:0 auto 40px;max-width:46ch}
 .centro{text-align:center}
+/* Cada sección entra con su título: sube, se enfoca y debajo se dibuja una línea dorada */
+.centro h2{position:relative;padding-bottom:16px}
+.centro h2::after{content:"";position:absolute;left:50%;bottom:0;width:min(150px,40%);height:2px;transform:translateX(-50%) scaleX(0);border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--vela),var(--rosa),transparent);transition:transform 1.2s cubic-bezier(.3,.7,.2,1) .5s}
+.revela .centro-pieza{opacity:0;transform:translateY(26px);filter:blur(6px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.8,.2,1),filter 1s ease;transition-delay:calc(var(--p,0) * 180ms)}
+.revela.visto .centro-pieza{opacity:1;transform:none;filter:none}
+.revela.visto h2::after{transform:translateX(-50%) scaleX(1)}
 button{font:inherit;cursor:pointer;color:inherit}
 :focus-visible{outline:2px solid var(--vela);outline-offset:4px;border-radius:6px}
 .btn{display:inline-flex;align-items:center;gap:10px;background:var(--vela);color:#2b1c0e;border:0;border-radius:999px;padding:13px 26px;font-weight:600;font-size:17px;text-decoration:none;
@@ -712,12 +722,16 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 .mesa{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 16px;max-width:1000px;margin:14px auto 0}
 @media (min-width:700px){ .mesa{grid-template-columns:repeat(3,minmax(0,1fr));gap:44px 28px} }
 @media (min-width:1000px){ .mesa{grid-template-columns:repeat(4,minmax(0,1fr))} }
-.pola{position:relative;display:block;width:100%;background:linear-gradient(170deg,#fffdf8,#f4ecdf);border:0;padding:9px 9px 0;color:var(--tinta);text-align:center;box-shadow:0 12px 28px rgba(0,0,0,.45);transform:rotate(var(--rot));-webkit-tap-highlight-color:transparent;touch-action:manipulation;opacity:0}
+.pola{position:relative;display:block;width:100%;background:linear-gradient(170deg,#fffdf8,#f4ecdf);border:0;padding:9px 9px clamp(30px,7vw,42px);color:var(--tinta);text-align:center;box-shadow:0 12px 28px rgba(0,0,0,.45);transform:rotate(var(--rot));-webkit-tap-highlight-color:transparent;touch-action:manipulation;opacity:0}
 .pola .marco{aspect-ratio:4/5}
 .pola .marco img{object-position:50% 30%}
+/* Brillo que cruza la foto cuando termina de revelarse */
+.pola .marco::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.45) 48%,transparent 60%) -150% 0/250% 100% no-repeat;opacity:0}
+.pola.visto .marco::after{animation:brilloFoto 1.3s ease-out forwards;animation-delay:calc(var(--n,0) * 130ms + 2.6s)}
+@keyframes brilloFoto{0%{opacity:1;background-position:-150% 0}100%{opacity:1;background-position:250% 0}}
 @media (hover:hover){
-  .pola.visto{transition:transform .3s ease,box-shadow .3s ease}
-  .pola.visto:hover{transform:rotate(0deg) translateY(-6px) scale(1.03);box-shadow:0 26px 50px rgba(0,0,0,.55),0 0 0 2px rgba(238,143,174,.35)}
+  .pola.visto{transition:transform .25s ease,box-shadow .3s ease}
+  .pola.visto:hover{transform:perspective(700px) rotateX(var(--ty,0deg)) rotateY(var(--tx,0deg)) translateY(-8px) scale(1.04);box-shadow:0 30px 54px rgba(0,0,0,.55),0 0 0 2px rgba(238,143,174,.35)}
 }
 /* Cinta adhesiva */
 .pola::before,.tarjeta-v::before{content:"";position:absolute;top:-11px;left:calc(50% + var(--cx,0px));z-index:2;width:78px;height:22px;transform:translateX(-50%) rotate(var(--cr,-3deg));
@@ -753,24 +767,64 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
 /* ---------- Frasco ---------- */
 .frasco-zona{display:grid;justify-items:center;gap:6px}
 #papelOut{min-height:200px;width:100%;display:grid;place-items:end center;padding:0 8px}
-.papelito{position:relative;background:var(--papel);color:var(--tinta);font-family:var(--mano);font-size:clamp(25px,4.6vw,31px);line-height:1.22;padding:26px 28px 22px;max-width:380px;
-  box-shadow:0 16px 34px rgba(0,0,0,.45);transform:rotate(var(--r));animation:sale .65s cubic-bezier(.2,.9,.3,1.25)}
-.papelito::before{content:"";position:absolute;top:-10px;left:50%;width:74px;height:22px;transform:translateX(-50%) rotate(-3deg);background:rgba(238,143,174,.55)}
-.papelito p{margin:0}
-@keyframes sale{from{opacity:0;transform:translateY(110px) scale(.35) rotate(14deg)}to{opacity:1;transform:translateY(0) scale(1) rotate(var(--r))}}
+.papelito{position:relative;background:var(--c-papel,var(--papel));color:var(--tinta);font-family:var(--mano);font-size:clamp(25px,4.6vw,31px);line-height:1.22;padding:26px 28px 22px;max-width:380px;
+  box-shadow:0 16px 34px rgba(0,0,0,.45);transform:rotate(var(--r));animation:vuelaPapel 1.15s cubic-bezier(.3,.7,.3,1) both;
+  background-image:linear-gradient(90deg,transparent 49.6%,rgba(120,90,50,.1) 50%,transparent 50.4%),linear-gradient(transparent 49.4%,rgba(120,90,50,.08) 50%,transparent 50.6%)}
+.papelito::before{content:"";position:absolute;top:-10px;left:50%;width:74px;height:22px;transform:translateX(-50%) rotate(-3deg);background:rgba(238,143,174,.55);opacity:0;animation:aparece .4s ease 1s forwards}
+.papelito p{margin:0;opacity:0;animation:aparece .6s ease .85s forwards}
+/* Sale volando del frasco doblado en cuatro, da un arco y se desdobla en el aire */
+@keyframes vuelaPapel{
+  0%{opacity:0;transform:translate(0,190px) scale(.12,.1) rotate(-40deg)}
+  12%{opacity:1}
+  40%{transform:translate(-36px,-50px) scale(.3,.22) rotate(25deg)}
+  62%{transform:translate(0,-10px) scale(1,.22) rotate(-8deg)}
+  80%{transform:translate(0,0) scale(1.03,1.06) rotate(calc(var(--r) * -1))}
+  100%{opacity:1;transform:translate(0,0) scale(1) rotate(var(--r))}}
 .frasco{background:none;border:0;padding:0;width:170px;transition:transform .2s}
 .frasco:active{transform:scale(.95) rotate(-3deg)}
+.frasco.sacude{animation:sacudeFrasco .6s ease}
+@keyframes sacudeFrasco{15%{transform:rotate(-9deg)}35%{transform:rotate(8deg)}55%{transform:rotate(-5deg)}75%{transform:rotate(3deg)}}
+.frasco-tapa{transform-box:fill-box;transform-origin:50% 100%}
+.frasco.sacude .frasco-tapa{animation:tapaSalta .6s cubic-bezier(.3,1.5,.5,1)}
+@keyframes tapaSalta{30%{transform:translateY(-16px) rotate(-14deg)}60%{transform:translateY(-4px) rotate(5deg)}}
 .frasco svg{width:100%;height:auto;display:block;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45))}
 .contador{color:var(--suave);font-size:16px;margin:8px 0 20px;min-height:1.6em}
 
 /* ---------- Corazón que se llena ---------- */
 .corazon-zona{display:grid;justify-items:center}
-.gran-corazon{position:relative;width:min(250px,66vw);border:0;padding:0;background:none;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:transform .2s ease}
-.gran-corazon svg{width:100%;height:auto;display:block;overflow:visible;filter:drop-shadow(0 18px 34px rgba(0,0,0,.45)) drop-shadow(0 0 22px rgba(238,143,174,.25))}
-.gran-corazon.apretando{transform:scale(.95)}
-.gran-corazon.lleno{animation:latido 1.2s ease-in-out infinite}
+/* ---------- Nuestra constelación ---------- */
+.constelacion-zona{display:grid;justify-items:center}
+.cielo-const{position:relative;width:min(420px,90vw);aspect-ratio:1;border-radius:50%;overflow:hidden;
+  background:radial-gradient(circle at 50% 42%,#2a1d4d,#140d29 62%,#0b0718);box-shadow:0 0 0 1px rgba(245,201,122,.18),0 30px 70px rgba(0,0,0,.55),inset 0 0 60px rgba(0,0,0,.6)}
+.cielo-const::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 120%,rgba(238,143,174,.18),transparent 55%);pointer-events:none}
+.cielo-const svg{position:absolute;inset:6%;width:88%;height:88%;overflow:visible}
+.c-fondo{fill:#fff;animation:titilaC var(--d,3s) ease-in-out infinite;animation-delay:var(--w,0s)}
+@keyframes titilaC{50%{opacity:.25}}
+.c-estrella{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.c-estrella .nucleo{fill:#fff6dd;opacity:.35;transition:opacity .4s,r .4s}
+.c-estrella .halo{fill:url(#constHalo);opacity:0;transition:opacity .4s}
+.c-estrella .toque{fill:transparent}
+.c-estrella.siguiente .nucleo{opacity:1;animation:llamaEstrella 1.3s ease-in-out infinite}
+.c-estrella.siguiente .halo{opacity:.7;animation:llamaHalo 1.3s ease-in-out infinite}
+@keyframes llamaEstrella{50%{r:2.4px}}
+@keyframes llamaHalo{50%{opacity:1;r:7px}}
+.c-estrella.unida .nucleo{opacity:1;fill:#fff}
+.c-estrella.unida .halo{opacity:.85}
+.c-linea{stroke:#f5c97a;stroke-width:.7;stroke-linecap:round;filter:drop-shadow(0 0 1.5px rgba(245,201,122,.9))}
+.c-linea.dibuja{animation:trazo .55s ease-out forwards}
+.cielo-const.completa .c-linea{animation:brillaLinea 2.2s ease-in-out infinite;stroke-dashoffset:0}
+@keyframes brillaLinea{50%{stroke:#ffe9b8;filter:drop-shadow(0 0 3px rgba(255,220,150,1))}}
+#constRelleno{transition:opacity 2.4s ease}
+.cielo-const.completa #constRelleno{opacity:1}
+.cielo-const.completa svg{animation:latidoConst 1.6s ease-in-out 1.2s 2}
+@keyframes latidoConst{0%,100%{transform:scale(1)}20%{transform:scale(1.05)}40%{transform:scale(.99)}60%{transform:scale(1.03)}}
+.fugaz{position:absolute;top:18%;left:-30%;width:90px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#fff);transform:rotate(18deg);opacity:0;pointer-events:none}
+.cielo-const.completa .fugaz{animation:fugaz 1.4s ease-in 1.8s}
+@keyframes fugaz{0%{opacity:0;left:-30%;top:14%}15%{opacity:1}100%{opacity:0;left:120%;top:46%}}
+.const-frase{font-family:var(--mano);font-size:clamp(26px,5.6vw,36px);color:var(--rosa);line-height:1.25;max-width:22ch;min-height:2.6em;margin:22px auto 0}
+.const-frase span{display:inline-block;animation:palabraEstrella .6s cubic-bezier(.2,.9,.3,1.3) both}
+@keyframes palabraEstrella{from{opacity:0;transform:translateY(10px) scale(.7);filter:blur(4px) drop-shadow(0 0 8px #f5c97a)}}
 @keyframes latido{0%,100%{transform:scale(1)}14%{transform:scale(1.1)}28%{transform:scale(.98)}42%{transform:scale(1.06)}}
-.medidor{font-family:var(--mano);font-size:clamp(28px,5.4vw,36px);color:var(--rosa);min-height:1.3em;margin:18px 0 0;line-height:1.2}
 .corazon-final{font-style:italic;font-size:clamp(22px,3.4vw,28px);line-height:1.4;max-width:24ch;margin:4px auto 0;animation:aparece 1s ease}
 
 /* ---------- Piano ---------- */
@@ -858,7 +912,11 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
   background-image:linear-gradient(180deg,transparent 33%,rgba(120,90,50,.07) 33.2%,rgba(255,255,255,.5) 33.5%,transparent 34%,transparent 66%,rgba(120,90,50,.07) 66.2%,rgba(255,255,255,.5) 66.5%,transparent 67%),
     radial-gradient(130% 90% at 50% 40%,transparent 62%,rgba(150,110,60,.13)),repeating-linear-gradient(180deg,transparent 0 39px,rgba(59,43,79,.09) 39px 40px);
   background-position:0 0,0 0,0 43px;box-shadow:0 30px 70px rgba(0,0,0,.55);
-  transform:rotate(-.6deg);transform-origin:top;animation:despliega 1.5s cubic-bezier(.3,.7,.3,1)}
+  transform:rotate(-.6deg);transform-origin:top;animation:despliega 2s cubic-bezier(.3,.7,.3,1)}
+/* Ya abierta, una luz cálida recorre el papel */
+.carta::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 30%,rgba(255,236,190,.55) 46%,transparent 62%) -160% 0/260% 100% no-repeat;opacity:0;mix-blend-mode:soft-light}
+.carta.abierta::after{animation:luzCarta 2.2s ease-out forwards}
+@keyframes luzCarta{0%{opacity:1;background-position:-160% 0}100%{opacity:1;background-position:260% 0}}
 /* Se despliega en sus tres dobleces, como una carta de verdad */
 @keyframes despliega{
   0%{opacity:0;transform:rotate(-.6deg) perspective(900px) rotateX(-70deg) scaleY(.33);filter:brightness(.7)}
@@ -867,28 +925,18 @@ body.empezo .tarde{animation:aparece 1s ease forwards;animation-delay:var(--d,1.
   100%{opacity:1;transform:rotate(-.6deg) scaleY(1);filter:none}}
 .carta p{margin:0 0 40px}
 .carta .saludo{font-size:1.25em;font-weight:600}
-.carta-polaroid{position:absolute;top:-46px;right:-10px;width:clamp(92px,22vw,128px);padding:7px 7px 0;background:#fff;box-shadow:0 8px 16px rgba(0,0,0,.35);transform:rotate(7deg);z-index:2;opacity:0;animation:pega .8s cubic-bezier(.3,1.4,.5,1) 1.4s forwards}
+.carta-polaroid{position:absolute;top:-46px;right:-10px;width:clamp(92px,22vw,128px);padding:7px 7px 24px;background:#fff;box-shadow:0 8px 16px rgba(0,0,0,.35);transform:rotate(7deg);z-index:2;opacity:0;animation:pega .8s cubic-bezier(.3,1.4,.5,1) 1.4s forwards}
 .carta-polaroid img{display:block;width:100%;aspect-ratio:1;object-fit:cover;filter:sepia(.15) saturate(.95)}
-.carta-polaroid span{display:block;font:600 16px/1 var(--mano);text-align:center;padding:6px 0 8px;color:#c9567d}
 .carta-polaroid::before{content:"";position:absolute;top:-10px;left:50%;width:58px;height:20px;margin-left:-29px;background:rgba(238,143,174,.55);transform:rotate(-4deg);box-shadow:0 1px 2px rgba(0,0,0,.1)}
 @keyframes pega{from{opacity:0;transform:rotate(18deg) scale(1.3) translateY(-20px)}to{opacity:1;transform:rotate(7deg)}}
 .carta-flor{position:absolute;left:clamp(10px,4vw,34px);bottom:26px;width:clamp(54px,12vw,78px);opacity:0;transform:rotate(-18deg);pointer-events:none;transition:opacity 1.6s}
 .carta-flor.on{opacity:.88}
-/* Escrita a mano: cada palabra aparece como tinta fresca, con una pluma que la va siguiendo */
-.escrita{display:inline-block;clip-path:inset(-20% 100% -20% 0);color:#4a2f6e}
-.escrita.tinta{animation:tinta var(--dur,.3s) linear forwards}
-@keyframes tinta{to{clip-path:inset(-20% -4% -20% 0);color:var(--tinta)}}
-.escrita.ya{clip-path:none;color:var(--tinta)}
-.pluma{position:absolute;left:0;top:0;width:34px;height:34px;z-index:3;pointer-events:none;opacity:0;transition:transform .14s linear,opacity .4s;transform-origin:0 100%}
-.pluma.on{opacity:1}
 .firma{text-align:right;white-space:pre-line;font-weight:600}
-.firma .nombre-firma{display:inline-block;font-size:1.5em;line-height:1.1;clip-path:inset(-30% 100% -30% 0)}
-.firma .nombre-firma.tinta{animation:tinta 1.8s cubic-bezier(.4,.1,.6,1) forwards}
+.firma .nombre-firma{display:inline-block;font-size:1.5em;line-height:1.1}
 .firma .corazon-firma{display:inline-block;width:34px;height:30px;vertical-align:-4px;margin-left:6px}
 .firma .corazon-firma path{fill:none;stroke:#c9567d;stroke-width:3;stroke-linecap:round;stroke-dasharray:120;stroke-dashoffset:120}
 .firma .corazon-firma.dibuja path{animation:trazo 1s ease-out forwards}
 @keyframes trazo{to{stroke-dashoffset:0}}
-.saltar{position:absolute;left:18px;top:12px;font-family:var(--serif);font-size:13px;color:rgba(59,43,79,.55);background:none;border:0;padding:4px}
 .una-mas{text-align:center;margin-top:64px}
 .una-mas p{font-family:var(--mano);font-size:34px;color:var(--vela);margin:0 0 18px}
 
@@ -1195,9 +1243,11 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
           <path d="M60 48 Q40 54 40 84 L40 204 Q40 230 66 230 L134 230 Q160 230 160 204 L160 84 Q160 54 140 48 Z" fill="rgba(195,181,240,.10)" stroke="rgba(255,255,255,.5)" stroke-width="2.5"/>
           <path d="M54 96 L54 196" stroke="rgba(255,255,255,.28)" stroke-width="7" stroke-linecap="round"/>
           <rect x="62" y="34" width="76" height="16" rx="3" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.45)" stroke-width="2"/>
-          <rect x="54" y="14" width="92" height="24" rx="6" fill="#d9a65a"/>
-          <rect x="54" y="14" width="92" height="8" rx="4" fill="#f0c47e"/>
-          <path d="M70 26 h60" stroke="#b9853e" stroke-width="2" stroke-dasharray="3 5"/>
+          <g class="frasco-tapa">
+            <rect x="54" y="14" width="92" height="24" rx="6" fill="#d9a65a"/>
+            <rect x="54" y="14" width="92" height="8" rx="4" fill="#f0c47e"/>
+            <path d="M70 26 h60" stroke="#b9853e" stroke-width="2" stroke-dasharray="3 5"/>
+          </g>
         </svg>
       </button>
       <button class="btn" id="btnPapel" type="button">Sacar un papelito</button>
@@ -1207,24 +1257,22 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
 
   <section id="corazon" class="centro">
     <h2>Lo que siento por ti</h2>
-    <p class="nota">Mantén presionado el corazón para medirlo.</p>
-    <div class="corazon-zona">
-      <button class="gran-corazon" id="granCorazon" type="button" aria-label="Mantén presionado para llenar el corazón">
-        <svg viewBox="0 0 100 90" aria-hidden="true">
+    <p class="nota">Une las estrellas: toca la que brilla.</p>
+    <div class="constelacion-zona">
+      <div class="cielo-const" id="cieloConst">
+        <svg viewBox="0 0 100 92" id="constSvg" aria-hidden="true">
           <defs>
-            <clipPath id="corClip"><path d="M50 86 C20 64 4 48 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 48 80 64 50 86 Z"/></clipPath>
-            <linearGradient id="corLiq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc2d3"/><stop offset=".5" stop-color="#ee8fae"/><stop offset="1" stop-color="#c9567d"/></linearGradient>
+            <radialGradient id="constHalo"><stop offset="0" stop-color="#fff2c8" stop-opacity=".95"/><stop offset=".35" stop-color="#f5c97a" stop-opacity=".45"/><stop offset="1" stop-color="#f5c97a" stop-opacity="0"/></radialGradient>
+            <radialGradient id="constLuz" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#ffd9e6" stop-opacity=".55"/><stop offset=".6" stop-color="#ee8fae" stop-opacity=".18"/><stop offset="1" stop-color="#ee8fae" stop-opacity="0"/></radialGradient>
           </defs>
-          <path d="M50 86 C20 64 4 48 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 48 80 64 50 86 Z" fill="rgba(238,143,174,.1)"/>
-          <g clip-path="url(#corClip)">
-            <rect id="corNivel" x="0" y="90" width="100" height="95" fill="url(#corLiq)"/>
-            <rect id="corOla" x="0" y="90" width="100" height="2.2" fill="rgba(255,255,255,.55)"/>
-          </g>
-          <path d="M50 86 C20 64 4 48 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 48 80 64 50 86 Z" fill="none" stroke="#fbe3ef" stroke-width="2.2" stroke-linejoin="round"/>
-          <path d="M23 15 C16 17 12 23 12 30" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linecap="round"/>
+          <g id="constFondo"></g>
+          <path id="constRelleno" fill="url(#constLuz)" opacity="0"/>
+          <g id="constLineas"></g>
+          <g id="constEstrellas"></g>
         </svg>
-      </button>
-      <p class="medidor" id="medidor" aria-live="polite"></p>
+        <span class="fugaz" aria-hidden="true"></span>
+      </div>
+      <p class="const-frase" id="constFrase" aria-live="polite"></p>
       <p class="corazon-final" id="corFinal" hidden>Infinito. Y aun así, se queda corto.</p>
     </div>
   </section>
@@ -1279,7 +1327,6 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       <p class="sobre-pista">Toca el sello para abrirla</p>
     </div>
     <article class="carta" id="cartaEl" hidden>
-      <button class="saltar" id="saltar" type="button">Leer de una vez</button>
       <figure class="carta-polaroid" id="cartaPolaroid" hidden></figure>
       <p class="saludo" id="cartaSaludo"></p>
       <div id="cartaTexto"></div>
@@ -1289,7 +1336,6 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
         <path d="M39 86 C28 80 22 84 18 90 C26 92 33 91 39 86Z M40 74 C50 66 58 68 62 74 C54 77 47 77 40 74Z" fill="#9db68a" opacity=".85"/>
         <g transform="translate(40 40)" opacity=".9"><g fill="#f2a7bf"><ellipse rx="8" ry="15" transform="rotate(0) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(72) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(144) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(216) translate(0 -13)"/><ellipse rx="8" ry="15" transform="rotate(288) translate(0 -13)"/></g><circle r="6" fill="#f5c97a"/></g>
       </svg>
-      <svg class="pluma" id="pluma" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 31 L7 21 L25 3 C28 1 32 4 30 8 L12 27 Z" fill="#3b2b4f"/><path d="M7 21 L12 27" stroke="#f5c97a" stroke-width="2"/><path d="M3 31 L6 24" stroke="#c9a25a" stroke-width="1.5"/></svg>
     </article>
     <div class="una-mas" id="unaMas" hidden>
       <p>Una última cosa…</p>
@@ -2439,6 +2485,16 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   tamCielo();
   if(!reduce) requestAnimationFrame(dibujarCielo);
 
+  /* ---------- Las secciones entran con su título ---------- */
+  document.querySelectorAll("section.centro").forEach(s => {
+    if(reduce || !("IntersectionObserver" in window)) return;
+    s.classList.add("revela");
+    // (la mesa de polaroids no: cada foto ya tiene su propia caída)
+    [...s.children].filter(h => !h.classList.contains("mesa")).forEach((h, i) => { h.classList.add("centro-pieza"); h.style.setProperty("--p", Math.min(i, 3)); });
+    const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ s.classList.add("visto"); io.disconnect(); } }), {threshold:0, rootMargin:"0px 0px -18% 0px"});
+    io.observe(s);
+  });
+
   /* ---------- Galería ---------- */
   if(!momentos.length) $("#momentos").hidden = true;
   const mesa = $("#mesa");
@@ -2452,8 +2508,15 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     b.style.setProperty("--cr", rnd(-9,9).toFixed(1)+"deg");
     b.style.setProperty("--cx", rnd(-16,16).toFixed(0)+"px");
     b.appendChild(medio(mo, {mini:true, insignia:true}));
-    const pie = document.createElement("span"); pie.className = "pie"; pie.textContent = mo.pie || ""; b.appendChild(pie);
     mesa.appendChild(b);
+    // En computador la polaroid se inclina siguiendo el mouse
+    b.addEventListener("pointermove", e => {
+      if(e.pointerType !== "mouse") return;
+      const r = b.getBoundingClientRect();
+      b.style.setProperty("--tx", (((e.clientX - r.left)/r.width - .5)*14).toFixed(1) + "deg");
+      b.style.setProperty("--ty", ((.5 - (e.clientY - r.top)/r.height)*14).toFixed(1) + "deg");
+    });
+    b.addEventListener("pointerleave", () => { b.style.setProperty("--tx", "0deg"); b.style.setProperty("--ty", "0deg"); });
     b.addEventListener("click", () => {
       const r = b.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, 14);
       setTimeout(() => abrirVisor(i), reduce ? 0 : 260);
@@ -2517,45 +2580,93 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     const out = $("#papelOut"); out.innerHTML = "";
     const n = document.createElement("div"); n.className = "papelito"; n.style.setProperty("--r", rnd(-4,4).toFixed(1)+"deg");
     n.innerHTML = `<p>…${esc(t)}</p>`; out.appendChild(n);
+    const fr = $("#frasco"); fr.classList.remove("sacude"); void fr.offsetWidth; fr.classList.add("sacude");
+    try { papel(); } catch(e){}
+    if(!reduce) setTimeout(() => { const r = n.getBoundingClientRect(); if(r.width) corazones(r.left + r.width/2, r.top + r.height/2, 8); }, 900);
     if(k >= razones.length){ const b = $("#btnPapel"); b.disabled = true; b.style.opacity = .5; b.textContent = "El frasco quedó vacío"; }
   }
   $("#btnPapel").addEventListener("click", sacarPapel);
   $("#frasco").addEventListener("click", sacarPapel);
   pintarFrasco(); contar();
 
-  /* ---------- Corazón que se llena ---------- */
-  const gc = $("#granCorazon"), nivel = $("#corNivel"), ola = $("#corOla");
-  const MEDIDA = [[.06,"Un poquito…"],[.3,"Más…"],[.55,"Mucho más…"],[.8,"Muchísimo más…"]];
-  let carga = 0, apretado = false, rafCor = 0, tCor = 0, lleno = false;
-  function pintarCor(){
-    const y = 90 - 92*carga;
-    nivel.setAttribute("y", y.toFixed(2)); ola.setAttribute("y", (y - 1).toFixed(2));
-    if(!lleno){ let m = ""; for(const [u, t] of MEDIDA) if(carga >= u) m = t; $("#medidor").textContent = m; }
+  /* ---------- Nuestra constelación ---------- */
+  // Estrellas en forma de corazón: cada toque une la siguiente y suma una palabra a la frase
+  const FRASE = String(C.constelacion || "Tus pecas son mi constelación favorita, y tú, mi cielo entero").split(" ").filter(Boolean);
+  const svgEl = (tag, at) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for(const k in at) e.setAttribute(k, at[k]); return e; };
+  const cieloC = $("#cieloConst");
+  // Las estrellas se reparten a la misma distancia a lo largo del borde del corazón, empezando arriba al centro
+  const PUNTOS = (() => {
+    const curva = [];
+    for(let i = 0; i <= 720; i++){
+      const t = i/720*Math.PI*2, x = 16*Math.pow(Math.sin(t), 3), y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+      curva.push([50 + x*2.8, 42 - y*2.6]);
+    }
+    const acum = [0];
+    for(let i = 1; i < curva.length; i++) acum.push(acum[i-1] + Math.hypot(curva[i][0] - curva[i-1][0], curva[i][1] - curva[i-1][1]));
+    // Siempre hay estrella en la hendidura de arriba y en la punta de abajo; las demás se reparten a los lados
+    const total = acum[acum.length - 1], mitad = total/2, N = FRASE.length;
+    const der = Math.ceil(Math.max(0, N - 2)/2), izq = Math.max(0, N - 2 - der);
+    const metas = [0];
+    for(let i = 1; i <= der; i++) metas.push(i/(der + 1)*mitad);
+    if(N > 1) metas.push(mitad);
+    for(let i = 1; i <= izq; i++) metas.push(mitad + i/(izq + 1)*mitad);
+    let j = 0;
+    return metas.slice(0, N).map(meta => {
+      while(j < acum.length - 1 && acum[j] < meta) j++;
+      return [curva[j][0] + rnd(-.5, .5), curva[j][1] + rnd(-.5, .5)];
+    });
+  })();
+  for(let i = 0; i < 46; i++){
+    const c = svgEl("circle", {cx: rnd(0, 100).toFixed(1), cy: rnd(0, 92).toFixed(1), r: rnd(.15, .5).toFixed(2), class: "c-fondo"});
+    c.style.setProperty("--d", rnd(2, 5).toFixed(1) + "s"); c.style.setProperty("--w", rnd(-5, 0).toFixed(1) + "s");
+    $("#constFondo").appendChild(c);
   }
-  function pasoCor(t){
-    const dt = tCor ? Math.min(50, t - tCor) : 16; tCor = t;
-    carga = Math.max(0, Math.min(1, carga + (apretado ? dt/2800 : -dt/2400)));
-    pintarCor();
-    if(apretado && Math.random() < .18){ const r = gc.getBoundingClientRect(); corazones(r.left + r.width*rnd(.25,.75), r.top + r.height*rnd(.2,.6), 1); }
-    if(carga >= 1 && !lleno) llenar();
-    if(!lleno && (apretado || carga > 0)) rafCor = requestAnimationFrame(pasoCor); else { rafCor = 0; tCor = 0; }
+  $("#constRelleno").setAttribute("d", "M" + PUNTOS.map(p => p.map(n => n.toFixed(1)).join(" ")).join(" L") + " Z");
+  const NOTAS_C = [67, 69, 72, 74, 76, 79, 81, 84, 86, 88, 91, 93];
+  let sigC = 0;
+  const elsC = PUNTOS.map(([x, y], k) => {
+    const g = svgEl("g", {class: "c-estrella"});
+    g.appendChild(svgEl("circle", {class: "halo", cx: x, cy: y, r: 4}));
+    g.appendChild(svgEl("circle", {class: "nucleo", cx: x, cy: y, r: 1.5}));
+    g.appendChild(svgEl("circle", {class: "toque", cx: x, cy: y, r: 7}));
+    g.addEventListener("click", () => tocarEstrella(k));
+    $("#constEstrellas").appendChild(g);
+    return g;
+  });
+  elsC[0].classList.add("siguiente");
+  function lineaC(a, b){
+    const [x1, y1] = PUNTOS[a], [x2, y2] = PUNTOS[b], largo = Math.hypot(x2 - x1, y2 - y1);
+    const l = svgEl("line", {class: "c-linea", x1, y1, x2, y2});
+    l.style.strokeDasharray = largo; l.style.strokeDashoffset = largo;
+    $("#constLineas").appendChild(l);
+    l.addEventListener("animationend", () => { l.style.strokeDashoffset = 0; }, {once: true});
+    if(reduce) l.style.strokeDashoffset = 0; else requestAnimationFrame(() => l.classList.add("dibuja"));
   }
-  function llenar(){
-    lleno = true; apretado = false;
-    gc.classList.remove("apretando"); gc.classList.add("lleno");
-    $("#medidor").textContent = "¿Que cuánto te quiero?";
-    $("#corFinal").hidden = false;
-    const r = gc.getBoundingClientRect();
-    corazones(r.left + r.width/2, r.top + r.height*.45, 60);
-    confeti(120);
+  function tocarEstrella(k){
+    if(k !== sigC || sigC >= FRASE.length) return;
+    const el = elsC[k];
+    el.classList.remove("siguiente"); el.classList.add("unida");
+    if(k > 0) lineaC(k - 1, k);
+    try { sonarNota(NOTAS_C[k % NOTAS_C.length]); } catch(e){}
+    const w = document.createElement("span"); w.textContent = FRASE[k];
+    const fr = $("#constFrase"); if(k > 0) fr.appendChild(document.createTextNode(" ")); fr.appendChild(w);
+    const r = el.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, 3);
+    sigC++;
+    if(sigC < FRASE.length){ elsC[sigC].classList.add("siguiente"); return; }
+    // La última estrella cierra el corazón y todo se ilumina
+    setTimeout(() => {
+      lineaC(FRASE.length - 1, 0);
+      setTimeout(() => {
+        // Las líneas quedan trazadas antes de que empiecen a brillar
+        document.querySelectorAll(".c-linea").forEach(l => { l.style.strokeDashoffset = 0; });
+        cieloC.classList.add("completa");
+        try { [72, 76, 79, 84, 88].forEach((m, i) => setTimeout(() => sonarNota(m), i*140)); } catch(e){}
+        const rc = cieloC.getBoundingClientRect();
+        corazones(rc.left + rc.width/2, rc.top + rc.height*.45, 40); confeti(110);
+        setTimeout(() => { $("#corFinal").hidden = false; }, 1600);
+      }, reduce ? 0 : 600);
+    }, reduce ? 0 : 350);
   }
-  const apretar = e => { if(lleno) return; e.preventDefault(); apretado = true; gc.classList.add("apretando"); if(!rafCor) rafCor = requestAnimationFrame(pasoCor); };
-  const aflojar = () => { apretado = false; gc.classList.remove("apretando"); };
-  gc.addEventListener("pointerdown", e => { try { gc.setPointerCapture(e.pointerId); } catch(err){} apretar(e); });
-  gc.addEventListener("pointerup", aflojar); gc.addEventListener("pointercancel", aflojar); gc.addEventListener("lostpointercapture", aflojar);
-  gc.addEventListener("keydown", e => { if((e.key === " " || e.key === "Enter") && !e.repeat) apretar(e); });
-  gc.addEventListener("keyup", e => { if(e.key === " " || e.key === "Enter") aflojar(); });
-  gc.addEventListener("contextmenu", e => e.preventDefault());
 
   /* ---------- Piano ---------- */
   let ac = null, master = null;
@@ -2769,9 +2880,8 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   }
 
   /* ---------- Carta ---------- */
-  let cartaAbierta = false, saltar = false;
-  $("#saltar").addEventListener("click", () => { saltar = true; });
-  // Sonidos de papel: el lacre que cruje, la hoja que se mueve y el lápiz sobre el papel
+  let cartaAbierta = false;
+  // Sonidos de papel: el lacre que cruje y la hoja que se mueve
   function ruidito(dur, frec, q, vol, tipo, curva){
     try {
       const a = audioCtx(), b = a.createBuffer(1, Math.max(1, Math.floor(a.sampleRate*dur)), a.sampleRate), d = b.getChannelData(0);
@@ -2783,62 +2893,28 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   }
   const crujeLacre = () => { ruidito(.09, 2600, .8, 1.1, "highpass", 3); setTimeout(() => ruidito(.06, 900, 1, .7, "bandpass", 3), 40); };
   const papel = () => ruidito(.55, 1700, .5, .32, "bandpass", .5);
-  const lapiz = n => ruidito(Math.min(.35, .05 + n*.022), 3800, 2.5, .05, "bandpass", 1);
 
-  // Escrita a mano: cada palabra aparece como tinta fresca y la pluma la va siguiendo
-  function moverPluma(s, dur){
-    const pl = $("#pluma"), y = s.offsetTop + s.offsetHeight*.82 - 31;
-    pl.style.transition = "none"; pl.style.transform = `translate(${s.offsetLeft - 3}px,${y}px)`; void pl.offsetWidth;
-    pl.style.transition = `transform ${dur}s linear,opacity .4s`; pl.style.transform = `translate(${s.offsetLeft + s.offsetWidth - 3}px,${y}px)`;
-  }
-  // Si la escritura llega al borde de la pantalla, la página baja con ella
-  function seguirEscritura(s){
-    const r = s.getBoundingClientRect();
-    if(r.bottom > innerHeight - 70 && r.top > 0) scrollBy({top: Math.min(160, r.bottom - innerHeight*.6), behavior: reduce ? "auto" : "smooth"});
-  }
-  function escribirMano(p, t){
-    return new Promise(res => {
-      const pals = String(t).split(" ").filter(Boolean);
-      const spans = pals.map((w, k) => {
-        const s = document.createElement("span"); s.className = "escrita"; s.textContent = w; p.appendChild(s);
-        if(k < pals.length - 1) p.appendChild(document.createTextNode(" "));
-        return s;
-      });
-      const todas = () => { spans.forEach(s => s.classList.add("ya")); res(); };
-      if(reduce || saltar) return todas();
-      $("#pluma").classList.add("on");
-      let k = 0;
-      (function paso(){
-        if(saltar) return todas();
-        if(k >= spans.length) return res();
-        const s = spans[k++], dur = Math.max(.12, s.textContent.length*.045);
-        s.style.setProperty("--dur", dur + "s"); s.classList.add("tinta");
-        moverPluma(s, dur); lapiz(s.textContent.length);
-        if(k % 6 === 1) seguirEscritura(s);
-        setTimeout(paso, dur*1000 + (/[.,;:…!?]$/.test(s.textContent) ? 280 : 45));
-      })();
-    });
-  }
-  async function firmar(){
+  // La carta ya viene escrita: se arma completa antes de desdoblarse
+  function armarCarta(){
+    $("#cartaSaludo").textContent = C.saludo || "";
+    const box = $("#cartaTexto"); box.innerHTML = "";
+    (C.carta || []).forEach(par => { const p = document.createElement("p"); p.textContent = par; box.appendChild(p); });
     const f = $("#cartaFirma"), lineas = String(C.firma || "").split("\n"), nombre = lineas.pop() || "";
     f.innerHTML = "";
-    if(lineas.length){ const l = document.createElement("span"); f.appendChild(l); await escribirMano(l, lineas.join(" ")); f.appendChild(document.createElement("br")); }
+    if(lineas.length){ f.appendChild(document.createTextNode(lineas.join(" "))); f.appendChild(document.createElement("br")); }
     const n = document.createElement("span"); n.className = "nombre-firma"; n.textContent = nombre; f.appendChild(n);
     f.insertAdjacentHTML("beforeend", `<svg class="corazon-firma" viewBox="0 0 34 30" aria-hidden="true"><path d="M17 27 C5 19 2 12 6 7 C10 3 15 5 17 9 C19 5 24 3 28 7 C32 12 29 19 17 27Z"/></svg>`);
-    const cor = f.querySelector(".corazon-firma");
-    if(reduce || saltar){ n.style.clipPath = "none"; cor.classList.add("dibuja"); }
-    else {
-      seguirEscritura(n);
-      n.classList.add("tinta"); moverPluma(n, 1.8); lapiz(14); setTimeout(() => lapiz(10), 900);
-      await esperar(1850);
-      cor.classList.add("dibuja"); await esperar(1000);
+    const cf = C.cartaFoto;
+    if(cf && cf.foto){
+      const pol = $("#cartaPolaroid"), im = new Image();
+      im.alt = ""; im.src = miniDe(cf.foto); im.onerror = () => { im.onerror = null; im.src = cf.foto; };
+      pol.innerHTML = ""; pol.appendChild(im); pol.hidden = false;
     }
-    $("#pluma").classList.remove("on");
-    $("#cartaFlor").classList.add("on");
   }
   async function abrirCarta(){
     if(cartaAbierta) return; cartaAbierta = true;
     $("#cartaSello").hidden = true;
+    armarCarta();
     // Primero llega el sobre con su sello de lacre
     const sc = $("#sobreCarta"), so = $("#sobreBtn");
     $("#sobrePara").textContent = `Para ${C.nombre} ♥`;
@@ -2856,23 +2932,15 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     sc.classList.add("fuera");
     await esperar(reduce ? 0 : 550);
     sc.hidden = true;
-    // La carta se despliega y se escribe a mano
-    const el = $("#cartaEl"); el.hidden = false; papel();
-    const cf = C.cartaFoto;
-    if(cf && cf.foto){
-      const pol = $("#cartaPolaroid"), im = new Image();
-      im.alt = ""; im.src = miniDe(cf.foto); im.onerror = () => { im.onerror = null; im.src = cf.foto; };
-      pol.appendChild(im); pol.insertAdjacentHTML("beforeend", `<span>${esc(cf.pie || "")}</span>`); pol.hidden = false;
-    }
+    // La carta se desdobla ya escrita, pliegue por pliegue
+    const el = $("#cartaEl"); el.hidden = false; papel(); setTimeout(papel, 700);
     el.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "start"});
-    await esperar(reduce ? 0 : 1600);
-    await escribirMano($("#cartaSaludo"), C.saludo || "");
-    await esperar(saltar || reduce ? 0 : 450);
-    const box = $("#cartaTexto");
-    for(const par of (C.carta || [])){ const p = document.createElement("p"); box.appendChild(p); await escribirMano(p, par); await esperar(saltar || reduce ? 0 : 420); }
-    $("#saltar").hidden = true;
-    await firmar();
-    await esperar(900);
+    await esperar(reduce ? 0 : 2000);
+    el.classList.add("abierta");
+    $("#cartaFirma .corazon-firma").classList.add("dibuja");
+    await esperar(reduce ? 0 : 900);
+    $("#cartaFlor").classList.add("on");
+    await esperar(reduce ? 0 : 1200);
     $("#unaMas").hidden = false;
   }
 
