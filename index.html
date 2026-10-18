@@ -120,6 +120,14 @@ const CONFIG = {
 
   intro: "Hoy cumples 19 años, y yo celebro tu vida y doy gracias porque ahora también es parte de la mía.",
 
+  // La ventana del cuarto (la noche de Bogotá): al tocar el cielo pasa una estrella fugaz y sale una de estas frases
+  ventana: [
+    "🌠 ¡Una estrella fugaz! Pide un deseo…",
+    "🌙 Hasta la luna salió a esperar tu cumpleaños.",
+    "✨ Todas las estrellas de Bogotá están brillando por ti.",
+    "🌠 Otra más… creo que el cielo también te quiere."
+  ],
+
   // El cuarto que se va decorando antes del cumpleaños.
   // Las cosas aparecen en este orden, repartidas entre "desde" y el día del cumpleaños.
   //  tipo:   cuadro | letrero | luces | globos | cafe | libros | rosas | regalos | globo19
@@ -661,6 +669,74 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .destello-cuarto.on{animation:destello 1.4s ease forwards}
 .cuarto.fiesta .luces .foco{animation-duration:.22s}
 .cuarto.fiesta .penumbra{opacity:0}
+/* Un minuto antes de medianoche la luz se va apagando; a las 12 vuelve con todo */
+.cuarto.casi .penumbra{opacity:.62;transition-duration:9s}
+
+/* La ventana: la noche de Bogotá arriba del cuarto (mide 1000 de ancho y llega hasta la moldura) */
+.ventana{position:absolute;left:0;top:-1700px;width:1000px;height:1674px;border:0;padding:0;margin:0;overflow:hidden;cursor:pointer;background:none;-webkit-tap-highlight-color:transparent}
+.cielo-noche{position:absolute;inset:0;background:linear-gradient(#05040f 0,#0b0820 45%,#171035 70%,#2a1b4f 86%,#4b2d63 95%,#74406a 100%)}
+.cielo-noche::after{content:"";position:absolute;left:-10%;right:-10%;bottom:0;height:520px;background:radial-gradient(60% 70% at 50% 100%,rgba(255,170,150,.22),transparent 70%)}
+.estrellas{position:absolute;inset:0}
+.estrellas i{position:absolute;width:var(--t);height:var(--t);border-radius:50%;background:#fffaf0;box-shadow:0 0 6px rgba(255,245,220,.9);opacity:var(--o,.8);animation:brillaEstrella var(--v,3s) ease-in-out infinite alternate;animation-delay:var(--d,0s)}
+.estrellas i.grande::before,.estrellas i.grande::after{content:"";position:absolute;left:50%;top:50%;width:26px;height:2px;translate:-50% -50%;background:linear-gradient(90deg,transparent,rgba(255,248,225,.85),transparent)}
+.estrellas i.grande::after{rotate:90deg}
+@keyframes brillaEstrella{0%{opacity:calc(var(--o,.8)*.25);scale:.7}100%{opacity:var(--o,.8);scale:1}}
+.luna{position:absolute;right:120px;top:max(40px,calc(1700px - var(--cielo,680px) + 64px));width:104px;height:104px;border-radius:50%;
+  background:radial-gradient(circle at 30% 62%,rgba(168,150,120,.35) 0 9%,transparent 10%),radial-gradient(circle at 62% 34%,rgba(168,150,120,.3) 0 7%,transparent 8%),
+    radial-gradient(circle at 58% 70%,rgba(168,150,120,.22) 0 5%,transparent 6%),radial-gradient(circle at 36% 32%,#fffef6,#f5ead2 48%,#dccaa2 80%,#c8b48a);
+  box-shadow:0 0 34px 6px rgba(255,241,210,.5),0 0 120px 40px rgba(200,180,255,.16)}
+.luna::after{content:"";position:absolute;inset:-70px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,240,210,.14),transparent);animation:respiraLuna 6s ease-in-out infinite alternate}
+@keyframes respiraLuna{to{scale:1.12;opacity:.6}}
+.fugaces{position:absolute;inset:0}
+.fugaz{position:absolute;width:190px;height:3px;border-radius:3px;transform-origin:100% 50%;rotate:var(--a,24deg);
+  background:linear-gradient(90deg,transparent,rgba(255,240,215,.55) 70%,#fff);filter:drop-shadow(0 0 6px rgba(255,236,200,.9));animation:fugaz 1.15s ease-in forwards}
+@keyframes fugaz{0%{opacity:0;translate:0 0;scale:.3 1}15%{opacity:1}100%{opacity:0;translate:var(--dx,420px) var(--dy,190px);scale:1 1}}
+.ciudad{position:absolute;left:0;bottom:0;width:1000px;height:200px;display:block}
+.ciudad .titila{animation:ventanaLuz 7s steps(1) infinite;animation-delay:var(--d,0s)}
+@keyframes ventanaLuz{0%,62%{opacity:1}63%,88%{opacity:.12}89%{opacity:1}}
+.ciudad .roja{animation:antena 1.8s ease-in-out infinite}
+@keyframes antena{0%,100%{opacity:.15}50%{opacity:1}}
+.ciudad .torre{animation:torreColor 9s linear infinite}
+@keyframes torreColor{0%{fill:#ee8fae}25%{fill:#c3b5f0}50%{fill:#9fd8c8}75%{fill:#f5c97a}100%{fill:#ee8fae}}
+.ciudad .santuario{filter:drop-shadow(0 0 5px rgba(255,236,200,.95))}
+.vidrio-v{position:absolute;inset:0;pointer-events:none;background:linear-gradient(112deg,transparent 58%,rgba(255,255,255,.035) 62%,transparent 66%,transparent 70%,rgba(255,255,255,.025) 72%,transparent 75%)}
+/* Cortinas de terciopelo recogidas a los lados */
+.cortina{position:absolute;top:-1700px;height:1716px;width:132px;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(0,0,0,.4),transparent 30%,transparent 70%,rgba(0,0,0,.35)),
+    repeating-linear-gradient(90deg,#4a1835 0,#86385c 13px,#a5486f 18px,#6a2648 28px,#4a1835 38px);
+  box-shadow:0 10px 24px rgba(0,0,0,.5)}
+.cortina.i{left:-12px;border-bottom-right-radius:100% 44%}
+.cortina.d{right:-12px;left:auto;border-bottom-left-radius:100% 44%}
+.cortina::after{content:"";position:absolute;bottom:150px;width:58px;height:14px;border-radius:8px;
+  background:linear-gradient(#fff1c9,#e3b062 45%,#a8742f);box-shadow:0 3px 6px rgba(0,0,0,.5)}
+.cortina.i::after{left:6px;rotate:-12deg} .cortina.d::after{right:6px;rotate:12deg}
+/* La luz de la noche dentro del cuarto */
+.luz-luna{position:absolute;left:-200px;width:1400px;top:0;height:760px;pointer-events:none;background:radial-gradient(50% 100% at 50% 0,rgba(170,160,255,.15),rgba(170,160,255,.05) 50%,transparent)}
+.noche{position:absolute;left:-3000px;width:7000px;top:-26px;height:4526px;pointer-events:none;background:radial-gradient(1150px 860px at 3500px 906px,transparent 35%,rgba(7,3,18,.34))}
+.resplandor-tv{position:absolute;left:150px;top:560px;width:700px;height:620px;z-index:3;pointer-events:none;border-radius:50%;opacity:.8;mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(140,175,255,.3),rgba(140,175,255,.1) 55%,transparent);animation:luzTele 3.4s linear infinite}
+.resplandor-tv.lista{background:radial-gradient(closest-side,rgba(255,170,200,.32),rgba(245,201,122,.1) 55%,transparent)}
+@keyframes luzTele{0%{opacity:.8}6%{opacity:.58}8%{opacity:.95}30%{opacity:.78}32%{opacity:.98}54%{opacity:.66}56%{opacity:.9}78%{opacity:.84}80%{opacity:.6}83%{opacity:.88}100%{opacity:.8}}
+.cosa.luces::before{content:"";position:absolute;left:-40px;right:-40px;top:20px;height:330px;z-index:-1;pointer-events:none;
+  background:radial-gradient(150px 130px at 9% 30%,rgba(255,217,138,.16),transparent),radial-gradient(160px 140px at 27% 52%,rgba(255,179,200,.15),transparent),
+    radial-gradient(160px 130px at 45% 30%,rgba(201,184,255,.15),transparent),radial-gradient(160px 130px at 59% 34%,rgba(168,240,212,.13),transparent),
+    radial-gradient(160px 140px at 75% 52%,rgba(255,217,138,.15),transparent),radial-gradient(150px 130px at 92% 30%,rgba(255,179,200,.15),transparent);
+  animation:respiraLuces 4.5s ease-in-out infinite alternate}
+@keyframes respiraLuces{to{opacity:.55}}
+.fuegos{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none}
+/* El reloj de la cuenta regresiva: hojitas doradas que caen al cambiar */
+.aviso-cuarto .sube.flip{display:flex;justify-content:center;align-items:flex-start;gap:5px;margin:6px 0 3px;min-height:0}
+.flip .u{display:grid;justify-items:center;gap:4px}
+.flip .ds{display:flex;gap:3px}
+.flip .h{position:relative;display:block;width:24px;height:34px;border-radius:5px;font:600 24px/34px var(--serif);color:#f5c97a;text-align:center;
+  background:linear-gradient(#2e2148 0 49.5%,#1c1430 50.5%);border:1px solid rgba(245,201,122,.3);box-shadow:0 5px 12px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.09);text-shadow:0 0 10px rgba(245,201,122,.45)}
+.flip .h::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.6)}
+.flip .h.cae{animation:hojaCae .5s cubic-bezier(.3,1.5,.6,1)}
+@keyframes hojaCae{0%{transform:perspective(140px) rotateX(-85deg);filter:brightness(1.8)}100%{transform:none}}
+.flip small{font:500 10px/1 var(--serif);letter-spacing:.18em;text-transform:uppercase;color:var(--suave);text-shadow:none}
+.flip .sep{font:600 22px/34px var(--serif);color:rgba(245,201,122,.55);width:6px;text-align:center}
+.flip .sep.esp{width:8px}
+@media (prefers-reduced-motion:reduce){ .estrellas i,.luna::after,.ciudad *,.resplandor-tv,.cosa.luces::before{animation:none} }
 /* Regalos que se abren */
 .vales{display:grid;gap:8px;margin-top:10px}
 .vale{display:flex;gap:10px;align-items:center;padding:8px 12px;border:2px dashed #e08aa8;border-radius:10px;background:#fff5f8;font-family:var(--mano);font-size:21px;line-height:1.15}
@@ -1199,7 +1275,17 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
    <div class="escenario" id="escenario">
     <span class="pared" aria-hidden="true"></span>
     <span class="techo" aria-hidden="true"></span>
+    <button class="ventana" id="ventana" type="button" aria-label="La ventana: el cielo de Bogotá">
+      <span class="cielo-noche" aria-hidden="true"></span>
+      <span class="estrellas" id="estrellas" aria-hidden="true"></span>
+      <span class="luna" id="luna" aria-hidden="true"></span>
+      <span class="fugaces" id="fugaces" aria-hidden="true"></span>
+      <svg class="ciudad" id="ciudad" viewBox="0 0 1000 260" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <span class="vidrio-v" aria-hidden="true"></span>
+    </button>
+    <span class="cortina i" aria-hidden="true"></span><span class="cortina d" aria-hidden="true"></span>
     <span class="moldura" aria-hidden="true"></span>
+    <span class="luz-luna" aria-hidden="true"></span>
     <span class="friso" aria-hidden="true"></span>
     <span class="zocalo" aria-hidden="true"></span>
     <span class="piso-c" aria-hidden="true"></span>
@@ -1250,6 +1336,8 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     </button>
     <span class="zona-musica" id="zonaMusica" aria-hidden="true"></span>
     <span class="penumbra" aria-hidden="true"></span>
+    <span class="noche" aria-hidden="true"></span>
+    <span class="resplandor-tv" id="resplandorTv" aria-hidden="true"></span>
     <div class="mueble" id="mueble">
       <span class="tabla" aria-hidden="true"></span>
       <button class="cajon i" id="cajonI" type="button" aria-label="Abrir el cajón de la izquierda"><span class="interior" aria-hidden="true"></span></button>
@@ -1290,6 +1378,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     </div>
     <span class="casete" id="casete" aria-hidden="true"><span class="casete-etiqueta">Para Sara ♥<small>no borrar · CH 15</small></span><span class="casete-ventana"><i></i><i></i></span></span>
    </div>
+   <canvas class="fuegos" id="fuegos" aria-hidden="true"></canvas>
    <div class="motas" id="motas" aria-hidden="true"></div>
    <div class="cuenta-grande" id="cuentaGrande" aria-live="assertive"></div>
    <div class="destello-cuarto" id="destelloCuarto" aria-hidden="true"></div>
@@ -1819,14 +1908,66 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     $("#motas").appendChild(m);
   }
 
+  // La ventana: estrellas que titilan y la ciudad de noche con Monserrate al fondo
+  for(let i = 0; i < 190; i++){
+    const e = document.createElement("i"), g = i % 23 === 0;
+    e.className = g ? "grande" : "";
+    e.style.cssText = `left:${rnd(1,99).toFixed(1)}%;top:${rnd(300,1440).toFixed(0)}px;--t:${(g ? 3.4 : rnd(1.2,2.8)).toFixed(1)}px;--o:${rnd(.45,1).toFixed(2)};--v:${rnd(1.8,5).toFixed(1)}s;--d:${(-rnd(0,5)).toFixed(1)}s`;
+    $("#estrellas").appendChild(e);
+  }
+  (function pintarCiudad(){
+    let semilla = 19;
+    const az = () => (semilla = (semilla*16807) % 2147483647)/2147483647;
+    const LUCES = ["#ffd98a","#ffe7b0","#ffc98f","#fff3d6","#ffd0a8"];
+    let s = `<defs><linearGradient id="bruma" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb0a0" stop-opacity="0"/><stop offset="1" stop-color="#ffb0a0" stop-opacity=".16"/></linearGradient></defs>`;
+    // Los cerros orientales: Guadalupe a la izquierda y Monserrate, con su santuario iluminado
+    s += `<path d="M0 166 C70 150 130 136 200 124 S300 100 350 110 S430 138 500 128 S610 70 668 64 S760 100 830 120 S940 144 1000 140 V260 H0Z" fill="#1d1338"/>`;
+    s += `<path d="M0 178 C120 160 210 150 300 146 S470 150 560 136 S760 128 860 146 S960 160 1000 156 V260 H0Z" fill="#170f2d"/>`;
+    s += `<g class="santuario" fill="#fbecc8"><rect x="657" y="50" width="22" height="15"/><rect x="664" y="38" width="8" height="13"/><path d="M664 38 l4 -8 l4 8z"/></g>`;
+    s += `<circle cx="668" cy="54" r="24" fill="#ffe9c0" opacity=".12"/>`;
+    // Los edificios, con ventanas prendidas
+    let x = -6;
+    while(x < 1000){
+      const w = 24 + az()*40, cerca = 1 - Math.abs(x + w/2 - 520)/520;
+      const h = 34 + az()*70 + cerca*60;
+      const top = 260 - h;
+      s += `<rect x="${x.toFixed(1)}" y="${top.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" fill="${az() < .5 ? "#100a20" : "#140d27"}"/>`;
+      for(let yy = top + 8; yy < 252; yy += 11) for(let xx = x + 5; xx < x + w - 6; xx += 8){
+        if(az() > .3) continue;
+        const t = az() < .1;
+        s += `<rect${t ? ` class="titila" style="--d:${(-az()*7).toFixed(1)}s"` : ""} x="${xx.toFixed(1)}" y="${yy.toFixed(1)}" width="3.6" height="5.4" fill="${LUCES[Math.floor(az()*LUCES.length)]}" opacity="${(.45 + az()*.5).toFixed(2)}"/>`;
+      }
+      if(h > 130) s += `<circle class="roja" cx="${(x + w/2).toFixed(1)}" cy="${(top - 4).toFixed(1)}" r="2.6" fill="#ff5a5a"/><rect x="${(x + w/2 - .8).toFixed(1)}" y="${(top - 4).toFixed(1)}" width="1.6" height="4" fill="#100a20"/>`;
+      x += w + (az() < .25 ? 6 + az()*10 : 0);
+    }
+    // Una torre alta con su corona de luces que cambia de color
+    s += `<rect x="574" y="70" width="34" height="190" fill="#120b24"/><rect class="torre" x="574" y="70" width="34" height="8"/><rect class="torre" x="574" y="70" width="2.4" height="190" opacity=".75"/><rect class="torre" x="605.6" y="70" width="2.4" height="190" opacity=".75"/>`;
+    for(let yy = 86; yy < 252; yy += 10) for(let xx = 580; xx < 602; xx += 7) if(az() < .35) s += `<rect x="${xx}" y="${yy}" width="3.6" height="5" fill="#ffe7b0" opacity="${(.4 + az()*.5).toFixed(2)}"/>`;
+    s += `<rect x="0" y="150" width="1000" height="110" fill="url(#bruma)"/>`;
+    $("#ciudad").innerHTML = s;
+  })();
+  // Estrellas fugaces: pasan solas de vez en cuando, y siempre que ella toca el cielo
+  function estrellaFugaz(){
+    if(reduce) return;
+    const f = document.createElement("span"), izq = Math.random() < .5, a = rnd(16, 34);
+    const cielo = parseFloat(getComputedStyle(escenario).getPropertyValue("--cielo")) || 680;
+    const top = rnd(Math.max(300, 1700 - cielo + 20), 1700 - 330);
+    f.className = "fugaz";
+    f.style.cssText = `top:${top.toFixed(0)}px;left:${(izq ? rnd(80, 420) : rnd(560, 900)).toFixed(0)}px;--a:${izq ? a : 180 - a}deg;--dx:${izq ? 420 : -420}px;--dy:${(420*Math.tan(a*Math.PI/180)).toFixed(0)}px`;
+    $("#fugaces").appendChild(f);
+    setTimeout(() => f.remove(), 1300);
+  }
+  (function fugazSola(){ setTimeout(() => { if(!document.hidden) estrellaFugaz(); fugazSola(); }, rnd(7000, 16000)); })();
+
   // El escenario mide 1000×1500 y se escala para caber en la pantalla, dejando arriba espacio para el aviso
-  const ANCHO = 1000, ALTO = 1500, RESERVA = 120;
+  const ANCHO = 1000, ALTO = 1500, RESERVA = 160;
   let vista = {s:1, tx:0, ty:0}, enfocado = null, final = false;
   function ponerVista(s, tx, ty){ vista = {s, tx, ty}; escenario.style.transform = `translate(${tx.toFixed(1)}px,${ty.toFixed(1)}px) scale(${s.toFixed(4)})`; }
   function vistaBase(){
     const vw = innerWidth, vh = innerHeight, s = Math.min(vw/ANCHO, (vh - RESERVA)/ALTO);
     ponerVista(s, (vw - ANCHO*s)/2, vh - ALTO*s);
     $("#avisoCuarto").style.height = Math.max(RESERVA, vh - ALTO*s) + "px";
+    escenario.style.setProperty("--cielo", ((vh - ALTO*s)/s).toFixed(0) + "px");
   }
   function rectLocal(el){ let x = 0, y = 0, n = el; while(n && n !== escenario){ x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; } return {x, y, w: el.offsetWidth, h: el.offsetHeight}; }
   // Acerca la cámara a un elemento: fw/fh = cuánto del ancho/alto de la pantalla ocupa, cy = a qué altura queda su centro
@@ -2137,7 +2278,11 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       const vis = i < n;
       if(vis && el.hidden){
         el.hidden = false;
-        if(!primera || i >= aparecidas){ el.style.animationDelay = primera ? `${(.5 + nuevas*.4).toFixed(2)}s` : "0s"; el.classList.add("aparece"); nuevas++; }
+        if(!primera || i >= aparecidas){
+          const espera = primera ? .5 + nuevas*.4 : 0, viaje = reduce ? 0 : .9;
+          el.style.animationDelay = `${(espera + viaje).toFixed(2)}s`; el.classList.add("aparece"); nuevas++;
+          if(viaje) setTimeout(() => estelaHacia(el), espera*1000);
+        }
       } else if(!vis) el.hidden = true;
       el.classList.toggle("sin-ver", vis && !abiertas.has(i));
     });
@@ -2428,7 +2573,9 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     cuarto.classList.add("fiesta");
     const d = $("#destelloCuarto"); d.classList.remove("on"); void d.offsetWidth; d.classList.add("on");
     tv.classList.add("sintoniza"); setTimeout(() => tv.classList.remove("sintoniza"), 900);
+    cuarto.classList.remove("casi");
     confeti(240);
+    setTimeout(() => funcionFuegos(30000), 500);
     const r = pantalla.getBoundingClientRect(); corazones(r.left + r.width/2, r.top + r.height/2, 40);
     setTimeout(() => notasMagicas(innerWidth/2, innerHeight*.55, 36), 600);
     try { [60,64,67,72,76,79,84].forEach((m, i) => setTimeout(() => sonarNota(m), 300 + i*110)); } catch(e){}
@@ -2438,7 +2585,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     const b = bloqueada();
     if(estabaBloqueada && !b && !modoPrueba && !final) celebrarMedianoche();
     estabaBloqueada = b;
-    tv.classList.toggle("lista", !b);
+    tv.classList.toggle("lista", !b); $("#resplandorTv").classList.toggle("lista", !b);
     actualizarCuarto();
     actualizarVinilos();
     const N = COSAS.length;
@@ -2451,7 +2598,8 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
         $("#osdCh").textContent = "CH 19";
         $("#osdReloj").textContent = `${d > 0 ? d + "D " : ""}${dos(h)}:${dos(m)}:${dos(s)}`;
       }
-      $("#cuenta").textContent = (d > 0 ? `Faltan ${d} ${d === 1 ? "día" : "días"}, ` : "Faltan ") + `${h} h, ${m} min y ${s} s`;
+      pintarFlip(d, h, m, s);
+      cuarto.classList.toggle("casi", ms <= 60000);
       if(Date.now() > avisoHasta) $("#pista").textContent = mostradas < N
         ? `Llevo ${mostradas} de ${N} sorpresas${textoSecretos()} · toca todo 🔍`
         : `Ya está todo colgado${textoSecretos()} · solo falta que llegue el día ♥`;
@@ -2459,10 +2607,150 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       const prueba = modoPrueba && cumple && new Date() < cumple;
       $("#arriba").textContent = prueba ? "¡Todo está listo para ti!" : `¡Feliz cumpleaños, ${C.nombre}!`;
       if(canal === 19 && !final){ $("#osdCh").textContent = "CH 19 ♥"; $("#osdReloj").textContent = "SEÑAL LISTA"; }
+      quitarFlip(); cuarto.classList.remove("casi");
       $("#cuenta").textContent = prueba ? "Modo prueba: solo tú puedes ver esto." : "Toca la tele para empezar. Sube el volumen.";
       $("#pista").textContent = `También puedes tocar las cosas para verlas de cerca${textoSecretos()} 🔍`;
     }
   }
+  // Tocar el cielo de la ventana: pasa una estrella fugaz y sale una frase
+  let iFrase = 0;
+  $("#ventana").addEventListener("click", e => {
+    e.stopPropagation();
+    if(final) return;
+    if(enfocado){ cerrarCosa(); return; }
+    estrellaFugaz();
+    const fr = C.ventana || [];
+    if(fr.length){ avisar(fr[iFrase % fr.length]); iFrase++; }
+  });
+
+  // Fuegos artificiales en la ventana: a medianoche y, el día del cumpleaños, de vez en cuando
+  const fg = $("#fuegos"), fgx = fg.getContext("2d");
+  const COLORES_FUEGO = [["#f5c97a","#fff1c9"],["#ee8fae","#ffd6e4"],["#c3b5f0","#f1ecff"],["#9fd8c8","#e6fff7"],["#ffb27a","#ffe3cc"]];
+  let cohetes = [], brasas = [], rafFuegos = 0;
+  // El pedazo de pantalla donde se ve el cielo (entre las cortinas, encima de la moldura)
+  function zonaCielo(){
+    const {s, tx, ty} = vista;
+    return {x0: Math.max(0, tx + 90*s), x1: Math.min(innerWidth, tx + 910*s), y1: ty - 90*s, piso: ty - 60*s};
+  }
+  function cohete(){
+    const z = zonaCielo();
+    if(z.y1 < 70 || z.x1 - z.x0 < 120) return;
+    const c = COLORES_FUEGO[Math.floor(Math.random()*COLORES_FUEGO.length)];
+    const x = rnd(z.x0 + (z.x1 - z.x0)*.08, z.x1 - (z.x1 - z.x0)*.08);
+    cohetes.push({x, y: z.piso, vx: rnd(-.5, .5), vy: -rnd(4.2, 5.6)*Math.min(1.4, Math.max(.7, z.y1/220)), meta: rnd(z.y1*.12, z.y1*.55), c, t: 0});
+    if(!rafFuegos){ medirFuegos(); rafFuegos = requestAnimationFrame(pasoFuegos); }
+  }
+  function medirFuegos(){
+    const w = Math.round(innerWidth*dpr), h = Math.round(innerHeight*dpr);
+    if(fg.width !== w || fg.height !== h){ fg.width = w; fg.height = h; }
+  }
+  function estallar(k){
+    const z = zonaCielo(), r = Math.min(1.5, Math.max(.6, z.y1/200)), n = 56 + Math.floor(Math.random()*30), anillo = Math.random() < .3;
+    brasas.push({tipo: "luz", x: k.x, y: k.y, t: 0, vida: 16, c: k.c[0], r: 90*r});
+    for(let i = 0; i < n; i++){
+      const a = i/n*Math.PI*2 + rnd(-.05, .05), v = (anillo ? 2 : rnd(.5, 2.2))*r;
+      brasas.push({x: k.x, y: k.y, px: k.x, py: k.y, vx: Math.cos(a)*v, vy: Math.sin(a)*v, t: 0, vida: rnd(60, 100), c: Math.random() < .3 ? k.c[1] : k.c[0], tit: Math.random() < .35});
+    }
+    setTimeout(() => ruidito(.7, 140, .7, .45, "lowpass", 2.6), 120);
+  }
+  function pasoFuegos(){
+    const w = innerWidth, h = innerHeight, z = zonaCielo();
+    fgx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    fgx.clearRect(0, 0, w, h);
+    fgx.save();
+    fgx.beginPath(); fgx.rect(z.x0, 0, z.x1 - z.x0, Math.max(0, z.y1 + 60*vista.s)); fgx.clip();
+    fgx.globalCompositeOperation = "lighter";
+    cohetes = cohetes.filter(k => {
+      k.t++; k.x += k.vx; k.y += k.vy; k.vy *= .985;
+      fgx.globalAlpha = .9; fgx.strokeStyle = k.c[1]; fgx.lineWidth = 2;
+      fgx.beginPath(); fgx.moveTo(k.x, k.y); fgx.lineTo(k.x - k.vx*4, k.y - k.vy*4); fgx.stroke();
+      if(k.y <= k.meta || k.vy > -1.2){ estallar(k); return false; }
+      return true;
+    });
+    brasas = brasas.filter(b => {
+      b.t++;
+      if(b.tipo === "luz"){
+        const g = fgx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+        g.addColorStop(0, b.c); g.addColorStop(1, "transparent");
+        fgx.globalAlpha = .28*(1 - b.t/b.vida); fgx.fillStyle = g;
+        fgx.fillRect(b.x - b.r, b.y - b.r, b.r*2, b.r*2);
+        return b.t < b.vida;
+      }
+      b.px = b.x; b.py = b.y;
+      b.vx *= .975; b.vy = b.vy*.975 + .028; b.x += b.vx; b.y += b.vy;
+      let a = Math.min(1, (b.vida - b.t)/40);
+      if(b.tit && b.t > 40) a *= Math.random() < .5 ? .2 : 1;
+      fgx.globalAlpha = a; fgx.strokeStyle = b.c; fgx.lineWidth = 2;
+      fgx.beginPath(); fgx.moveTo(b.px - b.vx*2.5, b.py - b.vy*2.5); fgx.lineTo(b.x, b.y); fgx.stroke();
+      return b.t < b.vida;
+    });
+    fgx.restore();
+    rafFuegos = cohetes.length || brasas.length ? requestAnimationFrame(pasoFuegos) : (fgx.clearRect(0, 0, w, h), 0);
+  }
+  // Una tanda de fuegos durante "ms" milisegundos
+  function funcionFuegos(ms){
+    if(reduce) return;
+    const fin = Date.now() + ms;
+    (function otro(){
+      if(Date.now() > fin || final) return;
+      cohete(); if(Math.random() < .35) setTimeout(cohete, 160);
+      setTimeout(otro, rnd(380, 900));
+    })();
+  }
+  const esElDia = () => !!cumple && new Date().toDateString() === cumple.toDateString();
+  (function fuegosDelDia(){
+    setTimeout(() => {
+      const enCuarto = !final && !document.hidden && !enfocado && !$("#portada").classList.contains("fuera");
+      if(enCuarto && !bloqueada() && (esElDia() || modoPrueba)){ cohete(); if(Math.random() < .5) setTimeout(cohete, rnd(250, 700)); }
+      fuegosDelDia();
+    }, rnd(5000, 11000));
+  })();
+
+  // Cuando llega algo nuevo al cuarto, una estela dorada baja de la luna hasta su lugar
+  function estelaHacia(el){
+    if(reduce || final) return;
+    const l = rectLocal(el), {s, tx, ty} = vista;
+    const xb = tx + (l.x + l.w/2)*s, yb = ty + (l.y + l.h/2)*s;
+    const lr = $("#luna").getBoundingClientRect();
+    const xa = lr.bottom > 0 && lr.width ? lr.left + lr.width/2 : innerWidth*.8, ya = lr.bottom > 0 && lr.width ? lr.top + lr.height/2 : 20;
+    const cx = (xa + xb)/2 + (xb > xa ? -1 : 1)*innerWidth*.22, cy = Math.min(ya, yb) - 40;
+    const t0 = performance.now(), dur = 950;
+    prepCanvas();
+    (function paso(t){
+      const u = Math.min(1, (t - t0)/dur), e = u*u*(3 - 2*u), v = 1 - e;
+      const x = v*v*xa + 2*v*e*cx + e*e*xb, y = v*v*ya + 2*v*e*cy + e*e*yb;
+      parts.push({tipo:"n", x, y, vx: 0, vy: 0, s: 24, c: "#fff6d8", ch: "✦", t: 0, vida: 13, fase: 0});
+      for(let k = 0; k < 2; k++) parts.push({tipo:"n", x: x + rnd(-5, 5), y: y + rnd(-5, 5), vx: rnd(-.35, .35), vy: rnd(-.1, .6), s: rnd(8, 14), c: k ? "#f5c97a" : "#fff1c9", ch: k ? "✦" : "✧", t: 0, vida: rnd(30, 55), fase: rnd(0, 6)});
+      if(!rafCf) rafCf = requestAnimationFrame(pasoCf);
+      if(u < 1) requestAnimationFrame(paso); else chispas(xb, yb, 12);
+    })(t0);
+  }
+
+  // El reloj de la cuenta regresiva: cada número es una hojita que cae al cambiar
+  let flipN = 0;
+  function pintarFlip(d, h, m, s){
+    const el = $("#cuenta");
+    const partes = [[d, d === 1 ? "día" : "días"], [h, "horas"], [m, "min"], [s, "seg"]].filter((p, k) => k > 0 || d > 0);
+    if(flipN !== partes.length){
+      flipN = partes.length; el.classList.add("flip");
+      el.setAttribute("aria-label", "Cuenta regresiva");
+      el.innerHTML = partes.map((p, k) => `${k ? `<span class="sep${d > 0 && k === 1 ? " esp" : ""}" aria-hidden="true">${d > 0 && k === 1 ? "" : ":"}</span>` : ""}<span class="u"><span class="ds"></span><small></small></span>`).join("");
+    }
+    const us = el.querySelectorAll(".u");
+    partes.forEach(([v, lab], k) => {
+      const txt = d > 0 && k === 0 ? String(v) : dos(v), ds = us[k].querySelector(".ds");
+      if(ds.children.length !== txt.length) ds.innerHTML = '<b class="h"></b>'.repeat(txt.length);
+      [...txt].forEach((ch, j) => {
+        const b = ds.children[j];
+        if(b.textContent === ch) return;
+        const antes = b.textContent !== ""; b.textContent = ch;
+        if(antes && !reduce){ b.classList.remove("cae"); void b.offsetWidth; b.classList.add("cae"); }
+      });
+      us[k].querySelector("small").textContent = lab;
+    });
+  }
+  function quitarFlip(){ if(flipN){ flipN = 0; $("#cuenta").classList.remove("flip"); $("#cuenta").removeAttribute("aria-label"); } }
+
   pintarCuenta();
   const relojT = setInterval(pintarCuenta, 250);
 
