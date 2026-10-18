@@ -411,8 +411,8 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
   background:var(--ruido) 0 0/260px 260px,var(--damasco) 0 0/120px 168px,
     repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 2px,transparent 2px 60px),linear-gradient(#45305f,#35264c 3800px)}
 .pared::after{content:"";position:absolute;inset:0;background:radial-gradient(1000px 820px at 3500px 3600px,rgba(255,206,170,.22),transparent 70%)}
-.techo{position:absolute;left:-3000px;right:-3000px;top:-3000px;height:2976px;background:var(--ruido) 0 0/260px 260px,linear-gradient(#0f0a1a 2700px,#2a1d40)}
-.moldura{position:absolute;left:-3000px;right:-3000px;top:-26px;height:26px;background:linear-gradient(#5a4372,#e9d8c4 30%,#b89c82 60%,#6d5585);box-shadow:0 6px 12px rgba(0,0,0,.35)}
+.techo{position:absolute;left:-3000px;right:-3000px;top:-3000px;height:calc(3000px - var(--cielo,680px) - 6px);background:var(--ruido) 0 0/260px 260px,linear-gradient(#0f0a1a 2700px,#2a1d40)}
+.moldura{position:absolute;left:-3000px;right:-3000px;top:calc(-1*var(--cielo,680px) - 8px);height:26px;background:linear-gradient(#5a4372,#e9d8c4 30%,#b89c82 60%,#6d5585);box-shadow:0 6px 12px rgba(0,0,0,.35)}
 .friso{position:absolute;left:-3000px;right:-3000px;top:905px;height:275px;
   background:var(--ruido) 0 0/260px 260px,
     linear-gradient(90deg,rgba(0,0,0,.32) 0 3px,rgba(255,255,255,.07) 3px 5px,transparent 5px) 0 0/124px 100%,
@@ -540,7 +540,7 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .vin-botones .btn.sec{color:#8a5a2a;border-color:rgba(138,90,42,.5)}
 @media (hover:hover){ .tocadiscos:hover{filter:brightness(1.1) drop-shadow(0 0 14px rgba(245,201,122,.6))} }
 .penumbra{position:absolute;left:-3000px;right:-3000px;top:-3000px;bottom:-3000px;background:#0b0716;opacity:var(--oscuro,.5);transition:opacity 2s ease;pointer-events:none}
-.aviso-cuarto{position:absolute;left:0;right:0;top:0;z-index:3;height:120px;display:grid;place-content:center;text-align:center;padding:12px 16px;pointer-events:none;transition:opacity .5s;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.aviso-cuarto{position:absolute;left:0;right:0;top:0;z-index:3;height:120px;display:grid;place-content:end center;text-align:center;padding:12px 16px;pointer-events:none;transition:opacity .5s;text-shadow:0 2px 12px rgba(0,0,0,.7)}
 .aviso-cuarto .arriba{font-family:var(--mano);font-size:clamp(28px,6.6vw,36px);color:var(--vela);margin:0 0 2px;line-height:1.1}
 .aviso-cuarto .sube{color:var(--texto);font-size:15px;margin:0;min-height:1.4em}
 .aviso-cuarto .pista{color:var(--suave);font-size:14px;margin:4px 0 0;min-height:1.4em;line-height:1.35}
@@ -673,44 +673,50 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 .cuarto.casi .penumbra{opacity:.62;transition-duration:9s}
 
 /* La ventana: la noche de Bogotá arriba del cuarto (mide 1000 de ancho y llega hasta la moldura) */
-.ventana{position:absolute;left:0;top:-1700px;width:1000px;height:1674px;border:0;padding:0;margin:0;overflow:hidden;cursor:pointer;background:none;-webkit-tap-highlight-color:transparent}
-.cielo-noche{position:absolute;inset:0;background:linear-gradient(#05040f 0,#0b0820 45%,#171035 70%,#2a1b4f 86%,#4b2d63 95%,#74406a 100%)}
-.cielo-noche::after{content:"";position:absolute;left:-10%;right:-10%;bottom:0;height:520px;background:radial-gradient(60% 70% at 50% 100%,rgba(255,170,150,.22),transparent 70%)}
+.ventana{position:absolute;left:var(--vx,380px);top:var(--vy,-560px);width:var(--vw,240px);height:var(--vh,300px);border:0;padding:0;margin:0;overflow:hidden;cursor:pointer;background:none;
+  border-radius:calc(var(--vw,240px)/2) calc(var(--vw,240px)/2) 3px 3px;box-shadow:0 0 0 9px #e9d8c4,0 0 0 12px #a88d74,0 16px 30px 12px rgba(0,0,0,.45);-webkit-tap-highlight-color:transparent}
+.ventana.sin,.ventana.sin~.cortinas{display:none}
+.cielo-noche{position:absolute;inset:0;background:linear-gradient(#070516 0,#0e0a26 40%,#1d1440 66%,#3a2458 84%,#6a3a66 100%)}
+.cielo-noche::after{content:"";position:absolute;left:-10%;right:-10%;bottom:0;height:45%;background:radial-gradient(60% 70% at 50% 100%,rgba(255,170,150,.24),transparent 70%)}
 .estrellas{position:absolute;inset:0}
-.estrellas i{position:absolute;width:var(--t);height:var(--t);border-radius:50%;background:#fffaf0;box-shadow:0 0 6px rgba(255,245,220,.9);opacity:var(--o,.8);animation:brillaEstrella var(--v,3s) ease-in-out infinite alternate;animation-delay:var(--d,0s)}
-.estrellas i.grande::before,.estrellas i.grande::after{content:"";position:absolute;left:50%;top:50%;width:26px;height:2px;translate:-50% -50%;background:linear-gradient(90deg,transparent,rgba(255,248,225,.85),transparent)}
+.estrellas i{position:absolute;width:var(--t);height:var(--t);border-radius:50%;background:#fffaf0;box-shadow:0 0 5px rgba(255,245,220,.9);opacity:var(--o,.8);animation:brillaEstrella var(--v,3s) ease-in-out infinite alternate;animation-delay:var(--d,0s)}
+.estrellas i.grande::before,.estrellas i.grande::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:2px;translate:-50% -50%;background:linear-gradient(90deg,transparent,rgba(255,248,225,.85),transparent)}
 .estrellas i.grande::after{rotate:90deg}
 @keyframes brillaEstrella{0%{opacity:calc(var(--o,.8)*.25);scale:.7}100%{opacity:var(--o,.8);scale:1}}
-.luna{position:absolute;right:190px;top:max(40px,calc(1700px - var(--cielo,680px) + 80px));width:78px;height:78px;border-radius:50%;
+.luna{position:absolute;right:15%;top:13%;width:27%;aspect-ratio:1;border-radius:50%;
   background:radial-gradient(circle at 30% 62%,rgba(168,150,120,.35) 0 9%,transparent 10%),radial-gradient(circle at 62% 34%,rgba(168,150,120,.3) 0 7%,transparent 8%),
     radial-gradient(circle at 58% 70%,rgba(168,150,120,.22) 0 5%,transparent 6%),radial-gradient(circle at 36% 32%,#fffef6,#f5ead2 48%,#dccaa2 80%,#c8b48a);
-  box-shadow:0 0 34px 6px rgba(255,241,210,.5),0 0 120px 40px rgba(200,180,255,.16)}
-.luna::after{content:"";position:absolute;inset:-56px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,240,210,.14),transparent);animation:respiraLuna 6s ease-in-out infinite alternate}
+  box-shadow:0 0 16px 3px rgba(255,241,210,.5),0 0 60px 18px rgba(200,180,255,.15)}
+.luna::after{content:"";position:absolute;inset:-60%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,240,210,.14),transparent);animation:respiraLuna 6s ease-in-out infinite alternate}
 @keyframes respiraLuna{to{scale:1.12;opacity:.6}}
 .fugaces{position:absolute;inset:0}
-.fugaz{position:absolute;width:190px;height:3px;border-radius:3px;transform-origin:100% 50%;rotate:var(--a,24deg);
-  background:linear-gradient(90deg,transparent,rgba(255,240,215,.55) 70%,#fff);filter:drop-shadow(0 0 6px rgba(255,236,200,.9));animation:fugaz 1.15s ease-in forwards}
-@keyframes fugaz{0%{opacity:0;translate:0 0;scale:.3 1}15%{opacity:1}100%{opacity:0;translate:var(--dx,420px) var(--dy,190px);scale:1 1}}
-.ciudad{position:absolute;left:0;bottom:0;width:1000px;height:200px;display:block}
+.fugaz-v{position:absolute;width:64px;height:2.5px;border-radius:3px;transform-origin:100% 50%;rotate:var(--a,24deg);
+  background:linear-gradient(90deg,transparent,rgba(255,240,215,.55) 70%,#fff);filter:drop-shadow(0 0 4px rgba(255,236,200,.9));animation:fugazV 1s ease-in forwards}
+@keyframes fugazV{0%{opacity:0;translate:0 0;scale:.3 1}15%{opacity:1}100%{opacity:0;translate:var(--dx,130px) var(--dy,60px);scale:1 1}}
+.ciudad{position:absolute;left:0;bottom:0;width:100%;height:38%;display:block}
 .ciudad .titila{animation:ventanaLuz 7s steps(1) infinite;animation-delay:var(--d,0s)}
 @keyframes ventanaLuz{0%,62%{opacity:1}63%,88%{opacity:.12}89%{opacity:1}}
 .ciudad .roja{animation:antena 1.8s ease-in-out infinite}
 @keyframes antena{0%,100%{opacity:.15}50%{opacity:1}}
 .ciudad .torre{animation:torreColor 9s linear infinite}
 @keyframes torreColor{0%{fill:#ee8fae}25%{fill:#c3b5f0}50%{fill:#9fd8c8}75%{fill:#f5c97a}100%{fill:#ee8fae}}
-.ciudad .santuario{opacity:.6}
-.vidrio-v{position:absolute;inset:0;pointer-events:none;background:linear-gradient(112deg,transparent 58%,rgba(255,255,255,.035) 62%,transparent 66%,transparent 70%,rgba(255,255,255,.025) 72%,transparent 75%)}
-/* Cortinas de terciopelo: empiezan arriba de lo que se ve de la ventana y caen hasta la moldura */
-.cortinas{position:absolute;left:0;width:1000px;top:calc(-1*var(--cielo,680px));height:calc(var(--cielo,680px) - 4px);z-index:1;pointer-events:none}
-.cortina{position:absolute;top:34px;bottom:0;width:180px}
-.cortina>svg{display:block;width:100%;height:100%;filter:drop-shadow(8px 0 10px rgba(0,0,0,.5))}
-.cortina.i{left:-8px} .cortina.d{right:-8px;transform:scaleX(-1)}
-.borla{position:absolute;left:0;top:56%;width:82px;translate:0 -14px}
-.borla svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(2px 4px 4px rgba(0,0,0,.5))}
-.cenefa{position:absolute;left:0;top:0;width:1000px;height:100px;z-index:2;overflow:visible;filter:drop-shadow(0 8px 10px rgba(0,0,0,.5))}
+.ciudad .santuario{opacity:.7}
+.vidrio-v{position:absolute;inset:0;pointer-events:none;background:linear-gradient(112deg,transparent 50%,rgba(255,255,255,.05) 56%,transparent 62%,transparent 68%,rgba(255,255,255,.035) 71%,transparent 75%)}
+/* La cuadrícula de la ventana y su sombra hacia adentro */
+.marco-v{position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 16px rgba(0,0,0,.55);
+  background:linear-gradient(90deg,transparent calc(50% - 4px),#e2cfb8 calc(50% - 4px) calc(50% + 4px),transparent calc(50% + 4px)),linear-gradient(transparent 58%,#e2cfb8 58% calc(58% + 7px),transparent calc(58% + 7px))}
+/* Cortinitas de terciopelo a los lados de la ventana, con su cenefa y el alféizar */
+.cortinas{position:absolute;left:calc(var(--vx,380px) - 34px);top:calc(var(--vy,-560px) - 24px);width:calc(var(--vw,240px) + 68px);height:calc(var(--vh,300px) + 38px);z-index:1;pointer-events:none}
+.cortina{position:absolute;top:12px;bottom:6px;width:calc(var(--vw,240px)*.14 + 22px)}
+.cortina>svg{display:block;width:100%;height:100%;filter:drop-shadow(4px 0 6px rgba(0,0,0,.45))}
+.cortina.i{left:0} .cortina.d{right:0;transform:scaleX(-1)}
+.borla{position:absolute;left:0;top:58%;width:30px;translate:0 -5px}
+.borla svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(2px 3px 3px rgba(0,0,0,.5))}
+.cenefa{position:absolute;left:0;top:0;width:100%;height:30px;z-index:2;overflow:visible;filter:drop-shadow(0 4px 6px rgba(0,0,0,.45))}
+.alfeizar{position:absolute;left:10px;right:10px;bottom:0;height:16px;z-index:3;border-radius:2px;background:linear-gradient(#f6e8d8,#d6bea5 50%,#8a6f58);box-shadow:0 7px 12px rgba(0,0,0,.5)}
 /* La luz de la noche dentro del cuarto */
-.luz-luna{position:absolute;left:-200px;width:1400px;top:0;height:760px;pointer-events:none;background:radial-gradient(50% 100% at 50% 0,rgba(170,160,255,.15),rgba(170,160,255,.05) 50%,transparent)}
-.noche{position:absolute;left:-3000px;width:7000px;top:-26px;height:4526px;pointer-events:none;background:radial-gradient(1150px 860px at 3500px 906px,transparent 35%,rgba(7,3,18,.34))}
+.luz-luna{position:absolute;left:calc(var(--vx,380px) - 420px);width:calc(var(--vw,240px) + 840px);top:var(--vy,-560px);height:1300px;pointer-events:none;background:radial-gradient(50% 55% at 50% 12%,rgba(170,160,255,.13),rgba(170,160,255,.04) 55%,transparent)}
+.noche{position:absolute;left:-3000px;width:7000px;top:-3000px;height:7500px;pointer-events:none;background:radial-gradient(1150px 1100px at 3500px 3800px,transparent 35%,rgba(7,3,18,.34))}
 .resplandor-tv{position:absolute;left:150px;top:560px;width:700px;height:620px;z-index:3;pointer-events:none;border-radius:50%;opacity:.8;mix-blend-mode:screen;
   background:radial-gradient(closest-side,rgba(140,175,255,.3),rgba(140,175,255,.1) 55%,transparent);animation:luzTele 3.4s linear infinite}
 .resplandor-tv.lista{background:radial-gradient(closest-side,rgba(255,170,200,.32),rgba(245,201,122,.1) 55%,transparent)}
@@ -723,24 +729,24 @@ button.perilla{display:block;border:0;padding:0;cursor:pointer;-webkit-tap-highl
 @keyframes respiraLuces{to{opacity:.55}}
 .fuegos{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none}
 /* El reloj de la cuenta regresiva: hojitas con números de oro que caen al cambiar */
-.aviso-cuarto .sube.flip{display:flex;justify-content:center;align-items:flex-start;gap:4px;margin:8px 0 4px;min-height:0}
-.flip .u{display:grid;justify-items:center;gap:5px}
-.flip .ds{display:flex;gap:3px}
-.flip .h{position:relative;display:block;width:27px;height:40px;border-radius:6px;text-align:center;
-  background:linear-gradient(#36244f,#251a3c 49.6%,#170f29 50.4%,#120a20);border:1px solid rgba(245,201,122,.55);
-  box-shadow:0 7px 16px rgba(0,0,0,.6),inset 0 0 0 2px rgba(18,10,32,.9),inset 0 0 0 3px rgba(245,201,122,.16),inset 0 12px 14px rgba(255,255,255,.04)}
-.flip .h::before{content:"";position:absolute;left:-3px;right:-3px;top:calc(50% - 2px);height:4px;border-radius:2px;background:linear-gradient(90deg,#c58a3e 0 3px,transparent 3px calc(100% - 3px),#c58a3e calc(100% - 3px))}
+.aviso-cuarto .sube.flip{display:flex;justify-content:center;align-items:flex-start;gap:3px;margin:6px 0 3px;min-height:0}
+.flip .u{display:grid;justify-items:center;gap:4px}
+.flip .ds{display:flex;gap:2px}
+.flip .h{position:relative;display:block;width:21px;height:31px;border-radius:4px;text-align:center;
+  background:linear-gradient(#36244f,#251a3c 49.6%,#170f29 50.4%,#120a20);border:1px solid rgba(245,201,122,.4);
+  box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 0 0 1.5px rgba(18,10,32,.9),inset 0 0 0 2.5px rgba(245,201,122,.12)}
+.flip .h::before{content:"";position:absolute;left:-2px;right:-2px;top:calc(50% - 1.5px);height:3px;border-radius:2px;background:linear-gradient(90deg,#c58a3e 0 2px,transparent 2px calc(100% - 2px),#c58a3e calc(100% - 2px))}
 .flip .h::after{content:"";position:absolute;left:2px;right:2px;top:50%;height:1px;background:rgba(0,0,0,.75)}
-.flip .h i{display:block;font:italic 600 28px/39px "Playfair Display",var(--serif);color:transparent;text-shadow:none;
+.flip .h i{display:block;font:italic 500 21px/30px "Playfair Display",var(--serif);color:transparent;text-shadow:none;
   background:linear-gradient(#fff8e2 18%,#f5c97a 50%,#c88a3c 82%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 7px rgba(245,201,122,.4))}
 .flip .h.cae{animation:hojaCae .55s cubic-bezier(.3,1.45,.6,1);transform-origin:50% 50%}
 @keyframes hojaCae{0%{transform:perspective(160px) rotateX(-88deg);filter:brightness(1.9)}100%{transform:none}}
-.flip small{font:italic 400 12.5px/1 "Playfair Display",var(--serif);letter-spacing:.06em;color:rgba(245,201,122,.8);text-shadow:0 1px 6px rgba(0,0,0,.8)}
-.flip .sep{position:relative;width:11px;height:40px}
-.flip .sep::before,.flip .sep::after{content:"";position:absolute;left:3px;width:5px;height:5px;rotate:45deg;background:linear-gradient(135deg,#fff1c9,#e3b062);box-shadow:0 0 6px rgba(245,201,122,.7)}
-.flip .sep::before{top:12px} .flip .sep::after{top:23px}
-.flip .sep.esp{width:14px}
-.flip .sep.esp::before{left:6.5px;top:6px;width:1px;height:30px;rotate:none;background:linear-gradient(transparent,rgba(245,201,122,.7),transparent);box-shadow:none}
+.flip small{font:italic 400 11px/1 "Playfair Display",var(--serif);letter-spacing:.06em;color:rgba(245,201,122,.8);text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.flip .sep{position:relative;width:9px;height:31px}
+.flip .sep::before,.flip .sep::after{content:"";position:absolute;left:2.5px;width:4px;height:4px;rotate:45deg;background:linear-gradient(135deg,#fff1c9,#e3b062);box-shadow:0 0 6px rgba(245,201,122,.7)}
+.flip .sep::before{top:9px} .flip .sep::after{top:18px}
+.flip .sep.esp{width:12px}
+.flip .sep.esp::before{left:5.5px;top:4px;width:1px;height:23px;rotate:none;background:linear-gradient(transparent,rgba(245,201,122,.7),transparent);box-shadow:none}
 .flip .sep.esp::after{display:none}
 @media (prefers-reduced-motion:reduce){ .estrellas i,.luna::after,.ciudad *,.resplandor-tv,.cosa.luces::before{animation:none} }
 /* Regalos que se abren */
@@ -1288,6 +1294,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
       <span class="fugaces" id="fugaces" aria-hidden="true"></span>
       <svg class="ciudad" id="ciudad" viewBox="0 0 1000 260" preserveAspectRatio="none" aria-hidden="true"></svg>
       <span class="vidrio-v" aria-hidden="true"></span>
+      <span class="marco-v" aria-hidden="true"></span>
     </button>
     <span class="cortinas" id="cortinas" aria-hidden="true"></span>
     <span class="moldura" aria-hidden="true"></span>
@@ -1915,10 +1922,10 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   }
 
   // La ventana: estrellas que titilan y la ciudad de noche con Monserrate al fondo
-  for(let i = 0; i < 190; i++){
-    const e = document.createElement("i"), g = i % 23 === 0;
+  for(let i = 0; i < 46; i++){
+    const e = document.createElement("i"), g = i % 12 === 0;
     e.className = g ? "grande" : "";
-    e.style.cssText = `left:${rnd(1,99).toFixed(1)}%;top:${rnd(300,1440).toFixed(0)}px;--t:${(g ? 3.4 : rnd(1.2,2.8)).toFixed(1)}px;--o:${rnd(.45,1).toFixed(2)};--v:${rnd(1.8,5).toFixed(1)}s;--d:${(-rnd(0,5)).toFixed(1)}s`;
+    e.style.cssText = `left:${rnd(1,99).toFixed(1)}%;top:${rnd(2,62).toFixed(1)}%;--t:${(g ? 4 : rnd(2,3.6)).toFixed(1)}px;--o:${rnd(.45,1).toFixed(2)};--v:${rnd(1.8,5).toFixed(1)}s;--d:${(-rnd(0,5)).toFixed(1)}s`;
     $("#estrellas").appendChild(e);
   }
   (function pintarCiudad(){
@@ -1986,20 +1993,18 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     const borlita = x => `<g transform="translate(${x} 4)"><circle cy="6" r="6" fill="url(#oroV)"/><path d="M-4 11 L-7 40 Q0 45 7 40 L4 11Z" fill="url(#oroV)"/></g>`;
     const cenefa = `<svg class="cenefa" viewBox="0 0 1000 100" preserveAspectRatio="none"><defs>${oro("oroV")}
       <linearGradient id="telaV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a1636"/><stop offset=".5" stop-color="#93345d"/><stop offset="1" stop-color="#4a1030"/></linearGradient></defs>
-      ${swag(320, 680, 64)}${swag(-30, 370, 58)}${swag(630, 1030, 58)}
-      <rect x="0" y="0" width="1000" height="8" fill="url(#oroV)"/>${borlita(345)}${borlita(655)}</svg>`;
-    $("#cortinas").innerHTML = `<span class="cortina i">${tela}<span class="borla">${borla}</span></span><span class="cortina d">${tela}<span class="borla">${borla}</span></span>${cenefa}`;
+      ${swag(320, 680, 40)}${swag(-30, 370, 36)}${swag(630, 1030, 36)}
+      <rect x="0" y="0" width="1000" height="7" fill="url(#oroV)"/></svg>`;
+    $("#cortinas").innerHTML = `<span class="alfeizar"></span><span class="cortina i">${tela}<span class="borla">${borla}</span></span><span class="cortina d">${tela}<span class="borla">${borla}</span></span>${cenefa}`;
   })();
   // Estrellas fugaces: pasan solas de vez en cuando, y siempre que ella toca el cielo
   function estrellaFugaz(){
-    if(reduce) return;
-    const f = document.createElement("span"), izq = Math.random() < .5, a = rnd(16, 34);
-    const cielo = parseFloat(getComputedStyle(escenario).getPropertyValue("--cielo")) || 680;
-    const top = rnd(Math.max(300, 1700 - cielo + 20), 1700 - 330);
-    f.className = "fugaz";
-    f.style.cssText = `top:${top.toFixed(0)}px;left:${(izq ? rnd(80, 420) : rnd(560, 900)).toFixed(0)}px;--a:${izq ? a : 180 - a}deg;--dx:${izq ? 420 : -420}px;--dy:${(420*Math.tan(a*Math.PI/180)).toFixed(0)}px`;
+    if(reduce || $("#ventana").classList.contains("sin")) return;
+    const f = document.createElement("span"), izq = Math.random() < .5, a = rnd(16, 32);
+    f.className = "fugaz-v";
+    f.style.cssText = `top:${rnd(6, 36).toFixed(0)}%;left:${(izq ? rnd(0, 30) : rnd(55, 90)).toFixed(0)}%;--a:${izq ? a : 180 - a}deg;--dx:${izq ? 130 : -130}px;--dy:${(130*Math.tan(a*Math.PI/180)).toFixed(0)}px`;
     $("#fugaces").appendChild(f);
-    setTimeout(() => f.remove(), 1300);
+    setTimeout(() => f.remove(), 1100);
   }
   (function fugazSola(){ setTimeout(() => { if(!document.hidden) estrellaFugaz(); fugazSola(); }, rnd(7000, 16000)); })();
 
@@ -2013,6 +2018,25 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     ponerVista(s, (vw - ANCHO*s)/2, vh - ALTO*s);
     $("#avisoCuarto").style.height = Math.max(reserva(), vh - ALTO*s) + "px";
     escenario.style.setProperty("--cielo", ((vh - ALTO*s)/s).toFixed(0) + "px");
+    ajustarVentana(true);
+  }
+  // La ventanita va centrada en la pared, entre el techo y el texto de arriba
+  let claveVentana = "";
+  function ajustarVentana(forzar){
+    const vw = innerWidth, vh = innerHeight, s = Math.min(vw/ANCHO, (vh - reserva())/ALTO), ty = vh - ALTO*s;
+    const tope = $("#arriba").getBoundingClientRect().top, arriba = 30;
+    const alto = Math.min(tope - 18 - arriba, 190), ancho = Math.min(alto*.82, vw*.4);
+    const clave = `${vw}x${vh}:${Math.round(tope)}`;
+    if(!forzar && clave === claveVentana) return;
+    claveVentana = clave;
+    const v = $("#ventana");
+    v.classList.toggle("sin", alto < 56);
+    if(alto < 56) return;
+    const W = ancho/s, H = alto/s;
+    escenario.style.setProperty("--vw", W.toFixed(0) + "px");
+    escenario.style.setProperty("--vh", H.toFixed(0) + "px");
+    escenario.style.setProperty("--vx", (ANCHO/2 - W/2).toFixed(0) + "px");
+    escenario.style.setProperty("--vy", ((arriba - ty)/s).toFixed(0) + "px");
   }
   function rectLocal(el){ let x = 0, y = 0, n = el; while(n && n !== escenario){ x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; } return {x, y, w: el.offsetWidth, h: el.offsetHeight}; }
   // Acerca la cámara a un elemento: fw/fh = cuánto del ancho/alto de la pantalla ocupa, cy = a qué altura queda su centro
@@ -2631,6 +2655,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     if(estabaBloqueada && !b && !modoPrueba && !final) celebrarMedianoche();
     estabaBloqueada = b;
     tv.classList.toggle("lista", !b); $("#resplandorTv").classList.toggle("lista", !b);
+    if(!enfocado && !final) ajustarVentana();
     actualizarCuarto();
     actualizarVinilos();
     const N = COSAS.length;
@@ -2674,16 +2699,16 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
   let cohetes = [], brasas = [], rafFuegos = 0;
   // El pedazo de pantalla donde se ve el cielo (entre las cortinas, encima de la moldura)
   function zonaCielo(){
-    const {s, tx, ty} = vista;
-    const cielo = (parseFloat(escenario.style.getPropertyValue("--cielo")) || 680)*s;
-    return {x0: Math.max(0, tx + 150*s), x1: Math.min(innerWidth, tx + 850*s), y0: Math.max(0, ty - cielo + 80*s), y1: ty - 90*s, piso: ty - 60*s};
+    const r = $("#ventana").getBoundingClientRect();
+    return {x0: r.left + 6, x1: r.right - 6, y0: r.top + 4, y1: r.bottom - r.height*.36, piso: r.bottom - r.height*.2};
   }
   function cohete(){
     const z = zonaCielo();
-    if(z.y1 < 70 || z.x1 - z.x0 < 120) return;
+    if($("#ventana").classList.contains("sin") || z.y1 - z.y0 < 20 || z.x1 - z.x0 < 30) return;
     const c = COLORES_FUEGO[Math.floor(Math.random()*COLORES_FUEGO.length)];
     const x = rnd(z.x0 + (z.x1 - z.x0)*.08, z.x1 - (z.x1 - z.x0)*.08);
-    cohetes.push({x, y: z.piso, vx: rnd(-.5, .5), vy: -rnd(4.2, 5.6)*Math.min(1.4, Math.max(.7, z.y1/220)), meta: rnd(z.y0 + (z.y1 - z.y0)*.15, z.y0 + (z.y1 - z.y0)*.55), c, t: 0});
+    const meta = rnd(z.y0 + (z.y1 - z.y0)*.15, z.y0 + (z.y1 - z.y0)*.7);
+    cohetes.push({x, y: z.piso, vx: rnd(-.15, .15), vy: -(z.piso - meta)/30, meta, c, t: 0});
     if(!rafFuegos){ medirFuegos(); rafFuegos = requestAnimationFrame(pasoFuegos); }
   }
   function medirFuegos(){
@@ -2691,7 +2716,7 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     if(fg.width !== w || fg.height !== h){ fg.width = w; fg.height = h; }
   }
   function estallar(k){
-    const z = zonaCielo(), r = Math.min(1.5, Math.max(.6, z.y1/200)), n = 56 + Math.floor(Math.random()*30), anillo = Math.random() < .3;
+    const z = zonaCielo(), r = Math.min(1, Math.max(.25, (z.piso - z.y0)/170)), n = 56 + Math.floor(Math.random()*30), anillo = Math.random() < .3;
     brasas.push({tipo: "luz", x: k.x, y: k.y, t: 0, vida: 16, c: k.c[0], r: 90*r});
     for(let i = 0; i < n; i++){
       const a = i/n*Math.PI*2 + rnd(-.05, .05), v = (anillo ? 2 : rnd(.5, 2.2))*r;
@@ -2704,13 +2729,13 @@ footer{text-align:center;color:var(--suave);font-size:14px;padding:30px 20px 60p
     fgx.setTransform(dpr, 0, 0, dpr, 0, 0);
     fgx.clearRect(0, 0, w, h);
     fgx.save();
-    fgx.beginPath(); fgx.rect(z.x0, z.y0, z.x1 - z.x0, Math.max(0, z.y1 + 60*vista.s - z.y0)); fgx.clip();
+    fgx.beginPath(); fgx.rect(z.x0, z.y0, z.x1 - z.x0, Math.max(0, z.piso - z.y0)); fgx.clip();
     fgx.globalCompositeOperation = "lighter";
     cohetes = cohetes.filter(k => {
       k.t++; k.x += k.vx; k.y += k.vy; k.vy *= .985;
       fgx.globalAlpha = .9; fgx.strokeStyle = k.c[1]; fgx.lineWidth = 2;
       fgx.beginPath(); fgx.moveTo(k.x, k.y); fgx.lineTo(k.x - k.vx*4, k.y - k.vy*4); fgx.stroke();
-      if(k.y <= k.meta || k.vy > -1.2){ estallar(k); return false; }
+      if(k.y <= k.meta || k.t > 70){ estallar(k); return false; }
       return true;
     });
     brasas = brasas.filter(b => {
